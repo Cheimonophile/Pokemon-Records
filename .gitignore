@@ -1,0 +1,10 @@
+
+# python
+__pycache__/
+
+# Mac
+.DS_Store
+
+# environment
+/venv
+*.sqlite3
