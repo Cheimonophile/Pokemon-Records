@@ -17,7 +17,7 @@ run: database
 	# rm src/db.sqlite3 || true
 	# make migrate
 	# cd src && python manage.py shell <master.py
-	python master.py
+	time python master.py
 
 database:
 	rm pokemon.sqlite3 || true

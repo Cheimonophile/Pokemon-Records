@@ -43,6 +43,8 @@ def make_battle(
     playthrough: tuple,
     location: tuple,
     opponent: str,
+    *,
+    lost: bool = False,
 ) -> tuple:
     """Create a new battle."""
     with Session(engine) as session:
@@ -53,10 +55,11 @@ def make_battle(
             location = location,
             event_type = "Battle",
             event_name = opponent,
+            failed = lost,
         )
         battle = session.merge(battle)
         session.commit()
-        print(f"Created battle {opponent} at {location}")
+        print(f"Battled {opponent} at {location}")
         return battle.pk
 
 
@@ -146,6 +149,7 @@ def evolve(
     with Session(engine) as session:
         event: Event = session.get(Event, event)
         team_member: TeamMember = session.get(TeamMember, team_member)
+        old_team_member_name = team_member.to_str(session)
         team_member_entry = TeamMemberEntry(
             team_member = team_member,
             event = event,
@@ -156,7 +160,7 @@ def evolve(
         )
         team_member_entry = session.merge(team_member_entry)
         session.commit()
-        print(f"{team_member.to_str(session)} evolved into {species}")
+        print(f"{old_team_member_name} evolved into {species}")
         return team_member.pk
     
 

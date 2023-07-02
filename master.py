@@ -304,3 +304,152 @@ level_up(battle,
 level_up(battle,
     pansear,
     25)
+castelia_gate = make_location(name="Castelia Gate", region="Unova")
+battle = make_battle(playthrough, castelia_gate,
+    "PKMN Trainer Bianca")
+level_up(battle,
+    herdier,
+    25)
+battle = make_battle(playthrough, route_4,
+    "PKMN Trainer Cheren", lost=True)
+battle = make_battle(playthrough, route_4,
+    "PKMN Trainer Cheren")
+level_up(battle,
+    pansear,
+    26)
+battle = make_battle(playthrough, route_4,
+    "Backpacker Keane")
+level_up(battle,
+    tympole,
+    25)
+palpitoad = evolve(battle,
+    tympole,
+    "Palpitoad",
+    dex_no=536,
+    type1="Water",
+    type2="Ground")
+battle = make_battle(playthrough, route_4,
+    "Backpacker Anna")
+battle = make_battle(playthrough, route_4,
+    "Backpacker Jill")
+battle = make_battle(playthrough, route_4,
+    "Backpacker Waylon")
+battle = make_battle(playthrough, route_4,
+    "Worker Scott")
+battle = make_battle(playthrough, route_4,
+    "Worker Zack")
+desert_resort = make_location(name="Desert Resort", region="Unova")
+battle = make_battle(playthrough, desert_resort,
+    "Doctor Jerry")
+battle = make_battle(playthrough, desert_resort,
+    "Backpacker Kelsey")
+level_up(battle,
+    palpitoad,
+    26)
+battle = make_battle(playthrough, desert_resort,
+    "Backpacker Liz")
+battle = make_battle(playthrough, desert_resort,
+    "Psychic Cybil")
+level_up(battle,
+    herdier,
+    26)
+battle = make_battle(playthrough, desert_resort,
+    "Backpacker Nate")
+battle = make_battle(playthrough, desert_resort,
+    "Backpacker Elaine")
+battle = make_battle(playthrough, desert_resort,
+    "Psychic Gaven")
+level_up(battle,
+    herdier,
+    27)
+battle = make_battle(playthrough, desert_resort,
+    "Psychic Low")
+battle = make_battle(playthrough, desert_resort,
+    "PKMN Ranger Mylene")
+battle = make_battle(playthrough, desert_resort,
+    "PKMN Ranger Jaden")
+level_up(battle,
+    palpitoad,
+    27)
+relic_castle = make_location(name="Relic Castle", region="Unova")
+battle = make_battle(playthrough, relic_castle,
+    "Psychic Perry")
+battle = make_battle(playthrough, relic_castle,
+    "Psychic Dua")
+level_up(battle,
+    pansear,
+    27)
+battle = make_battle(playthrough, route_4,
+    "Backpacker Jerome")
+nimbasa_city = make_location(name="Nimbasa City", region="Unova")
+battle = make_battle(playthrough, nimbasa_city,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, nimbasa_city,
+    "Linebacker Dan")
+battle = make_battle(playthrough, nimbasa_city,
+    "Hoopster Bobby")
+level_up(battle,
+    pansear,
+    28)
+battle = make_battle(playthrough, nimbasa_city,
+    "PKMN Trainer N")
+level_up(battle,
+    herdier,
+    28)
+route_16 = make_location(name="Route 16", region="Unova")
+battle = make_battle(playthrough, route_16,
+    "Policeman Daniel")
+battle = make_battle(playthrough, route_16,
+    "Cyclist Krissa")
+level_up(battle,
+    palpitoad,
+    28)
+battle = make_battle(playthrough, route_16,
+    "Backpacker Peter")
+battle = make_battle(playthrough, route_16,
+    "Cyclist Hector")
+battle = make_battle(playthrough, route_16,
+    "Backpacker Stephen")
+level_up(battle,
+    palpitoad,
+    29)
+route_5 = make_location(name="Route 5", region="Unova")
+battle = make_battle(playthrough, route_5,
+    "Backpacker Lois")
+battle = make_battle(playthrough, route_5,
+    "Backpacker Michael")
+battle = make_battle(playthrough, route_5,
+    "Baker Jenn")
+battle = make_battle(playthrough, route_5,
+    "Harlequin Paul")
+level_up(battle,
+    pansear,
+    29)
+battle = make_battle(playthrough, route_5,
+    "Musician Preston")
+battle = make_battle(playthrough, route_5,
+    "Dancer Brian")
+level_up(battle,
+    herdier,
+    29)
+battle = make_battle(playthrough, route_5,
+    "Artist Horton")
+battle = make_battle(playthrough, nimbasa_city,
+    "Lady Magnolia")
+battle = make_battle(playthrough, nimbasa_city,
+    "Rich Boy Cody")
+level_up(battle,
+    palpitoad,
+    30)
+battle = make_battle(playthrough, nimbasa_city,
+    "Rich Boy Rolan")
+battle = make_battle(playthrough, nimbasa_city,
+    "Lady Colette")
+battle = make_battle(playthrough, nimbasa_city,
+    "Leader Elesa")
+level_up(battle,
+    palpitoad,
+    31)
+
+
+

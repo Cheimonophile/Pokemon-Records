@@ -66,6 +66,7 @@ class Event(Base):
     location_region: Mapped[str] = mapped_column(String(64))
     event_type: Mapped[str] = mapped_column(String(32))
     event_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    failed: Mapped[Optional[bool]] = mapped_column(Integer, nullable=True, default=False)
     round: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, default=0)
 
     #relationships
