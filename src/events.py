@@ -1,6 +1,8 @@
 from operator import and_
 from sqlalchemy import select
+
 from .models import *
+from .pkmn_constants import *
 
 def make_playthrough(
     id_no: str,
@@ -80,7 +82,6 @@ def receive_pokemon(
     nickname: str = None,
 ) -> tuple:
     """Receive a new pokemon as a gift or prize."""
-    assert gender in ["M", "F", None], f"{gender} is not a valid gender"
     with Session(engine) as session:
         playthrough: Playthrough = session.get(Playthrough, playthrough)
         caught_location: Location = session.get(Location, caught_location)
@@ -115,6 +116,59 @@ def receive_pokemon(
         session.commit()
         print(f"Received {team_member.to_str(session)} as a gift")
         return team_member.pk
+    
+
+def revive_fossil(
+    playthrough: tuple,
+    fossil: str,
+    slot: int,
+    species: str,
+    *,
+    caught_date: dt.date,
+    caught_location: tuple,
+    caught_level: int,
+    ball: str,
+    dex_no: int,
+    type1: str,
+    type2: str = None,
+    gender: str = None,
+    nickname: str = None,
+) -> tuple:
+    with Session(engine) as session:
+        playthrough: Playthrough = session.get(Playthrough, playthrough)
+        caught_location: Location = session.get(Location, caught_location)
+        event = Event(
+            playthrough = playthrough,
+            location = caught_location,
+            event_type = "Revive",
+            event_name = fossil,
+        )
+        event = session.merge(event)
+        team_member = TeamMember(
+            playthrough = playthrough,
+            slot = slot,
+            nickname = nickname,
+            caught_date = caught_date,
+            caught_location = caught_location,
+            caught_level = caught_level,
+            ball = ball,
+            gender = gender,
+        )
+        team_member = session.merge(team_member)
+        team_member_entry = TeamMemberEntry(
+            team_member = team_member,
+            event = event,
+            level = caught_level,
+            species = species,
+            dex_no = dex_no,
+            type1 = type1,
+            type2 = type2,
+        )
+        team_member_entry = session.merge(team_member_entry)
+        session.commit()
+        print(f"Revived {team_member.to_str(session)} from a {fossil}")
+        return team_member.pk
+    
 
 
 def level_up(

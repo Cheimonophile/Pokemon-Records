@@ -450,6 +450,114 @@ battle = make_battle(playthrough, nimbasa_city,
 level_up(battle,
     palpitoad,
     31)
+archen = revive_fossil(playthrough,
+    "Plume Fossil",
+    slot=4,
+    species="Archen",
+    dex_no=566,
+    type1="Rock",
+    type2="Flying",
+    gender='M',
+    caught_date=dt.date(2023, 7,2),
+    caught_location=nacrene_city,
+    caught_level=25,
+    ball='Poke Ball')
+battle = make_battle(playthrough, route_5,
+    "PKMN Trainer Cheren")
+level_up(battle,
+    herdier,
+    30)
+level_up(battle,
+    palpitoad,
+    32)
+battle = make_battle(playthrough, route_5,
+    "Preschooler Sarah and Preschooler Billy with PKMN Trainer Cheren") # double battle
+level_up(battle,
+    archen,
+    26)
+cold_storage = make_location(name="Cold Storage", region="Unova")
+battle = make_battle(playthrough, cold_storage,
+    "Youngster Kenneth")
+battle = make_battle(playthrough, cold_storage,
+    "Youngster Albert")
+battle = make_battle(playthrough, cold_storage,
+    "Worker Eddie")
+level_up(battle,
+    archen,
+    27)
+battle = make_battle(playthrough, cold_storage,
+    "Worker Victor")
+level_up(battle,
+    pansear,
+    30)
+battle = make_battle(playthrough, cold_storage,
+    "Worker Glenn")
+battle = make_battle(playthrough, cold_storage,
+    "Worker Filipe")
+battle = make_battle(playthrough, cold_storage,
+    "Worker Patton")
+battle = make_battle(playthrough, cold_storage,
+    "Worker Ryan")
+level_up(battle,
+    archen,
+    28)
+battle = make_battle(playthrough, cold_storage,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, cold_storage,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, cold_storage,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, cold_storage,
+    "Team Plasma Grunt")
+route_6 = make_location(name="Route 6", region="Unova")
+battle = make_battle(playthrough, route_6,
+    "Scientist William")
+battle = make_battle(playthrough, route_6,
+    "PKMN Ranger Shanti")
+level_up(battle,
+    herdier,
+    31)
+level_up(battle,
+    archen,
+    29)
+battle = make_battle(playthrough, route_6,
+    "Parasol Lady Nicole")
+battle = make_battle(playthrough, route_6,
+    "Scientist Ron")
+battle = make_battle(playthrough, route_6,
+    "Scientist Maria")
+battle = make_battle(playthrough, route_6,
+    "Parasol Lady Tihana")
+battle = make_battle(playthrough, route_6,
+    "PKMN Ranger Richard")
+level_up(battle,
+    pansear,
+    31)
+level_up(battle,
+    archen,
+    30)
+driftveil_city = make_location(name="Driftveil City", region="Unova")
+battle = make_battle(playthrough, driftveil_city,
+    "Worker Felix")
+battle = make_battle(playthrough, driftveil_city,
+    "Worker Sterling")
+battle = make_battle(playthrough, driftveil_city,
+    "Worker Don")
+battle = make_battle(playthrough, driftveil_city,
+    "Clerk M Isaac")
+level_up(battle,
+    archen,
+    31)
+level_up(battle,
+    palpitoad,
+    33)
+battle = make_battle(playthrough, driftveil_city,
+    "Clerk F Katie")
+battle = make_battle(playthrough, driftveil_city,
+    "Leader Clay")
+
+
+
 
 
 

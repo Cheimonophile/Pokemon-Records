@@ -27,6 +27,9 @@ class Playthrough(Base):
     version: Mapped[str] = mapped_column(String(64))
     adventure_started: Mapped[dt.date] = mapped_column(Date)
 
+    # relationships
+    events: Mapped[List["Event"]] = relationship("Event", back_populates="playthrough")
+
     def __init__(self, **kwargs):
         assert kwargs['version'] in VERSIONS, f"Invalid version {kwargs.get('version')}"
         super().__init__(**kwargs)
@@ -164,8 +167,8 @@ class TeamMemberEntry(Base):
     )
 
     def __init__(self, **kwargs):
-        assert kwargs.get('type1') in [None] + TYPES, f"Invalid type {kwargs['type1']}"
-        assert kwargs.get('type2') in [None] + TYPES, f"Invalid type {kwargs['type2']}"
+        assert kwargs.get('type1') in [None] + list(TYPES), f"Invalid type {kwargs['type1']}"
+        assert kwargs.get('type2') in [None] + list(TYPES), f"Invalid type {kwargs['type2']}"
         super().__init__(**kwargs)
 
     def __str__(self):
