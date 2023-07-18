@@ -722,7 +722,27 @@ battle = make_battle(playthrough, celestial_tower,
 level_up(battle,
     stoutland,
     37)
-
+battle = make_battle(playthrough, mistralton_city,
+    "Worker Cliff")
+level_up(battle,
+    archeops,
+    38)
+battle = make_battle(playthrough, mistralton_city,
+    "Worker Brady")
+battle = make_battle(playthrough, mistralton_city,
+    "Pilot Ted")
+battle = make_battle(playthrough, mistralton_city,
+    "Pilot Chase")
+level_up(battle,
+    archeops,
+    39)
+battle = make_battle(playthrough, mistralton_city,
+    "Worker Arnold")
+battle = make_battle(playthrough, mistralton_city,
+    "Leader Skyla")
+level_up(battle,
+    archeops,
+    40)
 
 
 
