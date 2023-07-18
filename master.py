@@ -681,6 +681,47 @@ seismitoad = evolve(battle,
     dex_no=537,
     type1="Water",
     type2="Ground")
+celestial_tower = make_location(name="Celestial Tower", region="Unova")
+battle = make_battle(playthrough, celestial_tower,
+    "Psychic Doreen")
+level_up(battle,
+    seismitoad,
+    37)
+battle = make_battle(playthrough, celestial_tower,
+    "Lass Kara")
+battle = make_battle(playthrough, celestial_tower,
+    "Pokéfan Jude")
+battle = make_battle(playthrough, celestial_tower,
+    "Pokéfan Georgia")
+battle = make_battle(playthrough, celestial_tower,
+    "Psychic Belle")
+level_up(battle,
+    archen,
+    37)
+archeops = evolve(battle,
+    archen,
+    "Archeops",
+    dex_no=567,
+    type1="Rock",
+    type2="Flying")
+battle = make_battle(playthrough, celestial_tower,
+    "Psychic Lin")
+battle = make_battle(playthrough, celestial_tower,
+    "Psychic Micki")
+battle = make_battle(playthrough, celestial_tower,
+    "Psychic Bryce")
+battle = make_battle(playthrough, celestial_tower,
+    "Nurse Sachiko")
+level_up(battle,
+    pansear,
+    37)
+battle = make_battle(playthrough, celestial_tower,
+    "Ace Trainer Beckett")
+battle = make_battle(playthrough, celestial_tower,
+    "Ace Trainer Kassandra")
+level_up(battle,
+    stoutland,
+    37)
 
 
 
