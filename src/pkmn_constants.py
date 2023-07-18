@@ -114,3 +114,10 @@ VERSIONS = [
     "Scarlet",
     "Violet",
 ]
+
+BATTLE_TYPES = [
+    "Single",
+    "Double",
+    "Triple",
+    "Rotation",
+]

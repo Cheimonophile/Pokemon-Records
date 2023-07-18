@@ -47,8 +47,10 @@ def make_battle(
     opponent: str,
     *,
     lost: bool = False,
+    battle_type: str = "Single",
 ) -> tuple:
     """Create a new battle."""
+    assert battle_type in BATTLE_TYPES, f"Invalid battle type '{battle_type}'"
     with Session(engine) as session:
         playthrough: Playthrough = session.get(Playthrough, playthrough)
         location: Location = session.get(Location, location)
@@ -56,12 +58,12 @@ def make_battle(
             playthrough = playthrough,
             location = location,
             event_type = "Battle",
-            event_name = opponent,
+            event_name = f"{opponent} ({battle_type})",
             failed = lost,
         )
         battle = session.merge(battle)
         session.commit()
-        print(f"Battled {opponent} at {location}")
+        print(f"{battle_type} battled {opponent} at {location}")
         return battle.pk
 
 

@@ -47,6 +47,9 @@ class Location(Base):
     name: Mapped[str] = mapped_column(String(64), primary_key=True)
     region: Mapped[str] = mapped_column(String(64), primary_key=True)
 
+    # relationships
+    events: Mapped[List["Event"]] = relationship("Event", back_populates="location")
+
     def __init__(self, **kwargs):
         assert kwargs['region'] in REGIONS, f"Invalid region {kwargs.get('region')}"
         super().__init__(**kwargs)

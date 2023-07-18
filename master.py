@@ -555,7 +555,132 @@ battle = make_battle(playthrough, driftveil_city,
     "Clerk F Katie")
 battle = make_battle(playthrough, driftveil_city,
     "Leader Clay")
-
+battle = make_battle(playthrough, driftveil_city,
+    "PKMN Trainer Bianca")
+level_up(battle,
+    archen,
+    32)
+chargestone_cave = make_location(name="Chargestone Cave", region="Unova")
+battle = make_battle(playthrough, chargestone_cave,
+    "Ace Trainer Jared")
+battle = make_battle(playthrough, chargestone_cave,
+    "Scientist Ronald")
+battle = make_battle(playthrough, chargestone_cave,
+    "Hiker Hardy")
+level_up(battle,
+    pansear,
+    32)
+battle = make_battle(playthrough, chargestone_cave,
+    "Scientist Naoko")
+battle = make_battle(playthrough, chargestone_cave,
+    "Doctor Wayne")
+level_up(battle,
+    archen,
+    33)
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+level_up(battle,
+    herdier,
+    32)
+stoutland = evolve(battle,
+    herdier,
+    "Stoutland",
+    dex_no=508,
+    type1="Normal")
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+level_up(battle,
+    stoutland,
+    33)
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+level_up(battle,
+    archen,
+    34)
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, chargestone_cave,
+    "Ace Trainer Allison")
+level_up(battle,
+    palpitoad,
+    34)
+battle = make_battle(playthrough, chargestone_cave,
+    "Ace Trainer Stella")
+level_up(battle,
+    pansear,
+    33)
+level_up(battle,
+    stoutland,
+    34)
+battle = make_battle(playthrough, chargestone_cave,
+    "Scientist Orville")
+battle = make_battle(playthrough, chargestone_cave,
+    "Ace Trainer Corky")
+level_up(battle,
+    pansear,
+    34)
+battle = make_battle(playthrough, chargestone_cave,
+    "PKMN Trainer N")
+mistralton_city = make_location(name="Mistralton City", region="Unova")
+route_7 = make_location(name="Route 7", region="Unova")
+battle = make_battle(playthrough, route_7,
+    "Youngster Mikey")
+level_up(battle,
+    pansear,
+    35)
+battle = make_battle(playthrough, route_7,
+    "Youngster Parker")
+battle = make_battle(playthrough, route_7,
+    "Backpacker Terrance")
+battle = make_battle(playthrough, route_7,
+    "Ace Trainer Elmer",
+    battle_type='Rotation')
+level_up(battle,
+    archen,
+    35)
+level_up(battle,
+    stoutland,
+    35)
+level_up(battle,
+    palpitoad,
+    35)
+battle = make_battle(playthrough, route_7,
+    "Backpacker Ruth")
+battle = make_battle(playthrough, route_7,
+    "PKMN Ranger Mary")
+level_up(battle,
+    archen,
+    36)
+battle = make_battle(playthrough, route_7,
+    "PKMN Ranger Pedro")
+battle = make_battle(playthrough, route_7,
+    "Harlequin Pat")
+level_up(battle,
+    pansear,
+    36)
+battle = make_battle(playthrough, route_7,
+    "Harlequin Ian")
+level_up(battle,
+    stoutland,
+    36)
+twist_mountain = make_location(name="Twist Mountain", region="Unova")
+battle = make_battle(playthrough, twist_mountain,
+    "Hiker Terrell")
+level_up(battle,
+    palpitoad,
+    36)
+seismitoad = evolve(battle,
+    palpitoad,
+    "Seismitoad",
+    dex_no=537,
+    type1="Water",
+    type2="Ground")
 
 
 
