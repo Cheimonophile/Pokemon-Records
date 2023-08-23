@@ -848,8 +848,45 @@ battle = make_battle(playthrough, twist_mountain,
 level_up(battle,
     stoutland,
     42)
-
-
+dragonspiral_tower = make_location(name="Dragonspiral Tower", region="Unova")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Wild Mienfoo")
+mienfoo = catch(battle,
+    slot=5,
+    species="Mienfoo",
+    dex_no=619,
+    type1="Fighting",
+    caught_date=dt.date(2023, 8, 22),
+    caught_level=32,
+    ball="Great Ball",
+    gender='M')
+route_8 = make_location(name="Route 8", region="Unova")
+battle = make_battle(playthrough, route_8,
+    "PKMN Ranger Lewis")
+battle = make_battle(playthrough, route_8,
+    "Parasol Lady Melita")
+battle = make_battle(playthrough, route_8,
+    "Parasol Lady Lumi")
+level_up(battle,
+    mienfoo,
+    33)
+battle = make_battle(playthrough, route_8,
+    "Fisherman Bruce")
+battle = make_battle(playthrough, route_8,
+    "PKMN Ranger Annie")
+level_up(battle,
+    mienfoo,
+    34)
+moor_of_icirrus = make_location(name="Moor of Icirrus", region="Unova")
+battle = make_battle(playthrough, moor_of_icirrus,
+    "PKMN Ranger Harry")
+battle = make_battle(playthrough, moor_of_icirrus,
+    "PKMN Ranger Chloris")
+level_up(battle,
+    mienfoo,
+    35)
+battle = make_battle(playthrough, moor_of_icirrus,
+    "Fisherman Damon")
 
 
 
