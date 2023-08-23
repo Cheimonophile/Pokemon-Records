@@ -64,7 +64,8 @@ battle = make_battle(playthrough, rt3,
     "Preschooler Tully"
 )
 battle = make_battle(playthrough, rt3,
-    "Twins Kumi & Amy"
+    "Twins Kumi & Amy",
+    battle_type="Double"
 )
 battle = make_battle(playthrough, rt3,
     "PKMN Trainer Cheren"
@@ -81,7 +82,8 @@ wellspring_cave = make_location(name="Wellspring Cave", region="Unova")
 battle = make_battle(playthrough, wellspring_cave,
     "Team Plasma Grunt")
 battle = make_battle(playthrough, wellspring_cave,
-    "Team Plasma Grunt and Team Plasma Grunt with PKMN Trainer Cheren")
+    "Team Plasma Grunt and Team Plasma Grunt with PKMN Trainer Cheren",
+    battle_type="Double")
 level_up(battle,
     pansear,
     15)
@@ -166,7 +168,8 @@ level_up(battle,
     herdier,
     20)
 battle = make_battle(playthrough, pinwheel_forest,
-    "Twins Mayo & May")
+    "Twins Mayo & May",
+    battle_type="Double")
 level_up(battle,
     tympole,
     16)
@@ -471,7 +474,8 @@ level_up(battle,
     palpitoad,
     32)
 battle = make_battle(playthrough, route_5,
-    "Preschooler Sarah and Preschooler Billy with PKMN Trainer Cheren") # double battle
+    "Preschooler Sarah and Preschooler Billy with PKMN Trainer Cheren",
+    battle_type="Double")
 level_up(battle,
     archen,
     26)
@@ -743,6 +747,109 @@ battle = make_battle(playthrough, mistralton_city,
 level_up(battle,
     archeops,
     40)
+battle = make_battle(playthrough, twist_mountain,
+    "PKMN Trainer Cheren")
+level_up(battle,
+    seismitoad,
+    38)
+route_1 = make_location(name="Route 1", region="Unova")
+battle = make_battle(playthrough, route_1,
+    "PKMN Ranger Brenda")
+level_up(battle,
+    stoutland,
+    38)
+battle = make_battle(playthrough, route_1,
+    "Fisherman Sean")
+battle = make_battle(playthrough, route_1,
+    "Ranger Claude")
+route_17 = make_location(name="Route 17", region="Unova")
+battle = make_battle(playthrough, route_17,
+    "Fisherman Lydon")
+level_up(battle,
+    pansear,
+    38)
+level_up(battle,
+    stoutland,
+    39)
+battle = make_battle(playthrough, route_17,
+    "Swimmer F Joyce")
+battle = make_battle(playthrough, route_17,
+    "Swimmer M Wright")
+level_up(battle,
+    seismitoad,
+    39)
+battle = make_battle(playthrough, route_17,
+    "Hiker Jeremiah")
+level_up(battle,
+    seismitoad,
+    40)
+battle = make_battle(playthrough, route_17,
+    "Backpacker Kumiko")
+battle = make_battle(playthrough, route_17,
+    "Backpacker Sam")
+level_up(battle,
+    pansear,
+    39)
+battle = make_battle(playthrough, route_17,
+    "Veteran Ray")
+p2_laboratory = make_location(name="P2 Laboratory", region="Unova")
+battle = make_battle(playthrough, route_17,
+    "Scientist Nathan")
+battle = make_battle(playthrough, route_17,
+    "Swimmer M Berke")
+level_up(battle,
+    stoutland,
+    40)
+battle = make_battle(playthrough, route_17,
+    "Swimmer F Kelsey")
+battle = make_battle(playthrough, route_17,
+    "Battle Girl Hillary")
+mistralton_cave = make_location(name="Mistralton Cave", region="Unova")
+battle = make_battle(playthrough, mistralton_cave,
+    "Hiker Hugh")
+level_up(battle,
+    pansear,
+    40)
+battle = make_battle(playthrough, mistralton_cave,
+    "Hiker Clarke")
+battle = make_battle(playthrough, twist_mountain,
+    "Hiker Darrell")
+level_up(battle,
+    seismitoad,
+    41)
+battle = make_battle(playthrough, twist_mountain,
+    "Ace Trainer Caroll")
+level_up(battle,
+    pansear,
+    41)
+battle = make_battle(playthrough, twist_mountain,
+    "Battle Girl Sharon")
+level_up(battle,
+    archeops,
+    41)
+battle = make_battle(playthrough, twist_mountain,
+    "Worker Brand")
+battle = make_battle(playthrough, twist_mountain,
+    "Worker Heath")
+battle = make_battle(playthrough, twist_mountain,
+    "Worker Rob")
+level_up(battle,
+    seismitoad,
+    42)
+battle = make_battle(playthrough, twist_mountain,
+    "Worker Cairn")
+battle = make_battle(playthrough, twist_mountain,
+    "Doctor Hank")
+level_up(battle,
+    stoutland,
+    41)
+battle = make_battle(playthrough, twist_mountain,
+    "Ace Trainer Jordan")
+level_up(battle,
+    stoutland,
+    42)
+
+
 
 
 
