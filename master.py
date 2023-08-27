@@ -1018,6 +1018,54 @@ pawniard = catch(battle,
     caught_level=32,
     ball="Ultra Ball",
     gender='M')
+opelucid_city = make_location(name="Opelucid City", region="Unova")
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Eileen",
+    battle_type="Rotation")
+level_up(battle,
+    pawniard,
+    33)
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Lou",
+    battle_type="Rotation")
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Webster")
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Olwen")
+level_up(battle,
+    pawniard,
+    34)
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Jose")
+level_up(battle,
+    stoutland,
+    44)
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Clara")
+battle = make_battle(playthrough, opelucid_city,
+    "Veteran Hugo")
+level_up(battle,
+    pawniard,
+    35)
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Tom")
+battle = make_battle(playthrough, opelucid_city,
+    "Ace Trainer Dara")
+level_up(battle,
+    pawniard,
+    36)
+battle = make_battle(playthrough, opelucid_city,
+    "Veteran Kim")
+battle = make_battle(playthrough, opelucid_city,
+    "Leader Drayden")
+level_up(battle,
+    pawniard,
+    37)
+level_up(battle,
+    seismitoad,
+    44)
+route_10 = make_location(name="Route 10", region="Unova")
+
 
 
 
