@@ -949,6 +949,75 @@ battle = make_battle(playthrough, dragonspiral_tower,
     "Team Plasma Grunt")
 battle = make_battle(playthrough, dragonspiral_tower,
     "Team Plasma Grunt")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+level_up(battle,
+    mienfoo,
+    40)
+level_up(battle,
+    seismitoad,
+    43)
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+level_up(battle,
+    mienfoo,
+    41)
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+level_up(battle,
+    archeops,
+    43)
+battle = make_battle(playthrough, route_8,
+    "PKMN Trainer Bianca")
+level_up(battle,
+    mienfoo,
+    42)
+route_9 = make_location(name="Route 9", region="Unova")
+battle = make_battle(playthrough, route_9,
+    "Biker Phillip")
+battle = make_battle(playthrough, route_9,
+    "Roughneck Reese")
+battle = make_battle(playthrough, route_9,
+    "Hooligans Jim & Cas",
+    battle_type="Double")
+battle = make_battle(playthrough, route_9,
+    "Biker Zeke")
+battle = make_battle(playthrough, route_9,
+    "Roughneck Chance")
+battle = make_battle(playthrough, route_9,
+    "Waitress Flo")
+level_up(battle,
+    mienfoo,
+    43)
+battle = make_battle(playthrough, route_9,
+    "Rich Boy Manuel")
+level_up(battle,
+    archeops,
+    44)
+battle = make_battle(playthrough, route_9,
+    "Lady Isabel")
+battle = make_battle(playthrough, route_9,
+    "Waiter Bert")
+battle = make_battle(playthrough, route_9,
+    "Wild Pawniard")
+pawniard = catch(battle,
+    slot=6,
+    species="Pawniard",
+    dex_no=624,
+    type1="Dark",
+    type2="Steel",
+    caught_date=dt.date(2023, 8, 26),
+    caught_level=32,
+    ball="Ultra Ball",
+    gender='M')
 
 
 
