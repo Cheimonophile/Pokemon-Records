@@ -887,7 +887,36 @@ level_up(battle,
     35)
 battle = make_battle(playthrough, moor_of_icirrus,
     "Fisherman Damon")
-
+icirrus_city = make_location(name="Icirrus City", region="Unova")
+battle = make_battle(playthrough, icirrus_city,
+    "Black Belt Grant")
+level_up(battle,
+    mienfoo,
+    36)
+battle = make_battle(playthrough, icirrus_city,
+    "Battle Girl Miriam")
+level_up(battle,
+    pansear,
+    42)
+battle = make_battle(playthrough, icirrus_city,
+    "Black Belt Kendrew")
+battle = make_battle(playthrough, icirrus_city,
+    "Battle Girl Mikiko")
+battle = make_battle(playthrough, icirrus_city,
+    "Battle Girl Chandra")
+level_up(battle,
+    mienfoo,
+    37)
+battle = make_battle(playthrough, icirrus_city,
+    "Black Belt Thomas")
+battle = make_battle(playthrough, icirrus_city,
+    "Leader Brycen")
+level_up(battle,
+    stoutland,
+    43)
+level_up(battle,
+    mienfoo,
+    38)
 
 
 
