@@ -917,6 +917,38 @@ level_up(battle,
 level_up(battle,
     mienfoo,
     38)
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+level_up(battle,
+    archeops,
+    42)
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+level_up(battle,
+    pansear,
+    43)
+level_up(battle,
+    mienfoo,
+    39)
+simisear = evolve(battle,
+    pansear,
+    "Simisear",
+    dex_no=514,
+    type1="Fire")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
+battle = make_battle(playthrough, dragonspiral_tower,
+    "Team Plasma Grunt")
 
 
 
