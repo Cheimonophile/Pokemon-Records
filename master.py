@@ -1065,7 +1065,119 @@ level_up(battle,
     seismitoad,
     44)
 route_10 = make_location(name="Route 10", region="Unova")
-
+battle = make_battle(playthrough, route_10,
+    "Battle Girl Amy")
+level_up(battle,
+    pawniard,
+    38)
+battle = make_battle(playthrough, route_10,
+    "Ace Trainer Johan")
+level_up(battle,
+    archeops,
+    45)
+battle = make_battle(playthrough, route_10,
+    "Veteran Karla")
+level_up(battle,
+    pawniard,
+    39)
+battle = make_battle(playthrough, route_10,
+    "PKMN Trainer Cheren")
+level_up(battle,
+    pawniard,
+    40)
+level_up(battle,
+    simisear,
+    44)
+battle = make_battle(playthrough, route_10,
+    "Black Belt Corey")
+battle = make_battle(playthrough, route_10,
+    "Hiker Bret")
+level_up(battle,
+    pawniard,
+    41)
+battle = make_battle(playthrough, route_10,
+    "Ace Trainer Cheyenne")
+level_up(battle,
+    mienfoo,
+    44)
+level_up(battle,
+    stoutland,
+    45)
+battle = make_battle(playthrough, route_10,
+    "Veteran Chester")
+level_up(battle,
+    pawniard,
+    42)
+victory_road = make_location(name="Victory Road", region="Unova")
+battle = make_battle(playthrough, victory_road,
+    "Ace Trainer Shanta")
+battle = make_battle(playthrough, victory_road,
+    "Ace Trainer Dwayne")
+level_up(battle,
+    pawniard,
+    43)
+battle = make_battle(playthrough, victory_road,
+    "Veteran Tiffany")
+battle = make_battle(playthrough, victory_road,
+    "Ace Trainer Cathy")
+level_up(battle,
+    archeops,
+    46)
+level_up(battle,
+    pawniard,
+    44)
+battle = make_battle(playthrough, victory_road,
+    "Black Belt Tyrone")
+battle = make_battle(playthrough, victory_road,
+    "Doctor Logan")
+level_up(battle,
+    archeops,
+    47)
+level_up(battle,
+    pawniard,
+    45)
+battle = make_battle(playthrough, victory_road,
+    "Ace Trainer David")
+level_up(battle,
+    seismitoad,
+    45)
+battle = make_battle(playthrough, victory_road,
+    "Veteran Martell",
+    lost=True)
+battle = make_battle(playthrough, victory_road,
+    "Veteran Martell")
+level_up(battle,
+    seismitoad,
+    46)
+pokemon_league = make_location(name="Pokémon League", region="Unova")
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Marshal")
+level_up(battle,
+    mienfoo,
+    45)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Shauntal",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimmsley",
+    lost=True)
+level_up(battle,
+    simisear,
+    45)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin")
+level_up(battle,
+    stoutland,
+    46)
+level_up(battle,
+    archeops,
+    48)
+level_up(battle,
+    mienfoo,
+    46)
+battle = make_battle(playthrough, pokemon_league,
+    "Grimmsley",
+    lost=True)
 
 
 
