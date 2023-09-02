@@ -1159,7 +1159,7 @@ battle = make_battle(playthrough, pokemon_league,
     "Elite Four Shauntal",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley",
+    "Elite Four Grimsley",
     lost=True)
 level_up(battle,
     simisear,
@@ -1176,7 +1176,7 @@ level_up(battle,
     mienfoo,
     46)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley",
+    "Elite Four Grimsley",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
     "Elite Four Marshal",
@@ -1232,7 +1232,7 @@ level_up(battle,
     archeops,
     50)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley",
+    "Elite Four Grimsley",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
     "Elite Four Marshal",
@@ -1296,7 +1296,7 @@ level_up(battle,
     seismitoad,
     49)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley",
+    "Elite Four Grimsley",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
     "Elite Four Marshal")
@@ -1311,7 +1311,7 @@ mienshao = evolve(battle,
     dex_no=620,
     type1="Fighting")
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley")
+    "Elite Four Grimsley")
 level_up(battle,
     mienshao,
     51)
@@ -1319,7 +1319,7 @@ battle = make_battle(playthrough, pokemon_league,
     "Elite Four Shauntal",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimmsley")
+    "Elite Four Grimsley")
 level_up(battle,
     pawniard,
     50)
@@ -1332,5 +1332,61 @@ battle = make_battle(playthrough, pokemon_league,
 level_up(battle,
     pawniard,
     51)
-
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    seismitoad,
+    50)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Marshal",)
+level_up(battle,
+    archeops,
+    53)
+level_up(battle,
+    seismitoad,
+    51)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Shauntal",
+    lost=True)
+level_up(battle,
+    stoutland,
+    50)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    mienshao,
+    53)
+level_up(battle,
+    simisear,
+    51)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Marshal",)
+level_up(battle,
+    simisear,
+    52)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Shauntal",)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin")
+level_up(battle,
+    simisear,
+    53)
+level_up(battle,
+    simisear,
+    54)
+battle = make_battle(playthrough, pokemon_league,
+    "Team Plasma N",
+    lost=True)
+level_up(battle,
+    stoutland,
+    51)
+battle = make_battle(playthrough, pokemon_league,
+    "Team Plasma N",
+    lost=True)
+level_up(battle,
+    stoutland,
+    52)
+level_up(battle,
+    mienshao,
+    54)
 
