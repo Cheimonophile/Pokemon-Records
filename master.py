@@ -1374,13 +1374,14 @@ level_up(battle,
 level_up(battle,
     simisear,
     54)
-battle = make_battle(playthrough, pokemon_league,
+ns_castle = make_location(name="N's Castle", region="Unova")
+battle = make_battle(playthrough, ns_castle,
     "Team Plasma N",
     lost=True)
 level_up(battle,
     stoutland,
     51)
-battle = make_battle(playthrough, pokemon_league,
+battle = make_battle(playthrough, ns_castle,
     "Team Plasma N",
     lost=True)
 level_up(battle,
@@ -1389,4 +1390,40 @@ level_up(battle,
 level_up(battle,
     mienshao,
     54)
+battle = make_battle(playthrough, ns_castle,
+    "Team Plasma N",
+    lost=True)
+level_up(battle,
+    stoutland,
+    53)
+battle = make_battle(playthrough, ns_castle,
+    "Team Plasma N",)
+level_up(battle,
+    mienshao,
+    55)
+level_up(battle,
+    simisear,
+    55)
+level_up(battle,
+    stoutland,
+    54)
+level_up(battle,
+    archeops,
+    54)
+battle = make_battle(playthrough, ns_castle,
+    "Team Plasma Ghetsis")
+level_up(battle,
+    pawniard,
+    52)
+level_up(battle,
+    seismitoad,
+    52)
+bisharp = evolve(battle,
+    pawniard,
+    "Bisharp",
+    dex_no=625,
+    type1="Dark",
+    type2="Steel")
+         
+
 
