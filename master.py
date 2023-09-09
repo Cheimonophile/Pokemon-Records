@@ -1424,6 +1424,209 @@ bisharp = evolve(battle,
     dex_no=625,
     type1="Dark",
     type2="Steel")
+battle = make_battle(playthrough, dreamyard,
+    "Scientist Markus")
+level_up(battle,
+    stoutland,
+    55)
+battle = make_battle(playthrough, dreamyard,
+    "Scientist Kathrine")
+battle = make_battle(playthrough, relic_castle,
+    "Team Plasma Grunt")
+level_up(battle,
+    bisharp,
+    53)
+royal_unova = make_location(name="Royal Unova", region="Unova")
+battle = make_battle(playthrough, royal_unova,
+    "Ace Trainer Mariana")
+level_up(battle,
+    seismitoad,
+    53)
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+level_up(battle,
+    seismitoad,
+    54)
+battle = make_battle(playthrough, chargestone_cave,
+    "Team Plasma Grunt")
+challengers_cave = make_location(name="Challenger's Cave", region="Unova")
+battle = make_battle(playthrough, challengers_cave,
+    "Acd Trainer Terry")
+level_up(battle,
+    bisharp,
+    54)
+level_up(battle,
+    archeops,
+    55)
+battle = make_battle(playthrough, challengers_cave,
+    "Ace Trainer Beverly")
+battle = make_battle(playthrough, challengers_cave,
+    "Veteran Shaun",
+    lost=True)
+level_up(battle,
+    seismitoad,
+    55)
+level_up(battle,
+    archeops,
+    56)
+level_up(battle,
+    simisear,
+    56)
+battle = make_battle(playthrough, challengers_cave,
+    "Backpacker Toru")
+level_up(battle,
+    bisharp,
+    55)
+battle = make_battle(playthrough, challengers_cave,
+    "Veteran Shaun",
+    lost=True)
+level_up(battle,
+    stoutland,
+    56)
+level_up(battle,
+    mienshao,
+    56)
+battle = make_battle(playthrough, route_16,
+    "Backpacker Lora")
+marvelous_bridge = make_location(name="Marvelous Bridge", region="Unova")
+battle = make_battle(playthrough, marvelous_bridge,
+    "Ace Trainer Glinda")
+route_15 = make_location(name="Route 15", region="Unova")
+battle = make_battle(playthrough, route_15,
+    "Pokéfan Elliot")
+level_up(battle,
+    bisharp,
+    56)
+battle = make_battle(playthrough, route_15,
+    "Hiker Kit")
+level_up(battle,
+    seismitoad,
+    56)
+battle = make_battle(playthrough, route_15,
+    "PKMN Ranger Keith")
+level_up(battle,
+    seismitoad,
+    57)
+battle = make_battle(playthrough, route_15,
+    "Battle Girl Susie")
+level_up(battle,
+    archeops,
+    57)
+battle = make_battle(playthrough, route_15,
+    "PKMN Ranger Shelly")
+black_city = make_location(name="Black City", region="Unova")
+battle = make_battle(playthrough, black_city,
+    "Veteran Ken")
+battle = make_battle(playthrough, black_city,
+    "Black Belt Ryder")
+level_up(battle,
+    archeops,
+    58)
+battle = make_battle(playthrough, black_city,
+    "Roughneck Johnny")
+level_up(battle,
+    mienshao,
+    57)
+battle = make_battle(playthrough, black_city,
+    "Backpacker Kiyo")
+level_up(battle,
+    seismitoad,
+    58)
+level_up(battle,
+    bisharp,
+    57)
+battle = make_battle(playthrough, black_city,
+    "Roughneck Dave")
+route_14 = make_location(name="Route 14", region="Unova")
+battle = make_battle(playthrough, route_14,
+    "Ace Trainer Junko")
+level_up(battle,
+    simisear,
+    57)
+level_up(battle,
+    stoutland,
+    57)
+battle = make_battle(playthrough, route_14,
+    "Backpacker Vicki")
+battle = make_battle(playthrough, route_14,
+    "Black Belt Jay")
+battle = make_battle(playthrough, route_14,
+    "Fisherman Sid")
+level_up(battle,
+    stoutland,
+    58)
+undella_bay = make_location(name="Undella Bay", region="Unova")
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer F Tyra")
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer M Matt")
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer F Larissa")
+level_up(battle,
+    mienshao,
+    58)
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer M Tim")
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer F Rebecca")
+level_up(battle,
+    mienshao,
+    59)
+battle = make_battle(playthrough, undella_bay,
+    "Swimmer M Bart")
+level_up(battle,
+    archeops,
+    59)
+route_13 = make_location(name="Route 13", region="Unova")
+battle = make_battle(playthrough, route_13,
+    "Socialite Marian")
+battle = make_battle(playthrough, route_13,
+    "Gentleman Yan")
+level_up(battle,
+    bisharp,
+    58)
+battle = make_battle(playthrough, route_13,
+    "Twins Emy & Lin",
+    battle_type="Double")
+level_up(battle,
+    simisear,
+    58)
+battle = make_battle(playthrough, route_13,
+    "Black Belt Benjamin")
+battle = make_battle(playthrough, route_13,
+    "Fisherman Pete")
+battle = make_battle(playthrough, route_13,
+    "Fisherman Vince")
+battle = make_battle(playthrough, route_13,
+    "Parasol Lady Laura")
+battle = make_battle(playthrough, route_13,
+    "Fisherman Mick")
+battle = make_battle(playthrough, route_13,
+    "Fisherman Jones")
+level_up(battle,
+    seismitoad,
+    59)
+battle = make_battle(playthrough, route_13,
+    "Artist Zach")
+level_up(battle,
+    simisear,
+    59)
+battle = make_battle(playthrough, route_13,
+    "Youngster Astor")
+battle = make_battle(playthrough, route_13,
+    "Lass Fey")
+route_11 = make_location(name="Route 11", region="Unova")
+battle = make_battle(playthrough, route_11,
+    "Backpacker Talon")
+level_up(battle,
+    stoutland,
+    59)
+battle = make_battle(playthrough, route_11,
+    "PKMN Ranger Thalia")
+level_up(battle,
+    bisharp,
+    59)
+
          
 
 
