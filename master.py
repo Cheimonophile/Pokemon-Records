@@ -1806,10 +1806,165 @@ battle = make_battle(playthrough, pokemon_league,
     "Elite Four Caitlin",
     lost=True)
 battle = make_battle(playthrough, pokemon_league,
-    "Elite Four Grimsley")
+    "Elite Four Grimsley",
+    lost=True)
 level_up(battle,
     stoutland,
     64)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimlsey")
+level_up(battle,
+    seismitoad,
+    64)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    seismitoad,
+    65)
+level_up(battle,
+    archeops,
+    66)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    mienshao,
+    66)
+level_up(battle,
+    bisharp,
+    65)
+level_up(battle,
+    seismitoad,
+    66)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley",
+    lost=True)
+level_up(battle,
+    stoutland,
+    65)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    stoutland,
+    66)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+level_up(battle,
+    stoutland,
+    67)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    simisear,
+    66)
+level_up(battle,
+    mienshao,
+    67)
+level_up(battle,
+    bisharp,
+    66)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+level_up(battle,
+    simisear,
+    67)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    seismitoad,
+    67)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+level_up(battle,
+    seismitoad,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    archeops,
+    67)
+level_up(battle,
+    mienshao,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+level_up(battle,
+    archeops,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    bisharp,
+    67)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    bisharp,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    seismitoad,
+    69)
+level_up(battle,
+    simisear,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    mienshao,
+    69)
+level_up(battle,
+    stoutland,
+    68)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Shauntal",
+    lost=True)
+level_up(battle,
+    stoutland,
+    69)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    simisear,
+    69)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Caitlin",
+    lost=True)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Grimsley")
+level_up(battle,
+    mienshao,
+    70)
+level_up(battle,
+    bisharp,
+    69)
+battle = make_battle(playthrough, pokemon_league,
+    "Elite Four Marshal")
+level_up(battle,
+    simisear,
+    70)
 
          
 
