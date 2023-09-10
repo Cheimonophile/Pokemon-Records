@@ -1626,6 +1626,42 @@ battle = make_battle(playthrough, route_11,
 level_up(battle,
     bisharp,
     59)
+battle = make_battle(playthrough, route_11,
+    "Backpacker Corin")
+village_bridge = make_location(name="Village Bridge", region="Unova")
+battle = make_battle(playthrough, village_bridge,
+    "School Kid Serena")
+level_up(battle,
+    stoutland,
+    60)
+battle = make_battle(playthrough, village_bridge,
+    "Scientist Shannon")
+level_up(battle,
+    archeops,
+    60)
+battle = make_battle(playthrough, village_bridge,
+    "Baker Chris")
+route_12 = make_location(name="Route 12", region="Unova")
+battle = make_battle(playthrough, route_12,
+    "PKMN Breeder Ethel")
+level_up(battle,
+    simisear,
+    60)
+battle = make_battle(playthrough, route_12,
+    "PKMN Breeder Eustace")
+battle = make_battle(playthrough, route_12,
+    "School Kid Jem")
+level_up(battle,
+    mienshao,
+    60)
+battle = make_battle(playthrough, route_12,
+    "Backers Fey & Sue",
+    battle_type="Double")
+level_up(battle,
+    seismitoad,
+    60)
+battle = make_battle(playthrough, route_12,
+    "School Kid Ann")
 
          
 
