@@ -52,20 +52,10 @@ CREATE TABLE Species (
     name TEXT NOT NULL,
     form TEXT NOT NULL,
     generation INTEGER NOT NULL,
-    PRIMARY KEY (dex_no, form)
-);
-
--- Table for pokemon species game info
-CREATE TABLE Species_Version (
-    species_dex_no INTEGER NOT NULL,
-    species_form TEXT NOT NULL,
-    version TEXT NOT NULL,
     type1 TEXT NOT NULL,
     type2 TEXT,
     color TEXT NOT NULL,
-    PRIMARY KEY (species_dex_no, species_form, version),
-    FOREIGN KEY (species_dex_no, species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT,
-    FOREIGN KEY (version) REFERENCES Version(name) ON DELETE RESTRICT,
+    PRIMARY KEY (dex_no, form),
     FOREIGN KEY (type1) REFERENCES Type(name) ON DELETE RESTRICT,
     FOREIGN KEY (type2) REFERENCES Type(name) ON DELETE RESTRICT
 );
@@ -158,6 +148,22 @@ CREATE TABLE Catch_Event (
     FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
     FOREIGN KEY (enounter_type) REFERENCES Catch_Type(name) ON DELETE RESTRICT
 );
+
+-- Team Member Changes
+CREATE TABLE Team_Member_Changes (
+    no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    team_member_playthrough_id_no TEXT NOT NULL,
+    team_member_slot TEXT NOT NULL,
+    event_no INTEGER NOT NULL,
+    level_change INTEGER,
+    species_dex_no INTEGER,
+    species_form TEXT,
+    FOREIGN KEY (team_member_playthrough_id_no, team_member_slot) REFERENCES Team_Member(playthrough_id_no, slot) ON DELETE RESTRICT,
+    FOREIGN KEY (event_no) REFERENCES Event(no) ON DELETE RESTRICT,
+    CHECK (level_change >= 0),
+    FOREIGN KEY (species_dex_no, species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT
+);
+
 
 -- Pokemon Versions
 INSERT INTO Version (name, generation) VALUES

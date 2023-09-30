@@ -90,14 +90,6 @@ diesel::table! {
         name -> Text,
         form -> Text,
         generation -> Integer,
-    }
-}
-
-diesel::table! {
-    Species_Version (species_dex_no, species_form, version) {
-        species_dex_no -> Integer,
-        species_form -> Text,
-        version -> Text,
         type1 -> Text,
         type2 -> Nullable<Text>,
         color -> Text,
@@ -115,6 +107,18 @@ diesel::table! {
         caught_level -> Integer,
         ball -> Text,
         gender -> Text,
+    }
+}
+
+diesel::table! {
+    Team_Member_Changes (no) {
+        no -> Integer,
+        team_member_playthrough_id_no -> Text,
+        team_member_slot -> Text,
+        event_no -> Integer,
+        level_change -> Nullable<Integer>,
+        species_dex_no -> Nullable<Integer>,
+        species_form -> Nullable<Text>,
     }
 }
 
@@ -154,9 +158,9 @@ diesel::joinable!(Item_Event -> Event (no));
 diesel::joinable!(Item_Event -> Item (item));
 diesel::joinable!(Location -> Region (region));
 diesel::joinable!(Playthrough -> Version (version));
-diesel::joinable!(Species_Version -> Version (version));
 diesel::joinable!(Team_Member -> Ball (ball));
 diesel::joinable!(Team_Member -> Playthrough (playthrough_id_no));
+diesel::joinable!(Team_Member_Changes -> Event (event_no));
 diesel::joinable!(Trainer -> Trainer_Class (class));
 
 diesel::allow_tables_to_appear_in_same_query!(
@@ -172,8 +176,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     Playthrough,
     Region,
     Species,
-    Species_Version,
     Team_Member,
+    Team_Member_Changes,
     Trainer,
     Trainer_Class,
     Type,
