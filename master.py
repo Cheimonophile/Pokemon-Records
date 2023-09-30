@@ -1,5 +1,5 @@
-from src.events import *
-from src.pkmn_constants import *
+from src_python.events import *
+from src_python.pkmn_constants import *
 
 
 playthrough = make_playthrough(id_no="26852", name="Ben", version="Black", adventure_started=dt.date(2023, 6, 24))
