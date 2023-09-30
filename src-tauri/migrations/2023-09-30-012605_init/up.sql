@@ -29,6 +29,11 @@ CREATE TABLE Battle_Type (
     name TEXT PRIMARY KEY NOT NULL
 );
 
+-- Table for Catch Types
+CREATE TABLE Catch_Type (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
 -- Table for pokemon locations
 CREATE TABLE Location (
     name TEXT NOT NULL,
@@ -124,12 +129,21 @@ CREATE TABLE Battle_Event (
     partner_name TEXT,
     partner_class TEXT,
     round INTEGER NOT NULL,
-    lost BOOLEAN NOT NULL,
+    lost BOOLEAN DEFAULT 0 NOT NULL,
     FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
     FOREIGN KEY (opponent1_name, opponent1_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     FOREIGN KEY (opponent2_name, opponent2_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     FOREIGN KEY (partner_name, partner_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     CHECK (lost IN (0,1))
+);
+
+
+-- catch event
+CREATE TABLE Catch_Event (
+    no INTEGER NOT NULL PRIMARY KEY,
+    enounter_type TEXT NOT NULL,
+    FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
+    FOREIGN KEY (enounter_type) REFERENCES Catch_Type(name) ON DELETE RESTRICT
 );
 
 -- Pokemon Versions
@@ -254,3 +268,31 @@ INSERT INTO Battle_Type (name) VALUES
     ("Triple"),
     ("Rotation"),
     ("Horde");
+
+
+-- Catch Types
+INSERT INTO Catch_Type (name) VALUES
+    ("Gift"),
+    ("Grass"),
+    ("Cave"),
+    ("Surf"),
+    ("Old Rod"),
+    ("Good Rod"),
+    ("Super Rod"),
+    ("Fossil"),
+    ("Interact"),
+    ("Hatch"),
+    ("Rock Smash"),
+    ("Headbutt"),
+    -- ("Sweet Scent"),
+    ("Long Grass"),
+    ("Sand"),
+    ("Seaweed"),
+    ("Honey Tree"),
+    ("Puddle"),
+    ("Dark Grass"),
+    ("Snow"),
+    ("Ambush"),
+    ("Soaring"),
+    ("Shaking Tree"),
+    ("Raid");

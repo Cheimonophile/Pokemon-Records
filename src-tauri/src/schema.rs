@@ -27,6 +27,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    Catch_Event (no) {
+        no -> Integer,
+        enounter_type -> Text,
+    }
+}
+
+diesel::table! {
+    Catch_Type (name) {
+        name -> Text,
+    }
+}
+
+diesel::table! {
     Event (no) {
         no -> Integer,
         playthrough_id_no -> Text,
@@ -119,6 +132,8 @@ diesel::table! {
 }
 
 diesel::joinable!(Battle_Event -> Event (no));
+diesel::joinable!(Catch_Event -> Catch_Type (enounter_type));
+diesel::joinable!(Catch_Event -> Event (no));
 diesel::joinable!(Event -> Playthrough (playthrough_id_no));
 diesel::joinable!(Location -> Region (region));
 diesel::joinable!(Playthrough -> Version (version));
@@ -131,6 +146,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     Ball,
     Battle_Event,
     Battle_Type,
+    Catch_Event,
+    Catch_Type,
     Event,
     Location,
     Playthrough,

@@ -1,5 +1,6 @@
 -- This file should undo anything in `up.sql`
 
+DROP TABLE Catch_Event;
 DROP TABLE Battle_Event;
 DROP TABLE Event;
 DROP TABLE Trainer_Class;
@@ -10,6 +11,7 @@ DROP TABLE Playthrough;
 DROP TABLE Species_Version;
 DROP TABLE Species;
 DROP TABLE Location;
+DROP TABLE Catch_Type;
 DROP TABLE Battle_Type;
 DROP TABLE Type;
 DROP TABLE Region;
