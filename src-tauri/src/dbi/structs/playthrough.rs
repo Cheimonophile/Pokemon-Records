@@ -11,8 +11,9 @@ pub struct InsertPlaythrough<'a> {
     pub adventure_started: &'a str,
 }
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::Playthrough)]
+#[diesel(primary_key(id_no))]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Playthrough {
     pub id_no: String,

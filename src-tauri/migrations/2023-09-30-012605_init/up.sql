@@ -146,9 +146,9 @@ CREATE TABLE Item_Event (
 -- catch event
 CREATE TABLE Catch_Event (
     no INTEGER NOT NULL PRIMARY KEY,
-    enounter_type TEXT NOT NULL,
+    catch_type TEXT NOT NULL,
     FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
-    FOREIGN KEY (enounter_type) REFERENCES Catch_Type(name) ON DELETE RESTRICT
+    FOREIGN KEY (catch_type) REFERENCES Catch_Type(name) ON DELETE RESTRICT
 );
 
 -- Team Member Changes

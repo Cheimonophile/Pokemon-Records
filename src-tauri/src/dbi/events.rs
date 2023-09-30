@@ -89,6 +89,27 @@ pub fn catch_pokemon(
     gender: &str,
     ball: &str
 ) {
+    let new_event = event::InsertEvent {
+        playthrough_id_no: &playthrough.id_no,
+        location_name: &caught_location.name,
+        location_region: &caught_location.region,
+    };
+    diesel::insert_into(schema::Event::table)
+        .values(&new_event)
+        .execute(conn)
+        .expect("Error saving new event");
+    let event = schema::Event::table
+        .filter(schema::Event::playthrough_id_no.eq(&playthrough.id_no))
+        .first::<event::Event>(conn)
+        .expect("Error loading event");
+    let new_catch_event = catch_event::InsertCatchEvent {
+        no: &event.no,
+        catch_type: &"Gift",
+    };
+    diesel::insert_into(schema::Catch_Event::table)
+        .values(&new_catch_event)
+        .execute(conn)
+        .expect("Error saving new catch event");
     let new_team_member =  team_member::InsertTeamMember {
         playthrough_id_no: &playthrough.id_no,
         slot,
