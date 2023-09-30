@@ -76,6 +76,38 @@ pub fn create_species(
     species
 }
 
+
+pub fn catch_pokemon(
+    conn: &mut SqliteConnection,
+    playthrough: &playthrough::Playthrough,
+    slot: &i32,
+    species: &species::Species,
+    nickname: Option<&str>,
+    caught_date: &str,
+    caught_location: &location::Location,
+    caught_level: &i32,
+    gender: &str,
+    ball: &str
+) {
+    let new_team_member =  team_member::InsertTeamMember {
+        playthrough_id_no: &playthrough.id_no,
+        slot,
+        nickname,
+        caught_date,
+        caught_location_name: &caught_location.name,
+        caught_location_region: &caught_location.region,
+        caught_species_dex_no: &species.dex_no,
+        caught_species_form: species.form.as_deref(),
+        caught_level,
+        gender,
+        ball
+    };
+    diesel::insert_into(schema::Team_Member::table)
+        .values(&new_team_member)
+        .execute(conn)
+        .expect("Error saving new team member");
+}
+
 pub fn create_trainer_class(
     conn: &mut SqliteConnection,
     name: &str,

@@ -9,12 +9,23 @@ pub fn run() {
     // events
     let mut playthrough = create_playthrough(conn, "26852", "Ben", "Black", "2023-06-24");
     let nuvema_town = create_location(conn, "Nuvema Town", "Unova");
-    create_species(conn,
+    let species_lillipup = create_species(conn,
         &506,
         "Lillipup",
         None,
         &5,
         "Normal",
         None
+    );
+    let lillipup = catch_pokemon(conn,
+        &playthrough,
+        &1,
+        &species_lillipup,
+        None,
+        "2023-06-24",
+        &nuvema_town,
+        &5,
+        "M",
+        "Poké Ball"
     );
 }

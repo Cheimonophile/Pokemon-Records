@@ -72,11 +72,13 @@ CREATE TABLE Playthrough (
 -- Table for Team Member
 CREATE TABLE Team_Member (
     playthrough_id_no TEXT NOT NULL,
-    slot TEXT NOT NULL,
+    slot INTEGER NOT NULL,
     nickname TEXT,
     caught_date TEXT NOT NULL,
     caught_location_name TEXT NOT NULL,
     caught_location_region TEXT NOT NULL,
+    caught_species_dex_no INTEGER NOT NULL,
+    caught_species_form TEXT,
     caught_level INTEGER NOT NULL,
     ball TEXT NOT NULL,
     gender TEXT NOT NULL,
@@ -84,6 +86,7 @@ CREATE TABLE Team_Member (
     FOREIGN KEY (playthrough_id_no) REFERENCES Playthrough(id_no) ON DELETE RESTRICT,
     FOREIGN KEY (caught_location_name, caught_location_region) REFERENCES Location(name, region) ON DELETE RESTRICT,
     FOREIGN KEY (ball) REFERENCES Ball(name) ON DELETE RESTRICT,
+    FOREIGN KEY (caught_species_dex_no, caught_species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT,
     CHECK (slot >= 1 AND slot <= 6),
     CHECK (gender IN ("M","F","N")),
     CHECK (caught_level >= 1 AND caught_level <= 100)
@@ -152,7 +155,7 @@ CREATE TABLE Catch_Event (
 CREATE TABLE Team_Member_Changes (
     no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     team_member_playthrough_id_no TEXT NOT NULL,
-    team_member_slot TEXT NOT NULL,
+    team_member_slot INTEGER NOT NULL,
     event_no INTEGER NOT NULL,
     level_change INTEGER,
     species_dex_no INTEGER,

@@ -98,11 +98,13 @@ diesel::table! {
 diesel::table! {
     Team_Member (playthrough_id_no, slot) {
         playthrough_id_no -> Text,
-        slot -> Text,
+        slot -> Integer,
         nickname -> Nullable<Text>,
         caught_date -> Text,
         caught_location_name -> Text,
         caught_location_region -> Text,
+        caught_species_dex_no -> Integer,
+        caught_species_form -> Nullable<Text>,
         caught_level -> Integer,
         ball -> Text,
         gender -> Text,
@@ -113,7 +115,7 @@ diesel::table! {
     Team_Member_Changes (no) {
         no -> Integer,
         team_member_playthrough_id_no -> Text,
-        team_member_slot -> Text,
+        team_member_slot -> Integer,
         event_no -> Integer,
         level_change -> Nullable<Integer>,
         species_dex_no -> Nullable<Integer>,
