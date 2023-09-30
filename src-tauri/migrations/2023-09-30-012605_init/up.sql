@@ -1,7 +1,6 @@
 -- Your SQL goes here
 
 
-
 -- Table for Pokemon Version
 CREATE TABLE Version (
     name TEXT PRIMARY KEY NOT NULL,
@@ -127,6 +126,7 @@ CREATE TABLE Event (
 -- battle event table
 CREATE TABLE Battle_Event (
     no INTEGER NOT NULL PRIMARY KEY,
+    battle_type TEXT NOT NULL,
     opponent1_name TEXT NOT NULL,
     opponent1_class TEXT NOT NULL,
     opponent2_name TEXT,
@@ -136,6 +136,7 @@ CREATE TABLE Battle_Event (
     round INTEGER NOT NULL,
     lost BOOLEAN DEFAULT 0 NOT NULL,
     FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
+    FOREIGN KEY (battle_type) REFERENCES Battle_Type(name) ON DELETE RESTRICT,
     FOREIGN KEY (opponent1_name, opponent1_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     FOREIGN KEY (opponent2_name, opponent2_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     FOREIGN KEY (partner_name, partner_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
@@ -149,7 +150,6 @@ CREATE TABLE Item_Event (
     FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
     FOREIGN KEY (item) REFERENCES Item(name) ON DELETE RESTRICT
 );
-
 
 -- catch event
 CREATE TABLE Catch_Event (

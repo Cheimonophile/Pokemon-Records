@@ -9,6 +9,7 @@ diesel::table! {
 diesel::table! {
     Battle_Event (no) {
         no -> Integer,
+        battle_type -> Text,
         opponent1_name -> Text,
         opponent1_class -> Text,
         opponent2_name -> Nullable<Text>,
@@ -144,6 +145,7 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(Battle_Event -> Battle_Type (battle_type));
 diesel::joinable!(Battle_Event -> Event (no));
 diesel::joinable!(Catch_Event -> Catch_Type (enounter_type));
 diesel::joinable!(Catch_Event -> Event (no));
