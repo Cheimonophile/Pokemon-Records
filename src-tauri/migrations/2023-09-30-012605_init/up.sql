@@ -24,6 +24,11 @@ CREATE TABLE Type (
     color TEXT NOT NULL
 );
 
+-- Table for Battle Types
+CREATE TABLE Battle_Type (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
 -- Table for pokemon locations
 CREATE TABLE Location (
     name TEXT NOT NULL,
@@ -42,7 +47,7 @@ CREATE TABLE Species (
 );
 
 -- Table for pokemon species game info
-CREATE TABLE SpeciesVersion (
+CREATE TABLE Species_Version (
     species_dex_no INTEGER NOT NULL,
     species_form TEXT NOT NULL,
     version TEXT NOT NULL,
@@ -93,7 +98,7 @@ CREATE TABLE Trainer_Class (
 
 -- Trainer Table
 CREATE TABLE Trainer (
-    name TEXT NOT NULL,
+    name TEXT,
     class TEXT NOT NULL,
     PRIMARY KEY (name, class),
     FOREIGN KEY (class) REFERENCES Trainer_Class(name) ON DELETE RESTRICT
@@ -112,7 +117,19 @@ CREATE TABLE Event (
 -- battle event table
 CREATE TABLE Battle_Event (
     no INTEGER NOT NULL PRIMARY KEY,
-    FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT
+    opponent1_name TEXT NOT NULL,
+    opponent1_class TEXT NOT NULL,
+    opponent2_name TEXT,
+    opponent2_class TEXT,
+    partner_name TEXT,
+    partner_class TEXT,
+    round INTEGER NOT NULL,
+    lost BOOLEAN NOT NULL,
+    FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
+    FOREIGN KEY (opponent1_name, opponent1_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
+    FOREIGN KEY (opponent2_name, opponent2_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
+    FOREIGN KEY (partner_name, partner_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
+    CHECK (lost IN (0,1))
 );
 
 -- Pokemon Versions
@@ -229,3 +246,11 @@ INSERT INTO Type (name, color) VALUES
     ("Dark", "#705746"),
     ("Steel", "#B7B7CE"),
     ("Fairy", "#D685AD");
+
+-- Battle Types
+INSERT INTO Battle_Type (name) VALUES
+    ("Single"),
+    ("Double"),
+    ("Triple"),
+    ("Rotation"),
+    ("Horde");
