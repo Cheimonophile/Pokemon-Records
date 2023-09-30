@@ -29,4 +29,11 @@ pub fn run() {
         "M",
         "Poké Ball"
     );
+    let pkmn_trainer = create_trainer_class(conn,
+        "PKMN Trainer"
+    );
+    let bianca = create_trainer(conn,
+        Some("Bianca"),
+        &pkmn_trainer
+    );
 }

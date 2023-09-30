@@ -140,10 +140,14 @@ pub fn catch_pokemon(
         .execute(conn)
         .expect("Error saving new team member change");
     let team_member = schema::Team_Member::table
-        .filter(schema::Team_Member::playthrough_id_no.eq(&playthrough.id_no).and(schema::Team_Member::slot.eq(slot)))
+        .filter(
+            schema::Team_Member::playthrough_id_no
+                .eq(&playthrough.id_no)
+                .and(schema::Team_Member::slot.eq(slot)),
+        )
         .first::<team_member::TeamMember>(conn)
         .expect("Error loading team member");
-    println!("Got {} from {}", species, catch_type);
+    println!("Got {} ({})", species, catch_type);
     team_member
 }
 
@@ -162,4 +166,25 @@ pub fn create_trainer_class(
         .expect("Error loading trainer class");
     println!("Ceated trainer class {}", trainer_class);
     trainer_class
+}
+
+pub fn create_trainer(
+    conn: &mut SqliteConnection,
+    name: Option<&str>,
+    class: &trainer_class::TrainerClass,
+) -> trainer::Trainer {
+    let new_trainer = trainer::InsertTrainer {
+        name,
+        class: &class.name,
+    };
+    diesel::insert_into(schema::Trainer::table)
+        .values(&new_trainer)
+        .execute(conn)
+        .expect("Error saving new trainer");
+    let trainer = schema::Trainer::table
+        .filter(schema::Trainer::class.eq(&class.name))
+        .first::<crate::dbi::structs::trainer::Trainer>(conn)
+        .expect("Error loading trainer");
+    println!("Ceated trainer {}", trainer.format(conn));
+    trainer
 }
