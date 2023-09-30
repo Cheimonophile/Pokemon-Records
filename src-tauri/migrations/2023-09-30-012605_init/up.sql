@@ -34,6 +34,11 @@ CREATE TABLE Catch_Type (
     name TEXT PRIMARY KEY NOT NULL
 );
 
+-- Table for Items
+CREATE TABLE Item (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
 -- Table for pokemon locations
 CREATE TABLE Location (
     name TEXT NOT NULL,
@@ -135,6 +140,14 @@ CREATE TABLE Battle_Event (
     FOREIGN KEY (opponent2_name, opponent2_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     FOREIGN KEY (partner_name, partner_class) REFERENCES Trainer(name, class) ON DELETE RESTRICT,
     CHECK (lost IN (0,1))
+);
+
+-- events caused by items
+CREATE TABLE Item_Event (
+    no INTEGER NOT NULL PRIMARY KEY,
+    item TEXT NOT NULL,
+    FOREIGN KEY (no) REFERENCES Event(no) ON DELETE RESTRICT,
+    FOREIGN KEY (item) REFERENCES Item(name) ON DELETE RESTRICT
 );
 
 

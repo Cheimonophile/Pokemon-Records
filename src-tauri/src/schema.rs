@@ -49,6 +49,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    Item (name) {
+        name -> Text,
+    }
+}
+
+diesel::table! {
+    Item_Event (no) {
+        no -> Integer,
+        item -> Text,
+    }
+}
+
+diesel::table! {
     Location (name, region) {
         name -> Text,
         region -> Text,
@@ -135,6 +148,8 @@ diesel::joinable!(Battle_Event -> Event (no));
 diesel::joinable!(Catch_Event -> Catch_Type (enounter_type));
 diesel::joinable!(Catch_Event -> Event (no));
 diesel::joinable!(Event -> Playthrough (playthrough_id_no));
+diesel::joinable!(Item_Event -> Event (no));
+diesel::joinable!(Item_Event -> Item (item));
 diesel::joinable!(Location -> Region (region));
 diesel::joinable!(Playthrough -> Version (version));
 diesel::joinable!(Species_Version -> Version (version));
@@ -149,6 +164,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     Catch_Event,
     Catch_Type,
     Event,
+    Item,
+    Item_Event,
     Location,
     Playthrough,
     Region,
