@@ -3,8 +3,9 @@ use diesel::SqliteConnection;
 
 use crate::schema;
 
-use crate::dbi::structs::playthrough::InsertPlaythrough;
+use crate::dbi::structs::*;
 
+use super::structs::location::Location;
 use super::structs::playthrough::Playthrough;
 
 pub fn create_playthrough(
@@ -14,7 +15,7 @@ pub fn create_playthrough(
     version: &str,
     adventure_started: &str,
 ) -> Playthrough {
-    let new_playthrough = InsertPlaythrough {
+    let new_playthrough = playthrough::InsertPlaythrough {
         id_no,
         name,
         version,
@@ -36,8 +37,8 @@ pub fn create_location(
     conn: &mut SqliteConnection,
     name: &str,
     region: &str,
-) -> crate::dbi::structs::location::Location {
-    let new_location = crate::dbi::structs::location::InsertLocation { name, region };
+) -> Location {
+    let new_location = location::InsertLocation { name, region };
     diesel::insert_into(schema::Location::table)
         .values(&new_location)
         .execute(conn)
@@ -49,3 +50,29 @@ pub fn create_location(
     println!("Ceated location {}", location);
     location
 }
+
+pub fn create_trainer_class(
+    conn: &mut SqliteConnection,
+    name: &str,
+) -> trainer_class::TrainerClass {
+    let new_trainer_class = trainer_class::InsertTrainerClass { name };
+    diesel::insert_into(schema::Trainer_Class::table)
+        .values(&new_trainer_class)
+        .execute(conn)
+        .expect("Error saving new trainer class");
+    let trainer_class = schema::Trainer_Class::table
+        .filter(schema::Trainer_Class::name.eq(name))
+        .first::<crate::dbi::structs::trainer_class::TrainerClass>(conn)
+        .expect("Error loading trainer class");
+    println!("Ceated trainer class {}", trainer_class);
+    trainer_class
+}
+
+
+// pub fn create_battle(
+//     conn: &mut SqliteConnection,
+//     playthrough: &Playthrough,
+//     location: &Location
+// ) {
+
+// }
