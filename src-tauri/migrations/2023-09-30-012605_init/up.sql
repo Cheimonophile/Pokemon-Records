@@ -152,8 +152,8 @@ CREATE TABLE Catch_Event (
 );
 
 -- Team Member Changes
-CREATE TABLE Team_Member_Changes (
-    no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE Team_Member_Change (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     team_member_playthrough_id_no TEXT NOT NULL,
     team_member_slot INTEGER NOT NULL,
     event_no INTEGER NOT NULL,

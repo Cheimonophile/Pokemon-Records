@@ -1,6 +1,6 @@
 -- This file should undo anything in `up.sql`
 
-DROP TABLE Team_Member_Changes;
+DROP TABLE Team_Member_Change;
 DROP TABLE Catch_Event;
 DROP TABLE Item_Event;
 DROP TABLE Battle_Event;

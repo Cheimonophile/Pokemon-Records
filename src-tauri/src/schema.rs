@@ -112,8 +112,8 @@ diesel::table! {
 }
 
 diesel::table! {
-    Team_Member_Changes (no) {
-        no -> Integer,
+    Team_Member_Change (id) {
+        id -> Integer,
         team_member_playthrough_id_no -> Text,
         team_member_slot -> Integer,
         event_no -> Integer,
@@ -161,7 +161,7 @@ diesel::joinable!(Location -> Region (region));
 diesel::joinable!(Playthrough -> Version (version));
 diesel::joinable!(Team_Member -> Ball (ball));
 diesel::joinable!(Team_Member -> Playthrough (playthrough_id_no));
-diesel::joinable!(Team_Member_Changes -> Event (event_no));
+diesel::joinable!(Team_Member_Change -> Event (event_no));
 diesel::joinable!(Trainer -> Trainer_Class (class));
 
 diesel::allow_tables_to_appear_in_same_query!(
@@ -178,7 +178,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     Region,
     Species,
     Team_Member,
-    Team_Member_Changes,
+    Team_Member_Change,
     Trainer,
     Trainer_Class,
     Type,

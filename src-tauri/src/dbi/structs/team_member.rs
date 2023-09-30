@@ -28,6 +28,8 @@ pub struct TeamMember {
     pub caught_date: String,
     pub caught_location_name: String,
     pub caught_location_region: String,
+    pub caught_species_dex_no: i32,
+    pub caught_species_form: Option<String>,
     pub caught_level: i32,
     pub ball: String,
     pub gender: String,

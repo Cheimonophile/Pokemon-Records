@@ -76,19 +76,19 @@ pub fn create_species(
     species
 }
 
-
 pub fn catch_pokemon(
     conn: &mut SqliteConnection,
     playthrough: &playthrough::Playthrough,
     slot: &i32,
     species: &species::Species,
     nickname: Option<&str>,
+    catch_type: &str,
     caught_date: &str,
     caught_location: &location::Location,
     caught_level: &i32,
     gender: &str,
-    ball: &str
-) {
+    ball: &str,
+) -> team_member::TeamMember {
     let new_event = event::InsertEvent {
         playthrough_id_no: &playthrough.id_no,
         location_name: &caught_location.name,
@@ -104,13 +104,13 @@ pub fn catch_pokemon(
         .expect("Error loading event");
     let new_catch_event = catch_event::InsertCatchEvent {
         no: &event.no,
-        catch_type: &"Gift",
+        catch_type: catch_type,
     };
     diesel::insert_into(schema::Catch_Event::table)
         .values(&new_catch_event)
         .execute(conn)
         .expect("Error saving new catch event");
-    let new_team_member =  team_member::InsertTeamMember {
+    let new_team_member = team_member::InsertTeamMember {
         playthrough_id_no: &playthrough.id_no,
         slot,
         nickname,
@@ -121,12 +121,30 @@ pub fn catch_pokemon(
         caught_species_form: species.form.as_deref(),
         caught_level,
         gender,
-        ball
+        ball,
     };
     diesel::insert_into(schema::Team_Member::table)
         .values(&new_team_member)
         .execute(conn)
         .expect("Error saving new team member");
+    let new_team_member_change = team_member_change::InsertTeamMemberChange {
+        team_member_playthrough_id_no: &playthrough.id_no,
+        team_member_slot: slot,
+        event_no: &event.no,
+        level_change: None,
+        species_dex_no: None,
+        species_form: None,
+    };
+    diesel::insert_into(schema::Team_Member_Change::table)
+        .values(&new_team_member_change)
+        .execute(conn)
+        .expect("Error saving new team member change");
+    let team_member = schema::Team_Member::table
+        .filter(schema::Team_Member::playthrough_id_no.eq(&playthrough.id_no).and(schema::Team_Member::slot.eq(slot)))
+        .first::<team_member::TeamMember>(conn)
+        .expect("Error loading team member");
+    println!("Got {} from {}", species, catch_type);
+    team_member
 }
 
 pub fn create_trainer_class(
