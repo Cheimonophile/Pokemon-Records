@@ -27,6 +27,13 @@
       },
       // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
       "preLaunchTask": "ui:build"
+    },
+    {
+      "type": "python",
+      "request": "launch",
+      "name": "Master",
+      "program": "${workspaceFolder}/master.py",
+      "console": "integratedTerminal"
     }
   ]
 }

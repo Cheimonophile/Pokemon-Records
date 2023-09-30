@@ -29,7 +29,7 @@ pub fn create_playthrough(
         .filter(schema::Playthrough::id_no.eq(id_no))
         .first::<Playthrough>(conn)
         .expect("Error loading playthrough");
-    println!("Ceated playthrough {}", playthrough);
+    println!("Created playthrough {}", playthrough);
     playthrough
 }
 
@@ -43,7 +43,7 @@ pub fn create_location(conn: &mut SqliteConnection, name: &str, region: &str) ->
         .filter(schema::Location::name.eq(name))
         .first::<crate::dbi::structs::location::Location>(conn)
         .expect("Error loading location");
-    println!("Ceated location {}", location);
+    println!("Created location {}", location);
     location
 }
 
@@ -72,7 +72,7 @@ pub fn create_species(
         .filter(schema::Species::name.eq(name))
         .first::<crate::dbi::structs::species::Species>(conn)
         .expect("Error loading species");
-    println!("Ceated species {}", species);
+    println!("Created species {}", species);
     species
 }
 
@@ -165,7 +165,7 @@ pub fn create_trainer_class(
         .filter(schema::Trainer_Class::name.eq(name))
         .first::<crate::dbi::structs::trainer_class::TrainerClass>(conn)
         .expect("Error loading trainer class");
-    println!("Ceated trainer class {}", trainer_class);
+    println!("Created trainer class {}", trainer_class);
     trainer_class
 }
 
@@ -186,7 +186,7 @@ pub fn create_trainer(
         .filter(schema::Trainer::class.eq(&class.name).and(schema::Trainer::name.eq(&name)))
         .first::<crate::dbi::structs::trainer::Trainer>(conn)
         .expect("Error loading trainer");
-    println!("Ceated trainer {}", trainer.format(conn));
+    println!("Created trainer {}", trainer.format(conn));
     trainer
 }
 

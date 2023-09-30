@@ -2,6 +2,17 @@ from src_python.events import *
 from src_python.pkmn_constants import *
 
 
+print("""
+use crate::dbi::connection::connect;
+use crate::dbi::events::*;
+use crate::dbi::structs::*;
+
+pub fn run() {
+    // connection
+    let conn = &mut connect();
+""")
+
+
 playthrough = make_playthrough(id_no="26852", name="Ben", version="Black", adventure_started=dt.date(2023, 6, 24))
 nuvema_town = make_location(name="Nuvema Town", region="Unova")
 lillipup = receive_pokemon(playthrough,1,
@@ -1968,4 +1979,6 @@ level_up(battle,
 
          
 
-
+print("""
+}
+""")
