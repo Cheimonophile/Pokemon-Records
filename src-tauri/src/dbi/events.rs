@@ -33,11 +33,7 @@ pub fn create_playthrough(
     playthrough
 }
 
-pub fn create_location(
-    conn: &mut SqliteConnection,
-    name: &str,
-    region: &str,
-) -> Location {
+pub fn create_location(conn: &mut SqliteConnection, name: &str, region: &str) -> Location {
     let new_location = location::InsertLocation { name, region };
     diesel::insert_into(schema::Location::table)
         .values(&new_location)
@@ -49,6 +45,35 @@ pub fn create_location(
         .expect("Error loading location");
     println!("Ceated location {}", location);
     location
+}
+
+pub fn create_species(
+    conn: &mut SqliteConnection,
+    dex_no: &i32,
+    name: &str,
+    form: Option<&str>,
+    generation: &i32,
+    type1: &str,
+    type2: Option<&str>,
+) -> species::Species {
+    let new_species = species::InsertSpecies {
+        dex_no,
+        form,
+        name,
+        generation,
+        type1,
+        type2,
+    };
+    diesel::insert_into(schema::Species::table)
+        .values(&new_species)
+        .execute(conn)
+        .expect("Error saving new species");
+    let species = schema::Species::table
+        .filter(schema::Species::name.eq(name))
+        .first::<crate::dbi::structs::species::Species>(conn)
+        .expect("Error loading species");
+    println!("Ceated species {}", species);
+    species
 }
 
 pub fn create_trainer_class(
@@ -67,12 +92,3 @@ pub fn create_trainer_class(
     println!("Ceated trainer class {}", trainer_class);
     trainer_class
 }
-
-
-// pub fn create_battle(
-//     conn: &mut SqliteConnection,
-//     playthrough: &Playthrough,
-//     location: &Location
-// ) {
-
-// }

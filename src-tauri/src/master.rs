@@ -9,4 +9,12 @@ pub fn run() {
     // events
     let mut playthrough = create_playthrough(conn, "26852", "Ben", "Black", "2023-06-24");
     let nuvema_town = create_location(conn, "Nuvema Town", "Unova");
+    create_species(conn,
+        &506,
+        "Lillipup",
+        None,
+        &5,
+        "Normal",
+        None
+    );
 }

@@ -88,11 +88,10 @@ diesel::table! {
     Species (dex_no, form) {
         dex_no -> Integer,
         name -> Text,
-        form -> Text,
+        form -> Nullable<Text>,
         generation -> Integer,
         type1 -> Text,
         type2 -> Nullable<Text>,
-        color -> Text,
     }
 }
 

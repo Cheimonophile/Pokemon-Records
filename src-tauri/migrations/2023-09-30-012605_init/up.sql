@@ -50,11 +50,10 @@ CREATE TABLE Location (
 CREATE TABLE Species (
     dex_no INTEGER NOT NULL,
     name TEXT NOT NULL,
-    form TEXT NOT NULL,
+    form TEXT,
     generation INTEGER NOT NULL,
     type1 TEXT NOT NULL,
     type2 TEXT,
-    color TEXT NOT NULL,
     PRIMARY KEY (dex_no, form),
     FOREIGN KEY (type1) REFERENCES Type(name) ON DELETE RESTRICT,
     FOREIGN KEY (type2) REFERENCES Type(name) ON DELETE RESTRICT
