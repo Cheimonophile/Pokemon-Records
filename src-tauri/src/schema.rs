@@ -117,7 +117,7 @@ diesel::table! {
         team_member_playthrough_id_no -> Text,
         team_member_slot -> Integer,
         event_no -> Integer,
-        level_change -> Nullable<Integer>,
+        level -> Nullable<Integer>,
         species_dex_no -> Nullable<Integer>,
         species_form -> Nullable<Text>,
     }

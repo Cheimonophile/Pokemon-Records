@@ -157,12 +157,12 @@ CREATE TABLE Team_Member_Change (
     team_member_playthrough_id_no TEXT NOT NULL,
     team_member_slot INTEGER NOT NULL,
     event_no INTEGER NOT NULL,
-    level_change INTEGER,
+    level INTEGER,
     species_dex_no INTEGER,
     species_form TEXT,
     FOREIGN KEY (team_member_playthrough_id_no, team_member_slot) REFERENCES Team_Member(playthrough_id_no, slot) ON DELETE RESTRICT,
     FOREIGN KEY (event_no) REFERENCES Event(no) ON DELETE RESTRICT,
-    CHECK (level_change >= 0),
+    CHECK (level >= 1 AND level <= 100),
     FOREIGN KEY (species_dex_no, species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT
 );
 
