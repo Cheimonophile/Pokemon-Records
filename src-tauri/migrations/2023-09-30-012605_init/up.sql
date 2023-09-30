@@ -99,7 +99,7 @@ CREATE TABLE Trainer_Class (
 
 -- Trainer Table
 CREATE TABLE Trainer (
-    name TEXT,
+    name TEXT NOT NULL,
     class TEXT NOT NULL,
     PRIMARY KEY (name, class),
     FOREIGN KEY (class) REFERENCES Trainer_Class(name) ON DELETE RESTRICT

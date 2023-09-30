@@ -100,6 +100,7 @@ pub fn catch_pokemon(
         .expect("Error saving new event");
     let event = schema::Event::table
         .filter(schema::Event::playthrough_id_no.eq(&playthrough.id_no))
+        .order(schema::Event::no.desc())
         .first::<event::Event>(conn)
         .expect("Error loading event");
     let new_catch_event = catch_event::InsertCatchEvent {
@@ -170,7 +171,7 @@ pub fn create_trainer_class(
 
 pub fn create_trainer(
     conn: &mut SqliteConnection,
-    name: Option<&str>,
+    name: &str,
     class: &trainer_class::TrainerClass,
 ) -> trainer::Trainer {
     let new_trainer = trainer::InsertTrainer {
@@ -182,9 +183,64 @@ pub fn create_trainer(
         .execute(conn)
         .expect("Error saving new trainer");
     let trainer = schema::Trainer::table
-        .filter(schema::Trainer::class.eq(&class.name))
+        .filter(schema::Trainer::class.eq(&class.name).and(schema::Trainer::name.eq(&name)))
         .first::<crate::dbi::structs::trainer::Trainer>(conn)
         .expect("Error loading trainer");
     println!("Ceated trainer {}", trainer.format(conn));
     trainer
+}
+
+pub fn create_battle(
+    conn: &mut SqliteConnection,
+    playthrough: &playthrough::Playthrough,
+    location: &location::Location,
+    opponent1: &trainer::Trainer,
+    opponent2: Option<&trainer::Trainer>,
+    partner: Option<&trainer::Trainer>,
+    battle_type: &str,
+    round: &i32,
+    lost: &bool,
+) -> event::Event {
+    let new_event = event::InsertEvent {
+        playthrough_id_no: &playthrough.id_no,
+        location_name: &location.name,
+        location_region: &location.region,
+    };
+    diesel::insert_into(schema::Event::table)
+        .values(&new_event)
+        .execute(conn)
+        .expect("Error saving new event");
+    let event = schema::Event::table
+        .filter(schema::Event::playthrough_id_no.eq(&playthrough.id_no))
+        .order(schema::Event::no.desc())
+        .first::<event::Event>(conn)
+        .expect("Error loading event");
+    let new_battle_event = battle_event::InsertBattleEvent {
+        no: &event.no,
+        battle_type,
+        opponent1_name: &opponent1.name,
+        opponent1_class: &opponent1.class,
+        opponent2_name: opponent2.and_then(|o| Some(o.name.as_ref())),
+        opponent2_class: opponent2.and_then(|o| Some(o.class.as_ref())),
+        partner_name: partner.and_then(|p| Some(p.name.as_ref())),
+        partner_class: partner.and_then(|p| Some(p.class.as_ref())),
+        round,
+        lost,
+    };
+    diesel::insert_into(schema::Battle_Event::table)
+        .values(&new_battle_event)
+        .execute(conn)
+        .expect("Error saving new battle event");
+    let mut display = format!("Battled {}", opponent1.format(conn));
+    if let Some(trainer) = opponent2 {
+        display.push_str(&format!(" and {}", trainer.format(conn)));
+    }
+    if let Some(trainer) = partner {
+        display.push_str(&format!(" with {}", trainer.format(conn)));
+    }
+    if *lost {
+        display.push_str(" (lost)");
+    }
+    println!("{}", display);
+    event
 }

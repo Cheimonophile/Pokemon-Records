@@ -1,10 +1,14 @@
 use crate::dbi::connection::connect;
 use crate::dbi::events::*;
+use crate::dbi::structs::*;
 
 pub fn run() {
 
     // connection
     let conn = &mut connect();
+
+    // mutables
+    let mut battle: event::Event;
 
     // events
     let mut playthrough = create_playthrough(conn, "26852", "Ben", "Black", "2023-06-24");
@@ -33,7 +37,31 @@ pub fn run() {
         "PKMN Trainer"
     );
     let bianca = create_trainer(conn,
-        Some("Bianca"),
+        "Bianca",
         &pkmn_trainer
+    );
+    let cheren = create_trainer(conn,
+        "Cheren",
+        &pkmn_trainer
+    );
+    battle = create_battle(conn,
+        &playthrough,
+        &nuvema_town,
+        &bianca,
+        None,
+        None,
+        "Single",
+        &1,
+        &false
+    );
+    battle = create_battle(conn,
+        &playthrough,
+        &nuvema_town,
+        &cheren,
+        None,
+        None,
+        "Single",
+        &1,
+        &false
     );
 }

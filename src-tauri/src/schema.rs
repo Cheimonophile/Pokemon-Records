@@ -125,7 +125,7 @@ diesel::table! {
 
 diesel::table! {
     Trainer (name, class) {
-        name -> Nullable<Text>,
+        name -> Text,
         class -> Text,
     }
 }
