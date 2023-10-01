@@ -86,6 +86,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &7,
+    );
+    
+
     let route_2_unova = create_location(conn, "Route 2", "Unova");
     
 
@@ -108,6 +116,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &8,
+    );
+    
+
             let lass = create_trainer_class(conn, "Lass");
             
 
@@ -127,6 +143,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &9,
+    );
+    
+
         let youngster_roland = create_trainer(conn, "Roland", &youngster);
         
 
@@ -140,6 +164,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &10,
     );
     
 
@@ -175,6 +207,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &11,
+    );
+    
+
         let youngster_joey = create_trainer(conn, "Joey", &youngster);
         
 
@@ -188,6 +228,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &12,
     );
     
 
@@ -244,6 +292,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &11,
+    );
+    
+
             let waitress = create_trainer_class(conn, "Waitress");
             
 
@@ -282,6 +338,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &13,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &12,
+    );
+    
+
             let team_plasma = create_trainer_class(conn, "Team Plasma");
             
 
@@ -311,6 +383,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &14,
     );
     
 
@@ -352,6 +432,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &13,
     );
     
 
@@ -419,6 +507,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &14,
+    );
+    
+
             let pkmn_breeder = create_trainer_class(conn, "PKMN Breeder");
             
 
@@ -435,6 +531,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &15,
     );
     
 
@@ -464,6 +568,14 @@ pub fn run() {
         "Double",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &15,
     );
     
 
@@ -518,6 +630,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &16,
+    );
+    
+
         let school_kid_edgar = create_trainer(conn, "Edgar", &school_kid);
         
 
@@ -556,6 +676,27 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_lillipup,
+        &16,
+    );
+    
+
+        let species_herdier = create_species(conn, &507, "Herdier", None, &5, "Normal", None);
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_lillipup,
+            &species_herdier,
+        );
+    
+
+        let team_member_herdier = team_member_lillipup;
+    
+
     let nacrene_city_unova = create_location(conn, "Nacrene City", "Unova");
     
 
@@ -588,6 +729,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &17,
+    );
+    
+
             let wild = create_trainer_class(conn, "Wild");
             
 
@@ -605,6 +754,24 @@ pub fn run() {
         &0,
         &false,
     );
+    
+
+        let species_tympole = create_species(conn, &535, "Tympole", None, &5, "Water", None);
+    
+
+        let team_member_tympole = catch_pokemon(
+            conn,
+            &playthrough,
+            &3,
+            &species_tympole,
+            None,
+            "Grass",
+            "2023-06-26",
+            &pinwheel_forest_unova,
+            &12,
+            "M",
+            "Net Ball",
+        );
     
 
         let preschooler_homer = create_trainer(conn, "Homer", &preschooler);
@@ -636,6 +803,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &18,
     );
     
 
@@ -674,6 +849,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &13,
+    );
+    
+
             let black_belt = create_trainer_class(conn, "Black Belt");
             
 
@@ -709,6 +892,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &14,
+    );
+    
+
             let scientist = create_trainer_class(conn, "Scientist");
             
 
@@ -728,6 +919,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &15,
+    );
+    
+
         let school_kid_lydia = create_trainer(conn, "Lydia", &school_kid);
         
 
@@ -741,6 +940,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &17,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &19,
     );
     
 
@@ -760,6 +975,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &20,
+    );
+    
+
         let twins_mayo_and_may = create_trainer(conn, "Mayo & May", &twins);
         
 
@@ -776,6 +999,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &16,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -799,6 +1030,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &17,
     );
     
 
@@ -821,6 +1060,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &21,
+    );
+    
+
         let youngster_nicholas = create_trainer(conn, "Nicholas", &youngster);
         
 
@@ -834,6 +1081,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &18,
     );
     
 
@@ -882,6 +1137,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &18,
+    );
+    
+
         let pkmn_ranger_miguel = create_trainer(conn, "Miguel", &pkmn_ranger);
         
 
@@ -924,6 +1187,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &22,
     );
     
 
@@ -981,6 +1252,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &19,
+    );
+    
+
             let clerk_m = create_trainer_class(conn, "Clerk M");
             
 
@@ -997,6 +1276,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &19,
     );
     
 
@@ -1048,6 +1335,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &20,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &23,
+    );
+    
+
         let clerk_m_ivan = create_trainer(conn, "Ivan", &clerk_m);
         
 
@@ -1096,6 +1399,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &20,
+    );
+    
+
         let clerk_m_wade = create_trainer(conn, "Wade", &clerk_m);
         
 
@@ -1128,6 +1439,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &21,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &21,
     );
     
 
@@ -1188,6 +1515,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &22,
+    );
+    
+
         let fisherman_andrew = create_trainer(conn, "Andrew", &fisherman);
         
 
@@ -1201,6 +1536,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &22,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &24,
     );
     
 
@@ -1220,6 +1571,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &23,
     );
     
 
@@ -1306,6 +1665,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &23,
+    );
+    
+
         let harlequin_kerry = create_trainer(conn, "Kerry", &harlequin);
         
 
@@ -1354,6 +1721,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &24,
+    );
+    
+
         let leader_burgh = create_trainer(conn, "Burgh", &leader);
         
 
@@ -1370,6 +1745,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &24,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &25,
+    );
+    
+
     let castelia_gate_unova = create_location(conn, "Castelia Gate", "Unova");
     
 
@@ -1383,6 +1774,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &25,
     );
     
 
@@ -1412,6 +1811,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &26,
+    );
+    
+
             let backpacker = create_trainer_class(conn, "Backpacker");
             
 
@@ -1429,6 +1836,27 @@ pub fn run() {
         &0,
         &false,
     );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_tympole,
+        &25,
+    );
+    
+
+        let species_palpitoad = create_species(conn, &536, "Palpitoad", None, &5, "Water", Some("Ground"));
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_tympole,
+            &species_palpitoad,
+        );
+    
+
+        let team_member_palpitoad = team_member_tympole;
     
 
         let backpacker_anna = create_trainer(conn, "Anna", &backpacker);
@@ -1549,6 +1977,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &26,
+    );
+    
+
         let backpacker_liz = create_trainer(conn, "Liz", &backpacker);
         
 
@@ -1581,6 +2017,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &26,
     );
     
 
@@ -1632,6 +2076,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &27,
+    );
+    
+
         let psychic_low = create_trainer(conn, "Low", &psychic);
         
 
@@ -1680,6 +2132,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &27,
+    );
+    
+
     let relic_castle_unova = create_location(conn, "Relic Castle", "Unova");
     
 
@@ -1712,6 +2172,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &27,
     );
     
 
@@ -1785,6 +2253,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &28,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -1795,6 +2271,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &28,
     );
     
 
@@ -1836,6 +2320,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &28,
     );
     
 
@@ -1884,6 +2376,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &29,
     );
     
 
@@ -1957,6 +2457,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &29,
+    );
+    
+
             let musician = create_trainer_class(conn, "Musician");
             
 
@@ -1989,6 +2497,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &29,
     );
     
 
@@ -2049,6 +2565,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &30,
+    );
+    
+
         let rich_boy_rolan = create_trainer(conn, "Rolan", &rich_boy);
         
 
@@ -2097,6 +2621,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &31,
+    );
+    
+
         let species_archen = create_species(conn, &566, "Archen", None, &5, "Rock", Some("Flying"));
     
 
@@ -2128,6 +2660,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &30,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &32,
+    );
+    
+
         let preschooler_sarah = create_trainer(conn, "Sarah", &preschooler);
         
 
@@ -2144,6 +2692,14 @@ pub fn run() {
         "Double",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &26,
     );
     
 
@@ -2198,6 +2754,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &27,
+    );
+    
+
         let worker_victor = create_trainer(conn, "Victor", &worker);
         
 
@@ -2211,6 +2775,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &30,
     );
     
 
@@ -2275,6 +2847,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &28,
     );
     
 
@@ -2365,6 +2945,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &31,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &29,
+    );
+    
+
         let parasol_lady_nicole = create_trainer(conn, "Nicole", &parasol_lady);
         
 
@@ -2445,6 +3041,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &31,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &30,
+    );
+    
+
     let driftveil_city_unova = create_location(conn, "Driftveil City", "Unova");
     
 
@@ -2512,6 +3124,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &31,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &33,
+    );
+    
+
         let clerk_f_katie = create_trainer(conn, "Katie", &clerk_f);
         
 
@@ -2554,6 +3182,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &32,
     );
     
 
@@ -2614,6 +3250,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &32,
+    );
+    
+
         let scientist_naoko = create_trainer(conn, "Naoko", &scientist);
         
 
@@ -2646,6 +3290,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &33,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -2657,6 +3309,27 @@ pub fn run() {
         &0,
         &false,
     );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_herdier,
+        &32,
+    );
+    
+
+        let species_stoutland = create_species(conn, &508, "Stoutland", None, &5, "Normal", None);
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_herdier,
+            &species_stoutland,
+        );
+    
+
+        let team_member_stoutland = team_member_herdier;
     
 
     let battle = create_battle(
@@ -2711,6 +3384,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &33,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -2721,6 +3402,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &34,
     );
     
 
@@ -2753,6 +3442,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &34,
+    );
+    
+
         let ace_trainer_stella = create_trainer(conn, "Stella", &ace_trainer);
         
 
@@ -2766,6 +3463,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &33,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &34,
     );
     
 
@@ -2801,6 +3514,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &34,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -2833,6 +3554,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &35,
     );
     
 
@@ -2884,6 +3613,30 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &35,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &35,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &35,
+    );
+    
+
         let backpacker_ruth = create_trainer(conn, "Ruth", &backpacker);
         
 
@@ -2913,6 +3666,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &36,
     );
     
 
@@ -2948,6 +3709,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &36,
+    );
+    
+
         let harlequin_ian = create_trainer(conn, "Ian", &harlequin);
         
 
@@ -2961,6 +3730,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &36,
     );
     
 
@@ -2983,6 +3760,27 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_palpitoad,
+        &36,
+    );
+    
+
+        let species_seismitoad = create_species(conn, &537, "Seismitoad", None, &5, "Water", Some("Ground"));
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_palpitoad,
+            &species_seismitoad,
+        );
+    
+
+        let team_member_seismitoad = team_member_palpitoad;
+    
+
     let celestial_tower_unova = create_location(conn, "Celestial Tower", "Unova");
     
 
@@ -2999,6 +3797,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &37,
     );
     
 
@@ -3069,6 +3875,27 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archen,
+        &37,
+    );
+    
+
+        let species_archeops = create_species(conn, &567, "Archeops", None, &5, "Rock", Some("Flying"));
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_archen,
+            &species_archeops,
+        );
+    
+
+        let team_member_archeops = team_member_archen;
+    
+
         let psychic_lin = create_trainer(conn, "Lin", &psychic);
         
 
@@ -3133,6 +3960,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &37,
+    );
+    
+
         let ace_trainer_beckett = create_trainer(conn, "Beckett", &ace_trainer);
         
 
@@ -3165,6 +4000,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &37,
+    );
+    
+
         let worker_cliff = create_trainer(conn, "Cliff", &worker);
         
 
@@ -3178,6 +4021,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &38,
     );
     
 
@@ -3232,6 +4083,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &39,
+    );
+    
+
         let worker_arnold = create_trainer(conn, "Arnold", &worker);
         
 
@@ -3264,6 +4123,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &40,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -3274,6 +4141,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &38,
     );
     
 
@@ -3293,6 +4168,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &38,
     );
     
 
@@ -3350,6 +4233,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &38,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &39,
+    );
+    
+
             let swimmer_f = create_trainer_class(conn, "Swimmer F");
             
 
@@ -3388,6 +4287,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &39,
+    );
+    
+
         let hiker_jeremiah = create_trainer(conn, "Jeremiah", &hiker);
         
 
@@ -3401,6 +4308,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &40,
     );
     
 
@@ -3433,6 +4348,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &39,
     );
     
 
@@ -3490,6 +4413,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &40,
+    );
+    
+
         let swimmer_f_kelsey = create_trainer(conn, "Kelsey", &swimmer_f);
         
 
@@ -3541,6 +4472,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &40,
+    );
+    
+
         let hiker_clarke = create_trainer(conn, "Clarke", &hiker);
         
 
@@ -3573,6 +4512,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &41,
+    );
+    
+
         let ace_trainer_caroll = create_trainer(conn, "Caroll", &ace_trainer);
         
 
@@ -3589,6 +4536,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &41,
+    );
+    
+
         let battle_girl_sharon = create_trainer(conn, "Sharon", &battle_girl);
         
 
@@ -3602,6 +4557,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &41,
     );
     
 
@@ -3653,6 +4616,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &42,
+    );
+    
+
         let worker_cairn = create_trainer(conn, "Cairn", &worker);
         
 
@@ -3685,6 +4656,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &41,
+    );
+    
+
         let ace_trainer_jordan = create_trainer(conn, "Jordan", &ace_trainer);
         
 
@@ -3698,6 +4677,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &42,
     );
     
 
@@ -3718,6 +4705,24 @@ pub fn run() {
         &0,
         &false,
     );
+    
+
+        let species_mienfoo = create_species(conn, &619, "Mienfoo", None, &5, "Fighting", None);
+    
+
+        let team_member_mienfoo = catch_pokemon(
+            conn,
+            &playthrough,
+            &5,
+            &species_mienfoo,
+            None,
+            "Grass",
+            "2023-08-22",
+            &dragonspiral_tower_unova,
+            &32,
+            "M",
+            "Great Ball",
+        );
     
 
     let route_8_unova = create_location(conn, "Route 8", "Unova");
@@ -3771,6 +4776,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &33,
+    );
+    
+
         let fisherman_bruce = create_trainer(conn, "Bruce", &fisherman);
         
 
@@ -3800,6 +4813,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &34,
     );
     
 
@@ -3838,6 +4859,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &35,
+    );
+    
+
         let fisherman_damon = create_trainer(conn, "Damon", &fisherman);
         
 
@@ -3873,6 +4902,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &36,
+    );
+    
+
         let battle_girl_miriam = create_trainer(conn, "Miriam", &battle_girl);
         
 
@@ -3886,6 +4923,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &42,
     );
     
 
@@ -3937,6 +4982,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &37,
+    );
+    
+
         let black_belt_thomas = create_trainer(conn, "Thomas", &black_belt);
         
 
@@ -3969,6 +5022,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &43,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &38,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -3980,6 +5049,95 @@ pub fn run() {
         &0,
         &false,
     );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &dragonspiral_tower_unova,
+        &team_plasma_grunt,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &dragonspiral_tower_unova,
+        &team_plasma_grunt,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &dragonspiral_tower_unova,
+        &team_plasma_grunt,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &42,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &dragonspiral_tower_unova,
+        &team_plasma_grunt,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pansear,
+        &43,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &39,
+    );
+    
+
+        let species_simisear = create_species(conn, &514, "Simisear", None, &5, "Fire", None);
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_pansear,
+            &species_simisear,
+        );
+    
+
+        let team_member_simisear = team_member_pansear;
     
 
     let battle = create_battle(
@@ -4037,7 +5195,7 @@ pub fn run() {
     let battle = create_battle(
         conn,
         &playthrough,
-        &dragonspiral_tower_unova,
+        &relic_castle_unova,
         &team_plasma_grunt,
         None,
         None,
@@ -4047,42 +5205,19 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &dragonspiral_tower_unova,
-        &team_plasma_grunt,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_mienfoo,
+        &40,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &dragonspiral_tower_unova,
-        &team_plasma_grunt,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &dragonspiral_tower_unova,
-        &team_plasma_grunt,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_seismitoad,
+        &43,
     );
     
 
@@ -4151,16 +5286,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &relic_castle_unova,
-        &team_plasma_grunt,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_mienfoo,
+        &41,
     );
     
 
@@ -4174,6 +5304,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &43,
     );
     
 
@@ -4187,6 +5325,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &42,
     );
     
 
@@ -4298,6 +5444,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &43,
+    );
+    
+
         let rich_boy_manuel = create_trainer(conn, "Manuel", &rich_boy);
         
 
@@ -4311,6 +5465,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &44,
     );
     
 
@@ -4362,6 +5524,24 @@ pub fn run() {
     );
     
 
+        let species_pawniard = create_species(conn, &624, "Pawniard", None, &5, "Dark", Some("Steel"));
+    
+
+        let team_member_pawniard = catch_pokemon(
+            conn,
+            &playthrough,
+            &6,
+            &species_pawniard,
+            None,
+            "Grass",
+            "2023-08-26",
+            &route_9_unova,
+            &32,
+            "M",
+            "Ultra Ball",
+        );
+    
+
     let opelucid_city_unova = create_location(conn, "Opelucid City", "Unova");
     
 
@@ -4378,6 +5558,14 @@ pub fn run() {
         "Rotation",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &33,
     );
     
 
@@ -4429,6 +5617,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &34,
+    );
+    
+
         let ace_trainer_jose = create_trainer(conn, "Jose", &ace_trainer);
         
 
@@ -4442,6 +5638,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &44,
     );
     
 
@@ -4477,6 +5681,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &35,
+    );
+    
+
         let ace_trainer_tom = create_trainer(conn, "Tom", &ace_trainer);
         
 
@@ -4506,6 +5718,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &36,
     );
     
 
@@ -4541,6 +5761,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &37,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &44,
+    );
+    
+
     let route_10_unova = create_location(conn, "Route 10", "Unova");
     
 
@@ -4560,6 +5796,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &38,
+    );
+    
+
         let ace_trainer_johan = create_trainer(conn, "Johan", &ace_trainer);
         
 
@@ -4573,6 +5817,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &45,
     );
     
 
@@ -4592,6 +5844,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &39,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -4602,6 +5862,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &40,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &44,
     );
     
 
@@ -4637,6 +5913,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &41,
+    );
+    
+
         let ace_trainer_cheyenne = create_trainer(conn, "Cheyenne", &ace_trainer);
         
 
@@ -4653,6 +5937,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &44,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &45,
+    );
+    
+
         let veteran_chester = create_trainer(conn, "Chester", &veteran);
         
 
@@ -4666,6 +5966,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &42,
     );
     
 
@@ -4704,6 +6012,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &43,
+    );
+    
+
         let veteran_tiffany = create_trainer(conn, "Tiffany", &veteran);
         
 
@@ -4733,6 +6049,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &46,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &44,
     );
     
 
@@ -4768,6 +6100,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &47,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &45,
+    );
+    
+
         let ace_trainer_david = create_trainer(conn, "David", &ace_trainer);
         
 
@@ -4781,6 +6129,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &45,
     );
     
 
@@ -4813,6 +6169,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &46,
+    );
+    
+
     let pokémon_league_unova = create_location(conn, "Pokémon League", "Unova");
     
 
@@ -4832,6 +6196,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &45,
     );
     
 
@@ -4867,6 +6239,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &45,
+    );
+    
+
         let elite_four_caitlin = create_trainer(conn, "Caitlin", &elite_four);
         
 
@@ -4883,133 +6263,27 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_stoutland,
+        &46,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_archeops,
+        &48,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_mienfoo,
+        &46,
     );
     
 
@@ -5039,29 +6313,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_pawniard,
+        &46,
     );
     
 
@@ -5091,6 +6347,127 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &46,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &47,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &47,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &47,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &49,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &47,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &47,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5101,6 +6478,169 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &48,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &50,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &48,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &48,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &49,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &49,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &48,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &51,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &48,
     );
     
 
@@ -5130,6 +6670,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &49,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5143,6 +6691,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &52,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &49,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5153,6 +6717,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &50,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &49,
     );
     
 
@@ -5195,6 +6775,27 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienfoo,
+        &50,
+    );
+    
+
+        let species_mienshao = create_species(conn, &620, "Mienshao", None, &5, "Fighting", None);
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_mienfoo,
+            &species_mienshao,
+        );
+    
+
+        let team_member_mienshao = team_member_mienfoo;
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5205,6 +6806,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &51,
     );
     
 
@@ -5234,6 +6843,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &50,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &52,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5244,6 +6869,14 @@ pub fn run() {
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &51,
     );
     
 
@@ -5260,6 +6893,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &50,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5270,6 +6911,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &53,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &51,
     );
     
 
@@ -5286,6 +6943,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &50,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5299,6 +6964,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &53,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &51,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5309,6 +6990,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &52,
     );
     
 
@@ -5335,6 +7024,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &53,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &54,
     );
     
 
@@ -5357,16 +7062,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &ns_castle_unova,
-        &team_plasma_n,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_stoutland,
+        &51,
     );
     
 
@@ -5380,6 +7080,43 @@ pub fn run() {
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &52,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &54,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &ns_castle_unova,
+        &team_plasma_n,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &53,
     );
     
 
@@ -5393,6 +7130,38 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &55,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &55,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &54,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &54,
     );
     
 
@@ -5412,6 +7181,35 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_pawniard,
+        &52,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &52,
+    );
+    
+
+        let species_bisharp = create_species(conn, &625, "Bisharp", None, &5, "Dark", Some("Steel"));
+    
+
+        evolve(conn,
+            &battle,
+            &team_member_pawniard,
+            &species_bisharp,
+        );
+    
+
+        let team_member_bisharp = team_member_pawniard;
+    
+
         let scientist_markus = create_trainer(conn, "Markus", &scientist);
         
 
@@ -5425,6 +7223,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &55,
     );
     
 
@@ -5457,6 +7263,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &53,
+    );
+    
+
     let royal_unova_unova = create_location(conn, "Royal Unova", "Unova");
     
 
@@ -5476,6 +7290,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &53,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5486,6 +7308,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &54,
     );
     
 
@@ -5524,6 +7354,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &54,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &55,
+    );
+    
+
         let ace_trainer_beverly = create_trainer(conn, "Beverly", &ace_trainer);
         
 
@@ -5556,6 +7402,30 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &55,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &56,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &56,
+    );
+    
+
         let backpacker_toru = create_trainer(conn, "Toru", &backpacker);
         
 
@@ -5572,6 +7442,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &55,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -5582,6 +7460,22 @@ pub fn run() {
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &56,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &56,
     );
     
 
@@ -5639,6 +7533,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &56,
+    );
+    
+
         let hiker_kit = create_trainer(conn, "Kit", &hiker);
         
 
@@ -5652,6 +7554,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &56,
     );
     
 
@@ -5671,6 +7581,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &57,
+    );
+    
+
         let battle_girl_susie = create_trainer(conn, "Susie", &battle_girl);
         
 
@@ -5684,6 +7602,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &57,
     );
     
 
@@ -5738,6 +7664,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &58,
+    );
+    
+
         let roughneck_johnny = create_trainer(conn, "Johnny", &roughneck);
         
 
@@ -5754,6 +7688,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &57,
+    );
+    
+
         let backpacker_kiyo = create_trainer(conn, "Kiyo", &backpacker);
         
 
@@ -5767,6 +7709,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &58,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &57,
     );
     
 
@@ -5802,6 +7760,22 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &57,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &57,
     );
     
 
@@ -5850,6 +7824,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &58,
     );
     
 
@@ -5904,6 +7886,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &58,
+    );
+    
+
         let swimmer_m_tim = create_trainer(conn, "Tim", &swimmer_m);
         
 
@@ -5936,6 +7926,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &59,
+    );
+    
+
         let swimmer_m_bart = create_trainer(conn, "Bart", &swimmer_m);
         
 
@@ -5949,6 +7947,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &59,
     );
     
 
@@ -5993,6 +7999,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &58,
+    );
+    
+
         let twins_emy_and_lin = create_trainer(conn, "Emy & Lin", &twins);
         
 
@@ -6006,6 +8020,14 @@ pub fn run() {
         "Double",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &58,
     );
     
 
@@ -6105,6 +8127,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &59,
+    );
+    
+
         let artist_zach = create_trainer(conn, "Zach", &artist);
         
 
@@ -6118,6 +8148,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &59,
     );
     
 
@@ -6172,6 +8210,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &59,
+    );
+    
+
         let pkmn_ranger_thalia = create_trainer(conn, "Thalia", &pkmn_ranger);
         
 
@@ -6185,6 +8231,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &59,
     );
     
 
@@ -6223,6 +8277,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &60,
+    );
+    
+
         let scientist_shannon = create_trainer(conn, "Shannon", &scientist);
         
 
@@ -6236,6 +8298,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &60,
     );
     
 
@@ -6274,6 +8344,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &60,
+    );
+    
+
         let pkmn_breeder_eustace = create_trainer(conn, "Eustace", &pkmn_breeder);
         
 
@@ -6306,6 +8384,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &60,
+    );
+    
+
             let backers = create_trainer_class(conn, "Backers");
             
 
@@ -6322,6 +8408,14 @@ pub fn run() {
         "Double",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &60,
     );
     
 
@@ -6354,16 +8448,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_bisharp,
+        &60,
     );
     
 
@@ -6380,6 +8469,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &61,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &61,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -6390,6 +8495,35 @@ pub fn run() {
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &61,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &61,
     );
     
 
@@ -6419,16 +8553,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_stoutland,
+        &61,
     );
     
 
@@ -6445,107 +8574,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_marshal,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_seismitoad,
+        &61,
     );
     
 
@@ -6575,6 +8608,214 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &62,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &62,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &62,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &62,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &62,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &62,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &63,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &63,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &63,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &63,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &64,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &63,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &63,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -6592,12 +8833,41 @@ pub fn run() {
         conn,
         &playthrough,
         &pokémon_league_unova,
+        &elite_four_marshal,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &64,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
         &elite_four_grimsley,
         None,
         None,
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &64,
     );
     
 
@@ -6611,6 +8881,38 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &64,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &65,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &65,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &65,
     );
     
 
@@ -6637,6 +8939,14 @@ pub fn run() {
         "Single",
         &0,
         &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &64,
     );
     
 
@@ -6656,29 +8966,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_seismitoad,
+        &64,
     );
     
 
@@ -6708,42 +9000,19 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_seismitoad,
+        &65,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_archeops,
+        &66,
     );
     
 
@@ -6773,6 +9042,277 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &66,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &65,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &66,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &65,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &66,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &67,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &66,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &67,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &66,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &67,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &67,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_seismitoad,
+        &68,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &67,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &68,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_archeops,
+        &68,
+    );
+    
+
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimsley,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &67,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -6799,29 +9339,11 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
-    );
-    
-
-    let battle = create_battle(
-        conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_bisharp,
+        &68,
     );
     
 
@@ -6851,29 +9373,19 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_seismitoad,
+        &69,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_simisear,
+        &68,
     );
     
 
@@ -6903,29 +9415,19 @@ pub fn run() {
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_caitlin,
-        None,
-        None,
-        "Single",
-        &0,
-        &true,
+        &battle,
+        &team_member_mienshao,
+        &69,
     );
     
 
-    let battle = create_battle(
+    level_up(
         conn,
-        &playthrough,
-        &pokémon_league_unova,
-        &elite_four_grimsley,
-        None,
-        None,
-        "Single",
-        &0,
-        &false,
+        &battle,
+        &team_member_stoutland,
+        &68,
     );
     
 
@@ -6942,6 +9444,14 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_stoutland,
+        &69,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -6952,6 +9462,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &69,
     );
     
 
@@ -6981,6 +9499,22 @@ pub fn run() {
     );
     
 
+    level_up(
+        conn,
+        &battle,
+        &team_member_mienshao,
+        &70,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_bisharp,
+        &69,
+    );
+    
+
     let battle = create_battle(
         conn,
         &playthrough,
@@ -6991,6 +9525,14 @@ pub fn run() {
         "Single",
         &0,
         &false,
+    );
+    
+
+    level_up(
+        conn,
+        &battle,
+        &team_member_simisear,
+        &70,
     );
     
 

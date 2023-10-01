@@ -1,4 +1,6 @@
 from operator import and_
+from collections import defaultdict
+
 from sqlalchemy import select
 
 from .models import *
@@ -190,15 +192,15 @@ def level_up(
     level: int,
 ) -> tuple:
     """Level up a pokemon."""
-    # print(f"""
-    # level_up(
-    #     conn,
-    #     &{event},
-    #     &{team_member},
-    #     &{level},
-    # );
-    # """)
-    # return event
+    print(f"""
+    level_up(
+        conn,
+        &{event},
+        &{team_member},
+        &{level},
+    );
+    """)
+    return event
     
 
 def evolve(
@@ -210,31 +212,32 @@ def evolve(
     type2: str = None,
 ) -> tuple:
     """Evolve a pokemon."""
-    # with Session(engine) as session:
-    #     event: Event = session.get(Event, event)
-    #     team_member: TeamMember = session.get(TeamMember, team_member)
-    #     old_team_member_name = team_member.to_str(session)
-    #     team_member_entry = TeamMemberEntry(
-    #         team_member = team_member,
-    #         event = event,
-    #         species = species,
-    #         dex_no = dex_no,
-    #         type1 = type1,
-    #         type2 = type2,
-    #     )
-    #     team_member_entry = session.merge(team_member_entry)
-    #     session.commit()
-    #     print(f"{old_team_member_name} evolved into {species}")
-    #     return team_member.pk
+    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+    """)
+    print(f"""
+        evolve(conn,
+            &{event},
+            &{team_member},
+            &{species_var},
+        );
+    """)
+    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {team_member_var} = {team_member};
+    """)
+    return team_member_var
     
 
 def catch(
-    battle: tuple,
+    playthrough: tuple,
     slot: int,
     species: str,
     *,
     dex_no: int,
     type1: str,
+    caught_location: tuple,
     caught_date: dt.date,
     caught_level: int,
     ball: str,
@@ -243,32 +246,28 @@ def catch(
     nickname: str = None,
 ) -> tuple:
     """Catching a pokemon"""
-    # with Session(engine) as session:
-    #     battle: Event = session.get(Event, battle)
-    #     team_member = TeamMember(
-    #         playthrough=battle.playthrough,
-    #         slot=slot,
-    #         nickname=nickname,
-    #         caught_date=caught_date,
-    #         caught_location=battle.location,
-    #         caught_level=caught_level,
-    #         ball=ball,
-    #         gender=gender,
-    #     )
-    #     team_member = session.merge(team_member)
-    #     team_member_entry = TeamMemberEntry(
-    #         team_member=team_member,
-    #         event=battle,
-    #         level=caught_level,
-    #         species=species,
-    #         dex_no=dex_no,
-    #         type1=type1,
-    #         type2=type2,
-    #     )
-    #     session.merge(team_member_entry)
-    #     session.commit()
-    #     print(f"{team_member.to_str(session)} was caught")
-    #     return team_member.pk
+    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+    """)
+
+    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {team_member_var} = catch_pokemon(
+            conn,
+            &{playthrough},
+            &{slot},
+            &{species_var},
+            {f'Some("{nickname}")' if nickname else "None"},
+            "Grass",
+            "{caught_date.strftime('%Y-%m-%d')}",
+            &{caught_location},
+            &{caught_level},
+            "{gender if gender else "N"}",
+            "{ball}",
+        );
+    """)
+    return team_member_var
 
 
 
