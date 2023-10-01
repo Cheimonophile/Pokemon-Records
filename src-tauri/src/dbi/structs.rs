@@ -7,4 +7,6 @@ pub mod team_member_change;
 pub mod event;
 pub mod catch_event;
 pub mod battle_event;
+pub mod item_event;
 pub mod trainer;
+pub mod item;

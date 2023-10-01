@@ -279,3 +279,73 @@ pub fn level_up(
         .expect("Error saving new team member change");
     println!("{} leveled up to {}", team_member, level);
 }
+
+
+pub fn create_item(
+    conn: &mut SqliteConnection,
+    name: &str,
+) -> item::Item {
+    let new_item = item::InsertItem {
+        name,
+    };
+    diesel::insert_into(schema::Item::table)
+        .values(&new_item)
+        .execute(conn)
+        .expect("Error saving new item");
+    let item = schema::Item::table
+        .filter(schema::Item::name.eq(name))
+        .first::<crate::dbi::structs::item::Item>(conn)
+        .expect("Error loading item");
+    println!("Created item {}", item);
+    item
+}
+
+
+pub fn use_item(
+    conn: &mut SqliteConnection,
+    event: &event::Event,
+    item: &item::Item,
+) -> event::Event {
+    let event = event::InsertEvent {
+        playthrough_id_no: &event.playthrough_id_no,
+        location_name: &event.location_name,
+        location_region: &event.location_region,
+    };
+    diesel::insert_into(schema::Event::table)
+        .values(&event)
+        .execute(conn)
+        .expect("Error saving new event");
+    let event = schema::Event::table
+        .filter(schema::Event::playthrough_id_no.eq(&event.playthrough_id_no))
+        .order(schema::Event::no.desc())
+        .first::<event::Event>(conn)
+        .expect("Error loading event");
+    let new_item_event = item_event::InsertItemEvent {
+        no: &event.no,
+        item: &item.name,
+    };
+    println!("Used {}", item);
+    return event
+}
+
+
+pub fn evolve(
+    conn: &mut SqliteConnection,
+    event: &event::Event,
+    team_member: &team_member::TeamMember,
+    species: &species::Species,
+) {
+    let new_team_member_change = team_member_change::InsertTeamMemberChange {
+        team_member_playthrough_id_no: &team_member.playthrough_id_no,
+        team_member_slot: &team_member.slot,
+        event_no: &event.no,
+        level: None,
+        species_dex_no: Some(&species.dex_no),
+        species_form: species.form.as_deref(),
+    };
+    diesel::insert_into(schema::Team_Member_Change::table)
+        .values(&new_team_member_change)
+        .execute(conn)
+        .expect("Error saving new team member change");
+    println!("{} evolved into {}", team_member, species);
+}

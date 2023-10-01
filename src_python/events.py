@@ -14,18 +14,6 @@ def make_playthrough(
     print(f"""
     let playthrough = create_playthrough(conn, "{id_no}", "{name}", "{version}", "{adventure_started.strftime('%Y-%m-%d')}");
     """)
-
-    # with Session(engine) as session:
-    #     playthrough = Playthrough(
-    #         id_no = id_no,
-    #         name = name,
-    #         version = version,
-    #         adventure_started = adventure_started
-    #     )
-    #     session.merge(playthrough)
-    #     session.commit()
-    #     print(f"Created playthrough {playthrough}")
-    #     return playthrough.pk
     return "playthrough"
 
 
@@ -38,15 +26,6 @@ def make_location(
     print(f"""
     let {var} = create_location(conn, "{name}", "{region}");
     """)
-    # with Session(engine) as session:
-    #     location = Location(
-    #         name = name,
-    #         pregion = region
-    #     )
-    #     location = session.merge(location)
-    #     session.commit()
-    #     print(f"Created location {location}")
-    #     return location.pk
     return var
 
 trainer_class_dict = dict()
@@ -119,21 +98,6 @@ def make_battle(
         &{"true" if lost else "false"},
     );
     """)
-    # assert battle_type in BATTLE_TYPES, f"Invalid battle type '{battle_type}'"
-    # with Session(engine) as session:
-    #     playthrough: Playthrough = session.get(Playthrough, playthrough)
-    #     location: Location = session.get(Location, location)
-    #     battle = Event(
-    #         playthrough = playthrough,
-    #         location = location,
-    #         event_type = "Battle",
-    #         event_name = f"{opponent} ({battle_type})",
-    #         failed = lost,
-    #     )
-    #     battle = session.merge(battle)
-    #     session.commit()
-    #     print(f"{battle_type} battled {opponent} at {location}")
-    #     return battle.pk
     return "battle"
 
 
@@ -175,40 +139,6 @@ def receive_pokemon(
             "{ball}",
         );
     """)
-    # with Session(engine) as session:
-    #     playthrough: Playthrough = session.get(Playthrough, playthrough)
-    #     caught_location: Location = session.get(Location, caught_location)
-    #     event = Event(
-    #         playthrough = playthrough,
-    #         location = caught_location,
-    #         event_type = "Gift",
-    #         event_name = species,
-    #     )
-    #     event = session.merge(event)
-    #     team_member = TeamMember(
-    #         playthrough = playthrough,
-    #         slot = slot,
-    #         nickname = nickname,
-    #         caught_date = caught_date,
-    #         caught_location = caught_location,
-    #         caught_level = caught_level,
-    #         ball = ball,
-    #         gender = gender,
-    #     )
-    #     team_member = session.merge(team_member)
-    #     team_member_entry = TeamMemberEntry(
-    #         team_member = team_member,
-    #         event = event,
-    #         level = caught_level,
-    #         species = species,
-    #         dex_no = dex_no,
-    #         type1 = type1,
-    #         type2 = type2,
-    #     )
-    #     team_member_entry = session.merge(team_member_entry)
-    #     session.commit()
-    #     print(f"Received {team_member.to_str(session)} as a gift")
-    #     return team_member.pk
     return team_member_var
     
 
@@ -229,40 +159,28 @@ def revive_fossil(
     nickname: str = None,
 ) -> tuple:
     """Revive a Fossil"""
-    # with Session(engine) as session:
-    #     playthrough: Playthrough = session.get(Playthrough, playthrough)
-    #     caught_location: Location = session.get(Location, caught_location)
-    #     event = Event(
-    #         playthrough = playthrough,
-    #         location = caught_location,
-    #         event_type = "Revive",
-    #         event_name = fossil,
-    #     )
-    #     event = session.merge(event)
-    #     team_member = TeamMember(
-    #         playthrough = playthrough,
-    #         slot = slot,
-    #         nickname = nickname,
-    #         caught_date = caught_date,
-    #         caught_location = caught_location,
-    #         caught_level = caught_level,
-    #         ball = ball,
-    #         gender = gender,
-    #     )
-    #     team_member = session.merge(team_member)
-    #     team_member_entry = TeamMemberEntry(
-    #         team_member = team_member,
-    #         event = event,
-    #         level = caught_level,
-    #         species = species,
-    #         dex_no = dex_no,
-    #         type1 = type1,
-    #         type2 = type2,
-    #     )
-    #     team_member_entry = session.merge(team_member_entry)
-    #     session.commit()
-    #     print(f"Revived {team_member.to_str(session)} from a {fossil}")
-    #     return team_member.pk
+    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+    """)
+
+    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    print(f"""
+        let {team_member_var} = catch_pokemon(
+            conn,
+            &{playthrough},
+            &{slot},
+            &{species_var},
+            {f'Some("{nickname}")' if nickname else "None"},
+            "Fossil",
+            "{caught_date.strftime('%Y-%m-%d')}",
+            &{caught_location},
+            &{caught_level},
+            "{gender if gender else "N"}",
+            "{ball}",
+        );
+    """)
+    return team_member_var
     
 
 
@@ -272,18 +190,15 @@ def level_up(
     level: int,
 ) -> tuple:
     """Level up a pokemon."""
-    # with Session(engine) as session:
-    #     event: Event = session.get(Event, event)
-    #     team_member: TeamMember = session.get(TeamMember, team_member)
-    #     team_member_entry = TeamMemberEntry(
-    #         team_member = team_member,
-    #         event = event,
-    #         level = level,
-    #     )
-    #     team_member_entry = session.merge(team_member_entry)
-    #     session.commit()
-    #     print(f"{team_member.to_str(session)} leveled up to {level}")
-    #     return event.pk
+    # print(f"""
+    # level_up(
+    #     conn,
+    #     &{event},
+    #     &{team_member},
+    #     &{level},
+    # );
+    # """)
+    # return event
     
 
 def evolve(
