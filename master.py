@@ -13,6 +13,31 @@ pub fn run() {
 """)
 
 
+
+
+
+# Get data for the pokemon diamond run
+
+
+
+
+
+
+
+# Get data for the pokemon heartgold run
+
+
+
+
+
+
+
+
+
+
+
+
+
 playthrough = make_playthrough(id_no="26852", name="Ben", version="Black", adventure_started=dt.date(2023, 6, 24))
 nuvema_town = make_location(name="Nuvema Town", region="Unova")
 lillipup = receive_pokemon(playthrough,1,
@@ -23,7 +48,7 @@ lillipup = receive_pokemon(playthrough,1,
     caught_location=nuvema_town,
     caught_level=5,
     gender="M",
-    ball="Poke Ball",
+    ball="Poké Ball",
 )
 battle = make_battle(playthrough, nuvema_town, "PKMN Trainer Bianca")
 battle = make_battle(playthrough, nuvema_town, "PKMN Trainer Cheren")
@@ -51,7 +76,7 @@ pansear = receive_pokemon(playthrough,
     caught_location=dreamyard,
     caught_level=10,
     gender='M',
-    ball="Poke Ball"
+    ball="Poké Ball"
 )
 striaton_city = make_location(name="Striaton City", region="Unova")
 battle = make_battle(playthrough, striaton_city, "PKMN Trainer Cheren")
@@ -476,7 +501,7 @@ archen = revive_fossil(playthrough,
     caught_date=dt.date(2023, 7,2),
     caught_location=nacrene_city,
     caught_level=25,
-    ball='Poke Ball')
+    ball='Poké Ball')
 battle = make_battle(playthrough, route_5,
     "PKMN Trainer Cheren")
 level_up(battle,
@@ -1465,7 +1490,7 @@ battle = make_battle(playthrough, chargestone_cave,
     "Team Plasma Grunt")
 challengers_cave = make_location(name="Challenger's Cave", region="Unova")
 battle = make_battle(playthrough, challengers_cave,
-    "Acd Trainer Terry")
+    "Ace Trainer Terry")
 level_up(battle,
     bisharp,
     54)

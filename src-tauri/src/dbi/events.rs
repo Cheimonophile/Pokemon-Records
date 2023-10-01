@@ -49,17 +49,17 @@ pub fn create_location(conn: &mut SqliteConnection, name: &str, region: &str) ->
 
 pub fn create_species(
     conn: &mut SqliteConnection,
-    dex_no: &i32,
     name: &str,
-    form: Option<&str>,
+    form: &str,
+    dex_no: &i32,
     generation: &i32,
     type1: &str,
     type2: Option<&str>,
 ) -> species::Species {
     let new_species = species::InsertSpecies {
-        dex_no,
-        form,
         name,
+        form,
+        dex_no,
         generation,
         type1,
         type2,
@@ -118,8 +118,8 @@ pub fn catch_pokemon(
         caught_date,
         caught_location_name: &caught_location.name,
         caught_location_region: &caught_location.region,
-        caught_species_dex_no: &species.dex_no,
-        caught_species_form: species.form.as_deref(),
+        caught_species_name: &species.name,
+        caught_species_form: &species.form,
         caught_level,
         gender,
         ball,
@@ -132,9 +132,9 @@ pub fn catch_pokemon(
         team_member_playthrough_id_no: &playthrough.id_no,
         team_member_slot: slot,
         event_no: &event.no,
-        level: None,
-        species_dex_no: None,
-        species_form: None,
+        level: Some(caught_level),
+        species_name: Some(&species.name),
+        species_form: Some(&species.form),
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
@@ -270,14 +270,14 @@ pub fn level_up(
         team_member_slot: &team_member.slot,
         event_no: &event.no,
         level: Some(level),
-        species_dex_no: None,
+        species_name: None,
         species_form: None,
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
         .execute(conn)
         .expect("Error saving new team member change");
-    println!("{} leveled up to {}", team_member, level);
+    println!("{} leveled up to {}", team_member.format(conn), level);
 }
 
 
@@ -340,12 +340,12 @@ pub fn evolve(
         team_member_slot: &team_member.slot,
         event_no: &event.no,
         level: None,
-        species_dex_no: Some(&species.dex_no),
-        species_form: species.form.as_deref(),
+        species_name: Some(&species.name),
+        species_form: Some(&species.form),
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
         .execute(conn)
         .expect("Error saving new team member change");
-    println!("{} evolved into {}", team_member, species);
+    println!("{} evolved into {}", team_member.format(conn), species);
 }

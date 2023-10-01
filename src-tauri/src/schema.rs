@@ -85,10 +85,10 @@ diesel::table! {
 }
 
 diesel::table! {
-    Species (dex_no, form) {
-        dex_no -> Integer,
+    Species (name, form) {
         name -> Text,
-        form -> Nullable<Text>,
+        form -> Text,
+        dex_no -> Integer,
         generation -> Integer,
         type1 -> Text,
         type2 -> Nullable<Text>,
@@ -103,8 +103,8 @@ diesel::table! {
         caught_date -> Text,
         caught_location_name -> Text,
         caught_location_region -> Text,
-        caught_species_dex_no -> Integer,
-        caught_species_form -> Nullable<Text>,
+        caught_species_name -> Text,
+        caught_species_form -> Text,
         caught_level -> Integer,
         ball -> Text,
         gender -> Text,
@@ -118,7 +118,7 @@ diesel::table! {
         team_member_slot -> Integer,
         event_no -> Integer,
         level -> Nullable<Integer>,
-        species_dex_no -> Nullable<Integer>,
+        species_name -> Nullable<Text>,
         species_form -> Nullable<Text>,
     }
 }

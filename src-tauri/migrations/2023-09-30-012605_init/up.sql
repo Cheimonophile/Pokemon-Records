@@ -48,13 +48,13 @@ CREATE TABLE Location (
 
 -- Table for Pokemon Species
 CREATE TABLE Species (
-    dex_no INTEGER NOT NULL,
     name TEXT NOT NULL,
-    form TEXT,
+    form TEXT NOT NULL,
+    dex_no INTEGER NOT NULL,
     generation INTEGER NOT NULL,
     type1 TEXT NOT NULL,
     type2 TEXT,
-    PRIMARY KEY (dex_no, form),
+    PRIMARY KEY (name, form),
     FOREIGN KEY (type1) REFERENCES Type(name) ON DELETE RESTRICT,
     FOREIGN KEY (type2) REFERENCES Type(name) ON DELETE RESTRICT
 );
@@ -77,8 +77,8 @@ CREATE TABLE Team_Member (
     caught_date TEXT NOT NULL,
     caught_location_name TEXT NOT NULL,
     caught_location_region TEXT NOT NULL,
-    caught_species_dex_no INTEGER NOT NULL,
-    caught_species_form TEXT,
+    caught_species_name TEXT NOT NULL,
+    caught_species_form TEXT NOT NULL,
     caught_level INTEGER NOT NULL,
     ball TEXT NOT NULL,
     gender TEXT NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE Team_Member (
     FOREIGN KEY (playthrough_id_no) REFERENCES Playthrough(id_no) ON DELETE RESTRICT,
     FOREIGN KEY (caught_location_name, caught_location_region) REFERENCES Location(name, region) ON DELETE RESTRICT,
     FOREIGN KEY (ball) REFERENCES Ball(name) ON DELETE RESTRICT,
-    FOREIGN KEY (caught_species_dex_no, caught_species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT,
+    FOREIGN KEY (caught_species_name, caught_species_form) REFERENCES Species(name, form) ON DELETE RESTRICT,
     CHECK (slot >= 1 AND slot <= 6),
     CHECK (gender IN ("M","F","N")),
     CHECK (caught_level >= 1 AND caught_level <= 100)
@@ -158,12 +158,12 @@ CREATE TABLE Team_Member_Change (
     team_member_slot INTEGER NOT NULL,
     event_no INTEGER NOT NULL,
     level INTEGER,
-    species_dex_no INTEGER,
+    species_name TEXT,
     species_form TEXT,
     FOREIGN KEY (team_member_playthrough_id_no, team_member_slot) REFERENCES Team_Member(playthrough_id_no, slot) ON DELETE RESTRICT,
     FOREIGN KEY (event_no) REFERENCES Event(no) ON DELETE RESTRICT,
     CHECK (level >= 1 AND level <= 100),
-    FOREIGN KEY (species_dex_no, species_form) REFERENCES Species(dex_no, form) ON DELETE RESTRICT
+    FOREIGN KEY (species_name, species_form) REFERENCES Species(name, form) ON DELETE RESTRICT
 );
 
 

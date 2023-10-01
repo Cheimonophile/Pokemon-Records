@@ -12,7 +12,7 @@ pub fn run() {
     // events
     let playthrough = create_playthrough(conn, "26852", "Ben", "Black", "2023-06-24");
     let nuvema_town = create_location(conn, "Nuvema Town", "Unova");
-    let species_lillipup = create_species(conn, &506, "Lillipup", None, &5, "Normal", None);
+    let species_lillipup = create_species(conn, "Lillipup", "", &506, &5, "Normal", None);
     let lillipup = catch_pokemon(
         conn,
         &playthrough,
@@ -64,12 +64,7 @@ pub fn run() {
         &1,
         &false,
     );
-    level_up(
-        conn,
-        &battle,
-        &lillipup,
-        &7,
-    );
+    level_up(conn, &battle, &lillipup, &7);
     // level_up(battle, lillipup, 7)
     // battle = make_battle(playthrough, rt2 := make_location("Route 2", "Unova"), "Youngster Jimmy")
     // level_up(battle, lillipup, 8)

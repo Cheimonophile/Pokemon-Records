@@ -122,7 +122,7 @@ def receive_pokemon(
     """Receive a new pokemon as a gift or prize."""
     species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
     print(f"""
-        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+        let {species_var} = create_species(conn, "{species}", "", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
     team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
@@ -163,7 +163,7 @@ def revive_fossil(
     """Revive a Fossil"""
     species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
     print(f"""
-        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+        let {species_var} = create_species(conn, "{species}", "", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
     team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
@@ -214,7 +214,7 @@ def evolve(
     """Evolve a pokemon."""
     species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
     print(f"""
-        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+        let {species_var} = create_species(conn, "{species}", "", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
     print(f"""
         evolve(conn,
@@ -248,7 +248,7 @@ def catch(
     """Catching a pokemon"""
     species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
     print(f"""
-        let {species_var} = create_species(conn, &{dex_no}, "{species}", None, &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
+        let {species_var} = create_species(conn, "{species}", "", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
     team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")

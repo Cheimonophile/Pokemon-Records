@@ -14,7 +14,7 @@ pub fn run() {
     let nuvema_town_unova = create_location(conn, "Nuvema Town", "Unova");
     
 
-        let species_lillipup = create_species(conn, &506, "Lillipup", None, &5, "Normal", None);
+        let species_lillipup = create_species(conn, "Lillipup", "", &506,  &5, "Normal", None);
     
 
         let team_member_lillipup = catch_pokemon(
@@ -28,7 +28,7 @@ pub fn run() {
             &nuvema_town_unova,
             &5,
             "M",
-            "Poke Ball",
+            "Poké Ball",
         );
     
 
@@ -239,7 +239,7 @@ pub fn run() {
     );
     
 
-        let species_pansear = create_species(conn, &513, "Pansear", None, &5, "Fire", None);
+        let species_pansear = create_species(conn, "Pansear", "", &513,  &5, "Fire", None);
     
 
         let team_member_pansear = catch_pokemon(
@@ -253,7 +253,7 @@ pub fn run() {
             &dreamyard_unova,
             &10,
             "M",
-            "Poke Ball",
+            "Poké Ball",
         );
     
 
@@ -684,7 +684,7 @@ pub fn run() {
     );
     
 
-        let species_herdier = create_species(conn, &507, "Herdier", None, &5, "Normal", None);
+        let species_herdier = create_species(conn, "Herdier", "", &507,  &5, "Normal", None);
     
 
         evolve(conn,
@@ -756,7 +756,7 @@ pub fn run() {
     );
     
 
-        let species_tympole = create_species(conn, &535, "Tympole", None, &5, "Water", None);
+        let species_tympole = create_species(conn, "Tympole", "", &535,  &5, "Water", None);
     
 
         let team_member_tympole = catch_pokemon(
@@ -1846,7 +1846,7 @@ pub fn run() {
     );
     
 
-        let species_palpitoad = create_species(conn, &536, "Palpitoad", None, &5, "Water", Some("Ground"));
+        let species_palpitoad = create_species(conn, "Palpitoad", "", &536,  &5, "Water", Some("Ground"));
     
 
         evolve(conn,
@@ -2629,7 +2629,7 @@ pub fn run() {
     );
     
 
-        let species_archen = create_species(conn, &566, "Archen", None, &5, "Rock", Some("Flying"));
+        let species_archen = create_species(conn, "Archen", "", &566,  &5, "Rock", Some("Flying"));
     
 
         let team_member_archen = catch_pokemon(
@@ -2643,7 +2643,7 @@ pub fn run() {
             &nacrene_city_unova,
             &25,
             "M",
-            "Poke Ball",
+            "Poké Ball",
         );
     
 
@@ -3319,7 +3319,7 @@ pub fn run() {
     );
     
 
-        let species_stoutland = create_species(conn, &508, "Stoutland", None, &5, "Normal", None);
+        let species_stoutland = create_species(conn, "Stoutland", "", &508,  &5, "Normal", None);
     
 
         evolve(conn,
@@ -3768,7 +3768,7 @@ pub fn run() {
     );
     
 
-        let species_seismitoad = create_species(conn, &537, "Seismitoad", None, &5, "Water", Some("Ground"));
+        let species_seismitoad = create_species(conn, "Seismitoad", "", &537,  &5, "Water", Some("Ground"));
     
 
         evolve(conn,
@@ -3883,7 +3883,7 @@ pub fn run() {
     );
     
 
-        let species_archeops = create_species(conn, &567, "Archeops", None, &5, "Rock", Some("Flying"));
+        let species_archeops = create_species(conn, "Archeops", "", &567,  &5, "Rock", Some("Flying"));
     
 
         evolve(conn,
@@ -4707,7 +4707,7 @@ pub fn run() {
     );
     
 
-        let species_mienfoo = create_species(conn, &619, "Mienfoo", None, &5, "Fighting", None);
+        let species_mienfoo = create_species(conn, "Mienfoo", "", &619,  &5, "Fighting", None);
     
 
         let team_member_mienfoo = catch_pokemon(
@@ -5127,7 +5127,7 @@ pub fn run() {
     );
     
 
-        let species_simisear = create_species(conn, &514, "Simisear", None, &5, "Fire", None);
+        let species_simisear = create_species(conn, "Simisear", "", &514,  &5, "Fire", None);
     
 
         evolve(conn,
@@ -5524,7 +5524,7 @@ pub fn run() {
     );
     
 
-        let species_pawniard = create_species(conn, &624, "Pawniard", None, &5, "Dark", Some("Steel"));
+        let species_pawniard = create_species(conn, "Pawniard", "", &624,  &5, "Dark", Some("Steel"));
     
 
         let team_member_pawniard = catch_pokemon(
@@ -6783,7 +6783,7 @@ pub fn run() {
     );
     
 
-        let species_mienshao = create_species(conn, &620, "Mienshao", None, &5, "Fighting", None);
+        let species_mienshao = create_species(conn, "Mienshao", "", &620,  &5, "Fighting", None);
     
 
         evolve(conn,
@@ -7197,7 +7197,7 @@ pub fn run() {
     );
     
 
-        let species_bisharp = create_species(conn, &625, "Bisharp", None, &5, "Dark", Some("Steel"));
+        let species_bisharp = create_species(conn, "Bisharp", "", &625,  &5, "Dark", Some("Steel"));
     
 
         evolve(conn,
@@ -7335,17 +7335,14 @@ pub fn run() {
     let challengers_cave_unova = create_location(conn, "Challenger's Cave", "Unova");
     
 
-            let acd_trainer = create_trainer_class(conn, "Acd Trainer");
-            
-
-        let acd_trainer_terry = create_trainer(conn, "Terry", &acd_trainer);
+        let ace_trainer_terry = create_trainer(conn, "Terry", &ace_trainer);
         
 
     let battle = create_battle(
         conn,
         &playthrough,
         &challengers_cave_unova,
-        &acd_trainer_terry,
+        &ace_trainer_terry,
         None,
         None,
         "Single",
