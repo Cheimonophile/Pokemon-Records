@@ -40,7 +40,7 @@ pub fn create_location(conn: &mut SqliteConnection, name: &str, region: &str) ->
         .execute(conn)
         .expect("Error saving new location");
     let location = schema::Location::table
-        .filter(schema::Location::name.eq(name))
+        .filter(schema::Location::name.eq(name).and(schema::Location::region.eq(region)))
         .first::<crate::dbi::structs::location::Location>(conn)
         .expect("Error loading location");
     println!("Created location {}", location);

@@ -1,5 +1,6 @@
 from src_python.events import *
 from src_python.pkmn_constants import *
+import pandas as pd
 
 
 print("""
@@ -17,6 +18,7 @@ pub fn run() {
 
 
 # Get data for the pokemon diamond run
+diamond = pd.read_csv("old_games/Team Levels/2023-02-25 Diamond-Table.csv")
 
 
 

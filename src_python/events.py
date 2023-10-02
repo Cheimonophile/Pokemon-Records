@@ -6,6 +6,12 @@ from sqlalchemy import select
 from .models import *
 from .pkmn_constants import *
 
+
+def clean_name(name: str) -> str:
+    """Clean up a name."""
+    return name.lower().replace(" ", "_").replace("'","").replace(".","").replace("&","and").replace('-','_')
+
+
 def make_playthrough(
     id_no: str,
     name: str,
@@ -23,7 +29,7 @@ def make_location(
     name: str,
     region: str
 ) -> tuple:
-    var = f"{name} {region}".lower().replace(" ", "_").replace("'","")
+    var = clean_name(f"{name} {region}")
     """Create a new location."""
     print(f"""
     let {var} = create_location(conn, "{name}", "{region}");
@@ -50,11 +56,11 @@ def make_battle(
 
     # clean up trainer vars
     if opponent1 not in trainer_dict:
-        trainer_dict[opponent1] = opponent1.lower().replace(" ", "_").replace("'","").replace("&","and")
+        trainer_dict[opponent1] = clean_name(opponent1)
         opponent1_class, *opponent1_name  = opponent1.rsplit(" ", 1) if "&" not in opponent1 else opponent1.split(" ", 3)
         opponent1_name = " ".join(opponent1_name)
         if opponent1_class not in trainer_class_dict:
-            trainer_class_dict[opponent1_class] = opponent1_class.lower().replace(" ", "_").replace("'","")
+            trainer_class_dict[opponent1_class] = clean_name(opponent1_class)
             print(f"""
             let {trainer_class_dict[opponent1_class]} = create_trainer_class(conn, "{opponent1_class}");
             """)
@@ -62,11 +68,11 @@ def make_battle(
         let {trainer_dict[opponent1]} = create_trainer(conn, "{opponent1_name}", &{trainer_class_dict[opponent1_class]});
         """)
     if opponent2 and opponent2 not in trainer_dict:
-        trainer_dict[opponent2] = opponent2.lower().replace(" ", "_").replace("'","").replace("&","and")
+        trainer_dict[opponent2] = clean_name(opponent2)
         opponent2_class, *opponent2_name  = opponent2.rsplit(" ", 1) if "&" not in opponent2 else opponent2.split(" ", 3)
         opponent2_name = " ".join(opponent2_name)
         if opponent2_class not in trainer_class_dict:
-            trainer_class_dict[opponent2_class] = opponent2_class.lower().replace(" ", "_").replace("'","")
+            trainer_class_dict[opponent2_class] = clean_name(opponent2_class)
             print(f"""
             let {trainer_class_dict[opponent2_class]} = create_trainer_class(conn, "{opponent2_class}");
             """)
@@ -74,11 +80,11 @@ def make_battle(
         let {trainer_dict[opponent2]} = create_trainer(conn, "{opponent2_name}", &{trainer_class_dict[opponent2_class]});
         """)
     if partner and partner not in trainer_dict:
-        trainer_dict[partner] = partner.lower().replace(" ", "_").replace("'","").replace("&","and")
+        trainer_dict[partner] = clean_name(partner)
         partner_class, *partner_name  = partner.rsplit(" ", 1) if "&" not in partner else partner.split(" ", 3)
         partner_name = " ".join(partner_name)
         if partner_class not in trainer_class_dict:
-            trainer_class_dict[partner_class] = partner_class.lower().replace(" ", "_").replace("'","")
+            trainer_class_dict[partner_class] = clean_name(partner_class)
             print(f"""
             let {trainer_class_dict[partner_class]} = create_trainer_class(conn, "{partner_class}");
             """)
@@ -120,12 +126,12 @@ def receive_pokemon(
     nickname: str = None,
 ) -> tuple:
     """Receive a new pokemon as a gift or prize."""
-    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    species_var = "species_" + clean_name(species)
     print(f"""
         let {species_var} = create_species(conn, "{species}", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
-    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    team_member_var = "team_member_" + clean_name(species)
     print(f"""
         let {team_member_var} = catch_pokemon(
             conn,
@@ -161,12 +167,12 @@ def revive_fossil(
     nickname: str = None,
 ) -> tuple:
     """Revive a Fossil"""
-    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    species_var = "species_" + clean_name(species)
     print(f"""
         let {species_var} = create_species(conn, "{species}", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
-    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    team_member_var = "team_member_" + clean_name(species)
     print(f"""
         let {team_member_var} = catch_pokemon(
             conn,
@@ -212,7 +218,7 @@ def evolve(
     type2: str = None,
 ) -> tuple:
     """Evolve a pokemon."""
-    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    species_var = "species_" + clean_name(species)
     print(f"""
         let {species_var} = create_species(conn, "{species}", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
@@ -223,7 +229,7 @@ def evolve(
             &{species_var},
         );
     """)
-    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    team_member_var = "team_member_" + clean_name(species)
     print(f"""
         let {team_member_var} = {team_member};
     """)
@@ -246,12 +252,12 @@ def catch(
     nickname: str = None,
 ) -> tuple:
     """Catching a pokemon"""
-    species_var = "species_" + species.lower().replace(" ", "_").replace("'","")
+    species_var = "species_" + clean_name(species)
     print(f"""
         let {species_var} = create_species(conn, "{species}", &{dex_no},  &5, "{type1}", {f'Some("{type2}")' if type2 else "None"});
     """)
 
-    team_member_var = "team_member_" + species.lower().replace(" ", "_").replace("'","")
+    team_member_var = "team_member_" + clean_name(species)
     print(f"""
         let {team_member_var} = catch_pokemon(
             conn,
