@@ -25,6 +25,3 @@ database:
 
 shell:
 	cd src && python manage.py shell
-
-rust:
-	python master.py > src-tauri/src/master.rs
