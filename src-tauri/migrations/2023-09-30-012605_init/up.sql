@@ -49,12 +49,11 @@ CREATE TABLE Location (
 -- Table for Pokemon Species
 CREATE TABLE Species (
     name TEXT NOT NULL,
-    form TEXT NOT NULL,
     dex_no INTEGER NOT NULL,
     generation INTEGER NOT NULL,
     type1 TEXT NOT NULL,
     type2 TEXT,
-    PRIMARY KEY (name, form),
+    PRIMARY KEY (name),
     FOREIGN KEY (type1) REFERENCES Type(name) ON DELETE RESTRICT,
     FOREIGN KEY (type2) REFERENCES Type(name) ON DELETE RESTRICT
 );
@@ -78,7 +77,6 @@ CREATE TABLE Team_Member (
     caught_location_name TEXT NOT NULL,
     caught_location_region TEXT NOT NULL,
     caught_species_name TEXT NOT NULL,
-    caught_species_form TEXT NOT NULL,
     caught_level INTEGER NOT NULL,
     ball TEXT NOT NULL,
     gender TEXT NOT NULL,
@@ -86,7 +84,7 @@ CREATE TABLE Team_Member (
     FOREIGN KEY (playthrough_id_no) REFERENCES Playthrough(id_no) ON DELETE RESTRICT,
     FOREIGN KEY (caught_location_name, caught_location_region) REFERENCES Location(name, region) ON DELETE RESTRICT,
     FOREIGN KEY (ball) REFERENCES Ball(name) ON DELETE RESTRICT,
-    FOREIGN KEY (caught_species_name, caught_species_form) REFERENCES Species(name, form) ON DELETE RESTRICT,
+    FOREIGN KEY (caught_species_name) REFERENCES Species(name) ON DELETE RESTRICT,
     CHECK (slot >= 1 AND slot <= 6),
     CHECK (gender IN ("M","F","N")),
     CHECK (caught_level >= 1 AND caught_level <= 100)
@@ -159,11 +157,10 @@ CREATE TABLE Team_Member_Change (
     event_no INTEGER NOT NULL,
     level INTEGER,
     species_name TEXT,
-    species_form TEXT,
     FOREIGN KEY (team_member_playthrough_id_no, team_member_slot) REFERENCES Team_Member(playthrough_id_no, slot) ON DELETE RESTRICT,
     FOREIGN KEY (event_no) REFERENCES Event(no) ON DELETE RESTRICT,
     CHECK (level >= 1 AND level <= 100),
-    FOREIGN KEY (species_name, species_form) REFERENCES Species(name, form) ON DELETE RESTRICT
+    FOREIGN KEY (species_name) REFERENCES Species(name) ON DELETE RESTRICT
 );
 
 

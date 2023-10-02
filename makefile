@@ -27,4 +27,4 @@ shell:
 	cd src && python manage.py shell
 
 rust:
-	python master.py > src-tauri/src/master2.rs
+	python master.py > src-tauri/src/master.rs

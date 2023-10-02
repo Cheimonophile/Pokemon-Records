@@ -5,12 +5,11 @@ mod schema;
 
 mod dbi;
 mod master;
-mod master2;
 
 
 
 fn main() {
-  master2::run()
+  master::run()
   // tauri::Builder::default()
   //   .run(tauri::generate_context!())
   //   .expect("error while running tauri application");

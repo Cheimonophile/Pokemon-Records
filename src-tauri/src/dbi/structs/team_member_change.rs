@@ -10,7 +10,6 @@ pub struct InsertTeamMemberChange<'a> {
     pub team_member_slot: &'a i32,  
     pub level: Option<&'a i32>,
     pub species_name: Option<&'a str>,
-    pub species_form: Option<&'a str>,
 }
 
 #[derive(Queryable, Selectable)]
@@ -23,5 +22,4 @@ pub struct TeamMemberChange {
     pub event_no: i32,
     pub level: Option<i32>,
     pub species_name: Option<String>,
-    pub species_form: Option<String>,
 }

@@ -50,7 +50,6 @@ pub fn create_location(conn: &mut SqliteConnection, name: &str, region: &str) ->
 pub fn create_species(
     conn: &mut SqliteConnection,
     name: &str,
-    form: &str,
     dex_no: &i32,
     generation: &i32,
     type1: &str,
@@ -58,7 +57,6 @@ pub fn create_species(
 ) -> species::Species {
     let new_species = species::InsertSpecies {
         name,
-        form,
         dex_no,
         generation,
         type1,
@@ -119,7 +117,6 @@ pub fn catch_pokemon(
         caught_location_name: &caught_location.name,
         caught_location_region: &caught_location.region,
         caught_species_name: &species.name,
-        caught_species_form: &species.form,
         caught_level,
         gender,
         ball,
@@ -134,7 +131,6 @@ pub fn catch_pokemon(
         event_no: &event.no,
         level: Some(caught_level),
         species_name: Some(&species.name),
-        species_form: Some(&species.form),
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
@@ -271,7 +267,6 @@ pub fn level_up(
         event_no: &event.no,
         level: Some(level),
         species_name: None,
-        species_form: None,
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
@@ -341,7 +336,6 @@ pub fn evolve(
         event_no: &event.no,
         level: None,
         species_name: Some(&species.name),
-        species_form: Some(&species.form),
     };
     diesel::insert_into(schema::Team_Member_Change::table)
         .values(&new_team_member_change)
