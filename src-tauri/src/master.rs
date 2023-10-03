@@ -18987,4 +18987,40 @@ pub fn run() {
         &0,
         &true,
     );
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_grimlsey,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    level_up(conn, &battle, &team_member_mienshao, &72);
+    level_up(conn, &battle, &team_member_seismitoad, &70);
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_shauntal,
+        None,
+        None,
+        "Single",
+        &0,
+        &false,
+    );
+    level_up(conn, &battle, &team_member_seismitoad, &71);
+    let battle = create_battle(
+        conn,
+        &playthrough,
+        &pokémon_league_unova,
+        &elite_four_caitlin,
+        None,
+        None,
+        "Single",
+        &0,
+        &true,
+    );
 }
