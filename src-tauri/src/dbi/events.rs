@@ -247,24 +247,10 @@ pub fn level_up(
     team_member: &team_member::TeamMember,
     level: &i32,
 ) {
-    let new_event = event::InsertEvent {
-        playthrough_id_no: &battle.playthrough_id_no,
-        location_name: &battle.location_name,
-        location_region: &battle.location_region,
-    };
-    diesel::insert_into(schema::Event::table)
-        .values(&new_event)
-        .execute(conn)
-        .expect("Error saving new event");
-    let event = schema::Event::table
-        .filter(schema::Event::playthrough_id_no.eq(&battle.playthrough_id_no))
-        .order(schema::Event::no.desc())
-        .first::<event::Event>(conn)
-        .expect("Error loading event");
     let new_team_member_change = team_member_change::InsertTeamMemberChange {
         team_member_playthrough_id_no: &team_member.playthrough_id_no,
         team_member_slot: &team_member.slot,
-        event_no: &event.no,
+        event_no: &battle.no,
         level: Some(level),
         species_name: None,
     };
