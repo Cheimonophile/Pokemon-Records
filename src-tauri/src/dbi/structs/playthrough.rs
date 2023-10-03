@@ -11,6 +11,7 @@ pub struct InsertPlaythrough<'a> {
     pub adventure_started: &'a str,
 }
 
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::Playthrough)]
 #[diesel(primary_key(id_no))]
@@ -20,6 +21,25 @@ pub struct Playthrough {
     pub name: String,
     pub version: String,
     pub adventure_started: String,
+}
+
+impl Playthrough {
+    pub fn read(id_no: Option<&str>) -> Result<Vec<Playthrough>, Box<dyn std::error::Error>> {
+        let mut connection = crate::dbi::connection::connect();
+
+        let results = if let Some(id_no) = id_no {
+            schema::Playthrough::table
+                .filter(schema::Playthrough::id_no.eq(id_no))
+                .select(Playthrough::as_select())
+                .load(&mut connection)?
+        }
+        else {
+            schema::Playthrough::table
+                .select(Playthrough::as_select())
+                .load(&mut connection)?
+        };
+        Ok(results)
+    }
 }
 
 impl std::fmt::Display for Playthrough {
