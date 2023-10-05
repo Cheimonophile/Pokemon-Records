@@ -2,8 +2,10 @@
 
 
 
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
+import { sections } from '@/constants/sections'
+import Link from 'next/link'
 
 
 
@@ -18,8 +20,18 @@ export default function App() {
   }, [])
 
   return (
-    <main>
-      Hello World!
-    </main>
+    <>
+      <ul>
+        {sections.map((section, i) => (
+          <Fragment key={i}>
+            <li>
+              <Link href={`/${section}`}>
+                {section}
+              </Link>
+            </li>
+          </Fragment>
+        ))}
+      </ul>
+    </>
   )
 }

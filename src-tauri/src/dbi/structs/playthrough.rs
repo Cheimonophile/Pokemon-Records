@@ -26,7 +26,6 @@ pub struct Playthrough {
 impl Playthrough {
     pub fn read(id_no: Option<&str>) -> Result<Vec<Playthrough>, Box<dyn std::error::Error>> {
         let mut connection = crate::dbi::connection::connect();
-
         let results = if let Some(id_no) = id_no {
             schema::Playthrough::table
                 .filter(schema::Playthrough::id_no.eq(id_no))
@@ -39,6 +38,28 @@ impl Playthrough {
                 .load(&mut connection)?
         };
         Ok(results)
+    }
+
+    pub fn create(
+        id_no: &str,
+        name: &str,
+        version: &str,
+        adventure_started: &str,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut connection = crate::dbi::connection::connect();
+        let new_playthrough = InsertPlaythrough {
+            id_no,
+            name,
+            version,
+            adventure_started,
+        };
+        diesel::insert_into(schema::Playthrough::table)
+            .values(&new_playthrough)
+            .execute(&mut connection)?;
+        let playthrough = schema::Playthrough::table
+            .filter(schema::Playthrough::id_no.eq(id_no))
+            .first::<Playthrough>(&mut connection)?;
+        Ok(playthrough)
     }
 }
 

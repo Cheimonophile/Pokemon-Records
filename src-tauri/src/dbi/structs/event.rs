@@ -11,6 +11,7 @@ pub struct InsertEvent<'a> {
     pub location_region: &'a str,
 }
 
+#[derive(serde::Serialize)]
 #[derive(Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::Event)]
 #[diesel(primary_key(no))]

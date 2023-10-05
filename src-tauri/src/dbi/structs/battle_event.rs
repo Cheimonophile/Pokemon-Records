@@ -17,6 +17,7 @@ pub struct InsertBattleEvent<'a> {
     pub lost: &'a bool,
 }
 
+#[derive(serde::Serialize)]
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::Battle_Event)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
