@@ -53,15 +53,15 @@ const BattleTableRow: FC<{
 }> = (props) => {
 
     // make battle title
-    let title = `${props.battle.battle.opponent1_class} ${props.battle.battle.opponent1_name}`
-    if (props.battle.battle.opponent2_class) {
-        title += ` and ${props.battle.battle.opponent2_class}` + (props.battle.battle.opponent2_name ? ` ${props.battle.battle.opponent2_name}` : '')
+    let title = `${props.battle.opponent1_class} ${props.battle.opponent1_name}`
+    if (props.battle.opponent2_class) {
+        title += ` and ${props.battle.opponent2_class}` + (props.battle.opponent2_name ? ` ${props.battle.opponent2_name}` : '')
     }
-    if (props.battle.battle.partner_class) {
-        title += ` with ${props.battle.battle.partner_class}` + (props.battle.battle.partner_name ? ` ${props.battle.battle.partner_name}` : '')
+    if (props.battle.partner_class) {
+        title += ` with ${props.battle.partner_class}` + (props.battle.partner_name ? ` ${props.battle.partner_name}` : '')
     }
     title += ` at ${props.battle.event.location_name}, ${props.battle.event.location_region}`
-    if (props.battle.battle.lost) {
+    if (props.battle.lost) {
         title += " (lost)"
     }
 
