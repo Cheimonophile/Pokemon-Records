@@ -33,12 +33,14 @@ export default function Page() {
             <div className="flex-1 p-2">
 
                 {/* Battles Table */}
-                <div className="w-full h-full border-2 p-1 gap-1 overflow-y-scroll oveflow-x-hidden">
-                    {battles?.map((battle, i) => (
-                        <Fragment key={i}>
-                            <BattleTableRow battle={battle} />
-                        </Fragment>
-                    ))}
+                <div className=" w-full h-full border-2 p-1 gap-1 overflow-y-scroll oveflow-x-hidden">
+                    <table>
+                        {battles?.map((battle, i) => (
+                            <Fragment key={i}>
+                                <BattleTableRow battle={battle} />
+                            </Fragment>
+                        ))}
+                    </table>
                 </div>
 
             </div>
@@ -65,14 +67,12 @@ const BattleTableRow: FC<{
         title += " (lost)"
     }
 
-    return (
-        <div className="flex gap-1">
-            <div>
-                {props.battle.event.no}.
-            </div>
-            <div>
-                {title}
-            </div>
-        </div>
-    )
+    return (<tr>
+        <td>
+            {props.battle.event.no}.
+        </td>
+        <td className="row-start-2">
+            {title}
+        </td>
+    </tr>)
 }
