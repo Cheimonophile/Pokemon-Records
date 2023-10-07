@@ -1,10 +1,10 @@
 'use client'
 
 
-
 import { FC, Fragment, useEffect, useState } from 'react'
 import { ReadBattlesResult, readBattles } from '@/backend/battles'
 import Link from 'next/link'
+import { invoke } from '@tauri-apps/api'
 
 
 
@@ -16,16 +16,9 @@ export default function Page() {
 
 
     useEffect(() => {
-        (async () => {
-            try {
-                const battles = await readBattles()
-                console.log(battles)
-                setBattles(battles)
-            }
-            catch (error) {
-                console.log(error)
-            }
-        })();
+        // readBattles()
+        //     .then(console.log)
+        //     .catch(console.error)
     }, [])
 
     return (
@@ -35,7 +28,9 @@ export default function Page() {
 
                 {/* Battles Table */}
                 <div>
-
+                    <Link href="/battles/create">
+                        Create Battle
+                    </Link>
                 </div>
                 <div className="w-full h-full border-2 p-1 overflow-y-scroll oveflow-x-hidden">
                     <table className="border-separate border-spacing-x-2 border-spacing-y-1">
@@ -48,7 +43,6 @@ export default function Page() {
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     )
@@ -56,8 +50,10 @@ export default function Page() {
 
 
 
+
+
 const BattleTableRow: FC<{
-    battle: ReadBattlesResult
+    battle: any
 }> = (props) => {
 
     // make battle title
@@ -72,7 +68,7 @@ const BattleTableRow: FC<{
         title += " (lost)"
     }
 
-    return (<tr className="gap-1">
+    return (<tr>
         <td>
             {props.battle.event.no}.
         </td>

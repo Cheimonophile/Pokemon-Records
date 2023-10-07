@@ -1,3 +1,5 @@
+'use client'
+
 import { invoke } from "@tauri-apps/api"
 
 

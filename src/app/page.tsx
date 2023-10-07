@@ -25,7 +25,7 @@ export default function App() {
         {sections.map((section, i) => (
           <Fragment key={i}>
             <li>
-              <Link href={`/${section}`}>
+              <Link href={`/${section.toLowerCase()}`}>
                 {section}
               </Link>
             </li>

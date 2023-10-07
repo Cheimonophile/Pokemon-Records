@@ -33,11 +33,10 @@ pub fn read_battles() -> PkmnResult<Vec<ReadBattlesResult>> {
         .into_iter()
         .map(|(battle, event)| ReadBattlesResult { battle, event })
         .collect();
+    std::fs::File::open("foo")?;
     Ok(battles)
 }
 
 #[tauri::command]
 pub fn create_battle() {
-    let mut connection = dbi::connection::connect();
-    // let x = connection.transaction(|connection| Ok("Hello"));
 }
