@@ -1,10 +1,11 @@
 'use client'
 
 import { invoke } from "@tauri-apps/api"
+import { Battle } from "../types"
 
 
 
-export type ReadBattlesResult = {
+type ReadResult = {
     battle_type: string,
     lost: boolean
     no: number
@@ -21,10 +22,47 @@ export type ReadBattlesResult = {
         no: number
         playthrough_id_no: string
     }
-}
+}[]
 
 
-export async function readBattles(): Promise<ReadBattlesResult[]> {
-    const result: ReadBattlesResult[] = await invoke('read_battles', {})
-    return result
+export async function readBattles(): Promise<Battle[]> {
+    const results = await invoke<ReadResult>('read_battles', {})
+    let battles = results.map((result): Battle => {
+        const opponent2 = result.opponent2_name && result.opponent2_class
+            ? {
+                name: result.opponent2_name,
+                class: result.opponent2_class,
+            } : undefined
+
+        const partner = result.partner_name && result.partner_class
+            ? {
+                name: result.partner_name,
+                class: result.partner_class,
+            } : undefined
+
+        return {
+            type: result.battle_type,
+            lost: result.lost,
+            no: result.no,
+            opponent1: {
+                name: result.opponent1_name,
+                class: result.opponent1_class,
+            },
+            opponent2,
+            partner,
+            round: result.round,
+            location: {
+                name: result.event.location_name,
+                region: result.event.location_region,
+            },
+            playthrough: {
+                idNo: result.event.playthrough_id_no,
+                name: '',
+                version: '',
+                adventureStarted: new Date(),
+            },
+        }
+    })
+    console.log(battles)
+    return battles
 }

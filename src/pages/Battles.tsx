@@ -1,9 +1,9 @@
 import { FC, Fragment, useEffect, useState } from 'react'
 import { invoke } from '@tauri-apps/api'
-import { ReadBattlesResult, readBattles } from '../backend/battles'
+import { readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { message } from '@tauri-apps/api/dialog';
-import { Playthrough } from '../types';
+import { Battle, Playthrough } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
 
 
@@ -18,7 +18,7 @@ export const Battles: FC<{}> = () => {
 
 
     // battle table state
-    const [battles, setBattles] = useState<ReadBattlesResult[] | null>()
+    const [battles, setBattles] = useState<Battle[] | null>()
 
     // fetch battles
     useEffect(() => {
@@ -92,16 +92,16 @@ export const Battles: FC<{}> = () => {
 
 
 const BattleTableRow: FC<{
-    battle: ReadBattlesResult
+    battle: Battle
 }> = (props) => {
 
     // make battle title
-    let title = `${props.battle.opponent1_class} ${props.battle.opponent1_name}`
-    if (props.battle.opponent2_class) {
-        title += ` and ${props.battle.opponent2_class}` + (props.battle.opponent2_name ? ` ${props.battle.opponent2_name}` : '')
+    let title = `${props.battle.opponent1.class} ${props.battle.opponent1.name}`
+    if (props.battle.opponent2) {
+        title += ` and ${props.battle.opponent2.class}` + (props.battle.opponent2.name ? ` ${props.battle.opponent2.name}` : '')
     }
-    if (props.battle.partner_class) {
-        title += ` with ${props.battle.partner_class}` + (props.battle.partner_name ? ` ${props.battle.partner_name}` : '')
+    if (props.battle.partner) {
+        title += ` with ${props.battle.partner.class}` + (props.battle.partner.name ? ` ${props.battle.partner.name}` : '')
     }
     if (props.battle.lost) {
         title += " (lost)"
@@ -109,16 +109,16 @@ const BattleTableRow: FC<{
 
     return (<tr>
         <td>
-            {props.battle.event.no}.
+            {props.battle.no}.
         </td>
         <td>
             {title}
         </td>
         <td>
-            {props.battle.event.location_name}
+            {props.battle.location.name}
         </td>
         <td>
-            {props.battle.event.location_region}
+            {props.battle.location.region}
         </td>
     </tr>)
 }
