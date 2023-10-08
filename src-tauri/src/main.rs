@@ -16,8 +16,10 @@ fn main() {
             crate::api::battle_types::read_battle_types,
             crate::api::battles::create_battle,
             crate::api::battles::read_battles,
+            crate::api::locations::read_locations,
             crate::api::playthrough::create_playthrough,
             crate::api::playthrough::read_playthroughs,
+            crate::api::regions::read_regions,
             crate::api::trainer_classes::read_trainer_classes,
             crate::api::trainers::read_trainers,
         ])

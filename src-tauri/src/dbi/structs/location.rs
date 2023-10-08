@@ -9,6 +9,7 @@ pub struct InsertLocation<'a> {
     pub region: &'a str,
 }
 
+#[derive(serde::Serialize)]
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::Location)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]

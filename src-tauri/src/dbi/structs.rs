@@ -11,3 +11,4 @@ pub mod item_event;
 pub mod trainer;
 pub mod item;
 pub mod battle_type;
+pub mod region;

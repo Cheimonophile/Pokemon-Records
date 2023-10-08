@@ -7,6 +7,9 @@ import { readPlaythroughs } from '../backend/playthroughs';
 import { readBattleTypes } from '../backend/battle_types';
 import { readTrainerClasses } from '../backend/trainer_classes';
 import { readTrainers } from '../backend/trainers';
+import { invoke } from '@tauri-apps/api';
+import { readRegions } from '../backend/regions';
+import { readLocations } from '../backend/locations';
 
 
 
@@ -14,10 +17,6 @@ import { readTrainers } from '../backend/trainers';
 
 
 export const Battles: FC<{}> = () => {
-
-
-
-
 
     // battle table state
     const [battles, setBattles] = useState<Battle[] | null>()
@@ -152,6 +151,41 @@ const CreateBattle: FC<{}> = () => {
             }
         })()
     }, [])
+
+    // location
+    const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
+    const [regionOptions, setRegionOptions] = useState<string[]>()
+    useEffect(() => {
+        (async () => {
+            try {
+                const regions = (await readRegions({})).reverse()
+                setRegionOptions(regions)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Regions',
+                    type: 'error',
+                })
+            }
+        })()
+    }, [])
+    const [locationValid, setLocationValid] = useState<boolean>(false)
+    useEffect(() => {
+        (async () => {
+            try {
+                const locations = await readLocations({ name: location.name, region: location.region })
+                setLocationValid(locations.length > 0)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Locations',
+                    type: 'error',
+                })
+            }
+        })()
+    }, [location])
 
     // battle type
     const [battleType, setBattleType] = useState<string>("Single")
@@ -288,6 +322,24 @@ const CreateBattle: FC<{}> = () => {
                         <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
                     ))}
                 </select>
+            </div>
+
+            {/* Location */}
+            <div>
+                <label>Location:</label>
+                <select value={location.region} onChange={e => setLocation(prev => ({ ...prev, region: e.target.value }))}>
+                    {regionOptions?.map((region, i) => (
+                        <option key={i} value={region}>{region}</option>
+                    ))}
+                </select>
+                <input
+                    type="text"
+                    style={{
+                        color: locationValid ? undefined : 'red',
+                    }}
+                    value={location.name}
+                    onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
+                />
             </div>
 
             {/* Battle Type */}
