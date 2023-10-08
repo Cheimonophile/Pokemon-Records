@@ -326,25 +326,16 @@ const CreateBattle: FC<{}> = () => {
     const createBattleOnClick = async () => {
         try {
             // location
-            if (!locationValid) {
-                const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
-                    title: 'Create Location?',
-                    type: 'info',
-                })
-                if (!doCreateNewLocation)
-                    throw new Error("Location does not exist")
-                await createLocation(location)
-                setLocationValid(true)
-            }
+            tryCreateLocation(locationValid, setLocationValid, location)
             // opponent 1
-            maybeCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
+            tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
             // opponent 2
             if (useOpponent2) {
-                maybeCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
+                tryCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
             }
             // partner
             if (usePartner) {
-                maybeCreateTrainer(partnerValidity, setPartnerValidity, partner)
+                tryCreateTrainer(partnerValidity, setPartnerValidity, partner)
             }
             // create the battle
             await createBattle({
@@ -361,6 +352,13 @@ const CreateBattle: FC<{}> = () => {
                 round: round,
                 lost: lost,
             })
+            setBattleType(battleTypeOptions?.at(0) ?? "Single")
+            setOpponent1({ name: "", class: "", })
+            setUseOpponent2(false)
+            setOpponent2({ name: "", class: "", })
+            setUsePartner(false)
+            setPartner({ name: "", class: "", })
+            setLost(false)
         }
         catch (error) {
             console.error(error)
@@ -522,7 +520,7 @@ const CreateBattle: FC<{}> = () => {
 
 
 
-const maybeCreateTrainer = async (
+const tryCreateTrainer = async (
     validity: { name: boolean, class: boolean },
     setValidity: React.Dispatch<React.SetStateAction<{
         name: boolean;
@@ -549,5 +547,23 @@ const maybeCreateTrainer = async (
             throw new Error("Trainer does not exist")
         await createTrainer({ name: trainer.name, class: trainer.class })
         setValidity(prev => ({ ...prev, name: true }))
+    }
+}
+
+
+const tryCreateLocation = async (
+    locationValid: boolean,
+    setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
+    location: { name: string, region: string },
+) => {
+    if (!locationValid) {
+        const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
+            title: 'Create Location?',
+            type: 'info',
+        })
+        if (!doCreateNewLocation)
+            throw new Error("Location does not exist")
+        await createLocation(location)
+        setLocationValid(true)
     }
 }
