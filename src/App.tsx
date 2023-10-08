@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
     }}>
       <div style={{
         height: '100%',
-        width: '100%',
+        // width: '100%',
         display: 'flex',
         flexDirection: 'column',
         padding: '0.25rem',
@@ -25,13 +25,11 @@ function App() {
         </div>
 
         {/* Body */}
-        <div className="flex-1" style={{
+        <div style={{
           flex: '1 0 auto',
         }}>
           Children
         </div>
-
-
       </div>
     </div>
   );
