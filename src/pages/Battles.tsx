@@ -39,13 +39,17 @@ export const Battles: FC<{}> = () => {
             }}>
 
                 {/* Battles Table */}
-                <div className="border-2" style={{
+                <div style={{
                     width: '100%',
                     height: '100%',
                     overflowY: 'auto',
-                    padding: '0.25rem'
+                    padding: '0.25rem',
+                    borderStyle: 'solid',
                 }}>
-                    <table className="border-separate border-spacing-x-2 border-spacing-y-1">
+                    <table className="border-separate border-spacing-x-2 border-spacing-y-1" style={{
+                        borderCollapse: 'separate',
+                        borderSpacing: '0.5rem 0.25rem',
+                    }}>
                         <tbody>
                             {battles?.map((battle, i) => (
                                 <Fragment key={i}>
