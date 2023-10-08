@@ -336,6 +336,17 @@ const CreateBattle: FC<{}> = () => {
                 await createLocation(location)
                 setLocationValid(true)
             }
+            // opponent 1
+            if (!opponent1Validity.class) {
+                const doCreateNewTrainerClass = await ask(`'${opponent1.class}' does not exist. Create it?`, {
+                    title: 'Create Trainer Class?',
+                    type: 'info',
+                })
+                if (!doCreateNewTrainerClass)
+                    throw new Error("Trainer Class does not exist")
+                await invoke('create_trainer_class', { name: opponent1.class })
+                setOpponent1Validity(prev => ({ ...prev, class: true }))
+            }
             throw "TODO"
         }
         catch (error) {
