@@ -23,6 +23,7 @@ fn main() {
             crate::api::regions::read_regions,
             crate::api::trainer_classes::create_trainer_class,
             crate::api::trainer_classes::read_trainer_classes,
+            crate::api::trainers::create_trainer,
             crate::api::trainers::read_trainers,
         ])
         .run(tauri::generate_context!())

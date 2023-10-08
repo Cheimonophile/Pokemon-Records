@@ -2,6 +2,7 @@ use diesel::prelude::*;
 
 use diesel::QueryResult;
 
+use crate::dbi::structs::trainer::InsertTrainer;
 use crate::dbi::structs::trainer::Trainer;
 use crate::{
     dbi::{self},
@@ -23,4 +24,23 @@ pub fn read_trainers(name: Option<&str>, class: Option<&str>) -> PkmnResult<Vec<
         QueryResult::<Vec<Trainer>>::Ok(results)
     })?;
     Ok(trainer_classes)
+}
+
+
+#[tauri::command]
+pub fn create_trainer(name: &str, class: &str) -> PkmnResult<Trainer> {
+    let trainer = dbi::connection::connect().transaction::<_, diesel::result::Error, _>(|connection| {
+        let new_trainer = InsertTrainer {
+            name,
+            class,
+        };
+        diesel::insert_into(schema::Trainer::table)
+            .values(&new_trainer)
+            .execute(connection)?;
+        let trainer = schema::Trainer::table
+            .filter(schema::Trainer::name.eq(name).and(schema::Trainer::class.eq(class)))
+            .first::<Trainer>(connection)?;
+        QueryResult::<Trainer>::Ok(trainer)
+    })?;
+    Ok(trainer)
 }

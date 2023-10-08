@@ -6,7 +6,7 @@ import { Battle, Playthrough, Trainer } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
 import { readBattleTypes } from '../backend/battle_types';
 import { readTrainerClasses } from '../backend/trainer_classes';
-import { readTrainers } from '../backend/trainers';
+import { createTrainer, readTrainers } from '../backend/trainers';
 import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/regions';
 import { createLocation, readLocations } from '../backend/locations';
@@ -337,17 +337,16 @@ const CreateBattle: FC<{}> = () => {
                 setLocationValid(true)
             }
             // opponent 1
-            if (!opponent1Validity.class) {
-                const doCreateNewTrainerClass = await ask(`'${opponent1.class}' does not exist. Create it?`, {
-                    title: 'Create Trainer Class?',
-                    type: 'info',
-                })
-                if (!doCreateNewTrainerClass)
-                    throw new Error("Trainer Class does not exist")
-                await invoke('create_trainer_class', { name: opponent1.class })
-                setOpponent1Validity(prev => ({ ...prev, class: true }))
+            maybeCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
+            // opponent 2
+            if (useOpponent2) {
+                maybeCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
             }
-            throw "TODO"
+            // partner
+            if (usePartner) {
+                maybeCreateTrainer(partnerValidity, setPartnerValidity, partner)
+            }
+
         }
         catch (error) {
             console.error(error)
@@ -505,4 +504,36 @@ const CreateBattle: FC<{}> = () => {
             </div>
         </div>
     )
+}
+
+
+
+const maybeCreateTrainer = async (
+    validity: { name: boolean, class: boolean },
+    setValidity: React.Dispatch<React.SetStateAction<{
+        name: boolean;
+        class: boolean;
+    }>>,
+    trainer: Trainer,
+) => {
+    if (!validity.class) {
+        const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
+            title: 'Create Trainer Class?',
+            type: 'info',
+        })
+        if (!doCreateNewTrainerClass)
+            throw new Error("Trainer Class does not exist")
+        await invoke('create_trainer_class', { name: trainer.class })
+        setValidity(prev => ({ ...prev, class: true }))
+    }
+    if (!validity.name) {
+        const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
+            title: 'Create Trainer?',
+            type: 'info',
+        })
+        if (!doCreateNewTrainer)
+            throw new Error("Trainer does not exist")
+        await createTrainer({ name: trainer.name, class: trainer.class })
+        setValidity(prev => ({ ...prev, name: true }))
+    }
 }

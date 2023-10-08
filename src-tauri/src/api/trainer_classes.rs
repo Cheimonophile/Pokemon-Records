@@ -2,7 +2,6 @@ use diesel::prelude::*;
 
 use diesel::QueryResult;
 
-use crate::dbi::structs::trainer;
 use crate::dbi::structs::trainer_class::TrainerClass;
 use crate::{
     dbi::{self},
