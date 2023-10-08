@@ -1,5 +1,5 @@
 import { FC, Fragment, useEffect, useState } from 'react'
-import { readBattles } from '../backend/battles'
+import { createBattle, readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, Playthrough, Trainer } from '../types';
@@ -323,7 +323,7 @@ const CreateBattle: FC<{}> = () => {
     const [lost, setLost] = useState<boolean>(false)
 
     // create battle button
-    const createBattle = async () => {
+    const createBattleOnClick = async () => {
         try {
             // location
             if (!locationValid) {
@@ -346,7 +346,21 @@ const CreateBattle: FC<{}> = () => {
             if (usePartner) {
                 maybeCreateTrainer(partnerValidity, setPartnerValidity, partner)
             }
-
+            // create the battle
+            await createBattle({
+                playthroughIdNo: playthroughIdNo,
+                locationName: location.name,
+                locationRegion: location.region,
+                battleType: battleType,
+                opponent1Class: opponent1.class,
+                opponent1Name: opponent1.name,
+                opponent2Class: useOpponent2 ? opponent2.class : undefined,
+                opponent2Name: useOpponent2 ? opponent2.name : undefined,
+                partnerClass: usePartner ? partner.class : undefined,
+                partnerName: usePartner ? partner.name : undefined,
+                round: round,
+                lost: lost,
+            })
         }
         catch (error) {
             console.error(error)
@@ -500,7 +514,7 @@ const CreateBattle: FC<{}> = () => {
 
             {/* Add Button */}
             <div>
-                <button onClick={createBattle}>Create Battle</button>
+                <button onClick={createBattleOnClick}>Create Battle</button>
             </div>
         </div>
     )

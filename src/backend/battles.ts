@@ -65,3 +65,28 @@ export async function readBattles(): Promise<Battle[]> {
     })
     return battles
 }
+
+
+
+type CreateParams = {
+    playthroughIdNo: string,
+    locationName: string,
+    locationRegion: string,
+    battleType: string,
+    opponent1Name: string,
+    opponent1Class: string,
+    opponent2Name?: string,
+    opponent2Class?: string,
+    partnerName?: string,
+    partnerClass?: string,
+    round: number,
+    lost: boolean,
+}
+
+type CreateResult = number
+
+
+export async function createBattle(params: CreateParams): Promise<CreateResult> {
+    const result = await invoke<CreateResult>('create_battle', params)
+    return result
+}
