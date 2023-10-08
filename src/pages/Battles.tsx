@@ -1,5 +1,4 @@
 import { FC, Fragment, useEffect, useState } from 'react'
-import { invoke } from '@tauri-apps/api'
 import { readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { message } from '@tauri-apps/api/dialog';
@@ -175,10 +174,7 @@ const CreateBattle: FC<{}> = () => {
 
 
     // opponent 1
-    const [opponent1, setOpponent1] = useState<Trainer>({
-        name: "",
-        class: "",
-    })
+    const [opponent1, setOpponent1] = useState<Trainer>({ name: "", class: "", })
     const [opponent1Validity, setOpponent1Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
     useEffect(() => {
         // trainer classes
@@ -210,6 +206,77 @@ const CreateBattle: FC<{}> = () => {
             }
         })();
     }, [opponent1])
+
+    // opponent 2
+    const [opponent2, setOpponent2] = useState<Trainer>({ name: "", class: "", })
+    const [useOpponent2, setUseOpponent2] = useState<boolean>(false)
+    const [opponent2Validity, setOpponent2Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
+    useEffect(() => {
+        // trainer classes
+        (async () => {
+            try {
+                const trainerClasses = await readTrainerClasses({ name: opponent2.class })
+                setOpponent2Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainer Classes',
+                    type: 'error',
+                })
+            }
+        })();
+        // trainers
+        (async () => {
+            try {
+                const trainers = await readTrainers({ name: opponent2.name, class: opponent2.class })
+                setOpponent2Validity(prev => ({ ...prev, name: trainers.length > 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainers',
+                    type: 'error',
+                })
+            }
+        })();
+    }, [opponent2])
+
+    // partner
+    const [partner, setPartner] = useState<Trainer>({ name: "", class: "", })
+    const [usePartner, setUsePartner] = useState<boolean>(false)
+    const [partnerValidity, setPartnerValidity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
+    useEffect(() => {
+        // trainer classes
+        (async () => {
+            try {
+                const trainerClasses = await readTrainerClasses({ name: partner.class })
+                setPartnerValidity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainer Classes',
+                    type: 'error',
+                })
+            }
+        })();
+        // trainers
+        (async () => {
+            try {
+                const trainers = await readTrainers({ name: partner.name, class: partner.class })
+                setPartnerValidity(prev => ({ ...prev, name: trainers.length > 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainers',
+                    type: 'error',
+                })
+            }
+        })();
+    }, [partner])
+
 
     return (
         <div>
@@ -252,6 +319,63 @@ const CreateBattle: FC<{}> = () => {
                     value={opponent1.name}
                     onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
                 />
+            </div>
+
+
+            {/* Opponent 2 */}
+            <div>
+                <label>Opponent 2:</label>
+                <input
+                    type="checkbox"
+                    checked={useOpponent2}
+                    onChange={e => setUseOpponent2(prev => !prev)}
+                />
+                {useOpponent2 && (<>
+                    <input
+                        type="text"
+                        style={{
+                            color: opponent2Validity.class ? undefined : 'red',
+                        }}
+                        value={opponent2.class}
+                        onChange={e => setOpponent2(prev => ({ ...prev, class: e.target.value }))}
+                    />
+                    <input
+                        type="text"
+                        style={{
+                            color: opponent2Validity.name ? undefined : 'red',
+                        }}
+                        value={opponent2.name}
+                        onChange={e => setOpponent2(prev => ({ ...prev, name: e.target.value }))}
+                    />
+                </>)}
+            </div>
+
+            {/* Partner */}
+            <div>
+                <label>Partner:</label>
+                <input
+                    type="checkbox"
+                    checked={usePartner}
+                    onChange={e => setUsePartner(prev => !prev)}
+                />
+                {usePartner && (<>
+                    <input
+                        type="text"
+                        style={{
+                            color: partnerValidity.class ? undefined : 'red',
+                        }}
+                        value={partner.class}
+                        onChange={e => setPartner(prev => ({ ...prev, class: e.target.value }))}
+                    />
+                    <input
+                        type="text"
+                        style={{
+                            color: partnerValidity.name ? undefined : 'red',
+                        }}
+                        value={partner.name}
+                        onChange={e => setPartner(prev => ({ ...prev, name: e.target.value }))}
+                    />
+                </>)}
             </div>
 
             {/* Add Button */}

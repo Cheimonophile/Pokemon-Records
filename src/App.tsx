@@ -1,6 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
-import logo from './logo.svg';
-import { invoke } from '@tauri-apps/api';
+import React, { useState } from 'react';
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
 // import './App.css';
@@ -19,7 +17,7 @@ type Route = keyof typeof ROUTES;
 function App() {
 
 
-  const [route, setRoute] = useState<Route>('Battles');
+  const [route,] = useState<Route>('Battles');
 
 
   return (
@@ -32,20 +30,20 @@ function App() {
       gap: '0.25rem',
     }}>
 
-        {/* Nav Bar */}
-        <div style={{
-          flex: 'none',
-        }}>
-          Home
-        </div>
-
-        {/* Body */}
-        <div style={{
-          flex: flexGrow,
-        }}>
-          {ROUTES[route]}
-        </div>
+      {/* Nav Bar */}
+      <div style={{
+        flex: 'none',
+      }}>
+        Home
       </div>
+
+      {/* Body */}
+      <div style={{
+        flex: flexGrow,
+      }}>
+        {ROUTES[route]}
+      </div>
+    </div>
   );
 }
 
