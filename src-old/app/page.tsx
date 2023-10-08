@@ -4,7 +4,7 @@
 
 import { Fragment, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
-import { sections } from '@/constants/sections'
+import { sections } from '../constants/sections'
 import Link from 'next/link'
 
 

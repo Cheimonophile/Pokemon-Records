@@ -1,9 +1,9 @@
 {
   "build": {
     "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "npm start",
     "devPath": "http://localhost:3000",
-    "distDir": "../out"
+    "distDir": "../build"
   },
   "package": {
     "productName": "Pokemon Playthrough CRM",
