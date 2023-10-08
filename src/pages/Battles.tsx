@@ -2,6 +2,11 @@ import { FC, Fragment, useEffect, useState } from 'react'
 import { invoke } from '@tauri-apps/api'
 import { ReadBattlesResult, readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
+import { message } from '@tauri-apps/api/dialog';
+import { Playthrough } from '../types';
+import { readPlaythroughs } from '../backend/playthroughs';
+
+
 
 
 
@@ -9,9 +14,13 @@ import { flexGrow } from '../styles'
 export const Battles: FC<{}> = () => {
 
 
+
+
+
+    // battle table state
     const [battles, setBattles] = useState<ReadBattlesResult[] | null>()
 
-
+    // fetch battles
     useEffect(() => {
         (async () => {
             try {
@@ -19,26 +28,42 @@ export const Battles: FC<{}> = () => {
                 console.log(battles)
                 setBattles(battles)
             }
-            catch (err) {
-                console.error(err)
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error',
+                    type: 'error',
+                })
+                setBattles(null)
             }
         })()
+        return () => {
+            setBattles(undefined)
+        }
     }, [])
+
 
     return (
         <div style={{
             height: '100%',
             width: '100%',
             display: 'flex',
+            gap: '0.25rem',
             flexDirection: 'column'
         }}>
             <h1>Battles</h1>
+
+            {/* Create Battle */}
+            <div style={{
+                flex: 'none'
+            }}>
+                <CreateBattle />
+            </div>
+
+            {/* Battles Table */}
             <div style={{
                 flex: flexGrow,
-                // padding: "0.5rem"
             }}>
-
-                {/* Battles Table */}
                 <div style={{
                     width: '100%',
                     height: '100%',
@@ -66,10 +91,8 @@ export const Battles: FC<{}> = () => {
 
 
 
-
-
 const BattleTableRow: FC<{
-    battle: any
+    battle: ReadBattlesResult
 }> = (props) => {
 
     // make battle title
@@ -98,4 +121,57 @@ const BattleTableRow: FC<{
             {props.battle.event.location_region}
         </td>
     </tr>)
+}
+
+
+
+/**
+ * Is the form to create a battle
+ * 
+ * @returns 
+ */
+const CreateBattle: FC<{}> = () => {
+
+
+    // Playthroughs
+    const [playthroughIdNo, setPlaythroughIdNo] = useState<string>("")
+    const [playthroughs, setPlaythroughs] = useState<Playthrough[] | null>()
+    useEffect(() => {
+        (async () => {
+            try {
+                const playthroughs = await readPlaythroughs({})
+                setPlaythroughs(playthroughs)
+                console.log(playthroughs)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error',
+                    type: 'error',
+                })
+                setPlaythroughs(null)
+            }
+        })()
+        return () => {
+            setPlaythroughs(undefined)
+        }
+    }, [])
+    
+
+    return (
+        <div>
+            {/* Playthrough selector */}
+            <div>
+                <label>Playthrough:</label>
+                <select value={playthroughIdNo} onChange={e => setPlaythroughIdNo(e.target.value)}>
+                    {playthroughs?.map((playthrough, i) => (
+                        <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0,10)})</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Add Button */}
+            <button>Create Battle</button>
+        </div>
+    )
 }

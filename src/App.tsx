@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import { invoke } from '@tauri-apps/api';
-import { Battles } from './pages/Battles';
 import { flexGrow } from './styles';
+import { Battles } from './pages/Battles';
 // import './App.css';
 
 
