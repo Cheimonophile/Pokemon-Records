@@ -23,7 +23,8 @@ export const Battles: FC<{}> = () => {
 
     // fetch battles
     useEffect(() => {
-        (async () => {
+        const getBattles = setInterval(async () => {
+            console.log('getting battles')
             try {
                 const battles = await readBattles()
                 setBattles(battles)
@@ -36,9 +37,9 @@ export const Battles: FC<{}> = () => {
                 })
                 setBattles(null)
             }
-        })()
+        }, 1000)
         return () => {
-            setBattles(undefined)
+            clearInterval(getBattles)
         }
     }, [])
 
@@ -311,6 +312,11 @@ const CreateBattle: FC<{}> = () => {
         })();
     }, [partner])
 
+    // round
+    const [round, setRound] = useState<number>(0)
+
+    // lost
+    const [lost, setLost] = useState<boolean>(false)
 
     return (
         <div>
@@ -430,8 +436,33 @@ const CreateBattle: FC<{}> = () => {
                 </>)}
             </div>
 
+            {/* Round */}
+            <div>
+                <label>Round:</label>
+                <input
+                    type="number"
+                    style={{
+                        color: isNaN(round) ? 'red' : undefined,
+                    }}
+                    value={round}
+                    onChange={e => setRound(parseInt(e.target.value))}
+                />
+            </div>
+
+            {/* Lost */}
+            <div>
+                <label>Lost:</label>
+                <input
+                    type="checkbox"
+                    checked={lost}
+                    onChange={e => setLost(e.target.checked)}
+                />
+            </div>
+
             {/* Add Button */}
-            <button>Create Battle</button>
+            <div>
+                <button>Create Battle</button>
+            </div>
         </div>
     )
 }
