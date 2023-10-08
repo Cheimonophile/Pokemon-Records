@@ -33,7 +33,6 @@ pub fn read_battles() -> PkmnResult<Vec<ReadBattlesResult>> {
         .into_iter()
         .map(|(battle, event)| ReadBattlesResult { battle, event })
         .collect();
-    std::fs::File::open("foo")?;
     Ok(battles)
 }
 

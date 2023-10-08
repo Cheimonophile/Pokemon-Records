@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import { invoke } from '@tauri-apps/api';
+import { ROUTES } from './constants/routes';
 // import './App.css';
 
 function App() {
+
+
+  const [page, setPage] = useState<ReactNode>(ROUTES.Battles)
 
 
   useEffect(() => {
@@ -38,7 +42,7 @@ function App() {
         <div style={{
           flex: '1 0 auto',
         }}>
-          Children
+          {page}
         </div>
       </div>
     </div>
