@@ -12,7 +12,8 @@
   "tauri": {
     "allowlist": {
       "dialog": {
-        "message": true
+        "message": true,
+        "ask": true
       }
     },
     "bundle": {
@@ -59,7 +60,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "Pokemon Playthrough CRM",
+        "title": "Pokemon Playthrough DB",
         "width": 800
       }
     ]

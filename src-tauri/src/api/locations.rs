@@ -2,6 +2,7 @@ use diesel::prelude::*;
 
 use diesel::QueryResult;
 
+use crate::dbi::structs::location::InsertLocation;
 use crate::dbi::structs::location::Location;
 use crate::{
     dbi::{self},
@@ -23,4 +24,23 @@ pub fn read_locations(name: Option<&str>, region: Option<&str>) -> PkmnResult<Ve
         QueryResult::<Vec<Location>>::Ok(results)
     })?;
     Ok(locations)
+}
+
+
+#[tauri::command]
+pub fn create_location(name: &str, region: &str) -> PkmnResult<Location> {
+    let location = dbi::connection::connect().transaction(|connection| {
+        let location = InsertLocation {
+            name: name,
+            region: region,
+        };
+        diesel::insert_into(schema::Location::table)
+            .values(&location)
+            .execute(connection)?;
+        let location = schema::Location::table
+            .filter(schema::Location::name.eq(name).and(schema::Location::region.eq(region)))
+            .first(connection)?;
+        QueryResult::<Location>::Ok(location)
+    })?;
+    Ok(location)
 }

@@ -1,7 +1,7 @@
 import { FC, Fragment, useEffect, useState } from 'react'
 import { readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
-import { message } from '@tauri-apps/api/dialog';
+import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, Playthrough, Trainer } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
 import { readBattleTypes } from '../backend/battle_types';
@@ -9,7 +9,7 @@ import { readTrainerClasses } from '../backend/trainer_classes';
 import { readTrainers } from '../backend/trainers';
 import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/regions';
-import { readLocations } from '../backend/locations';
+import { createLocation, readLocations } from '../backend/locations';
 
 
 
@@ -23,8 +23,7 @@ export const Battles: FC<{}> = () => {
 
     // fetch battles
     useEffect(() => {
-        const getBattles = setInterval(async () => {
-            console.log('getting battles')
+        const getBattles = async () => {
             try {
                 const battles = await readBattles()
                 setBattles(battles)
@@ -37,9 +36,11 @@ export const Battles: FC<{}> = () => {
                 })
                 setBattles(null)
             }
-        }, 1000)
+        }
+        getBattles()
+        const interval = setInterval(getBattles, 1000)
         return () => {
-            clearInterval(getBattles)
+            clearInterval(interval)
         }
     }, [])
 
@@ -142,6 +143,7 @@ const CreateBattle: FC<{}> = () => {
             try {
                 const playthroughs = await readPlaythroughs({})
                 setPlaythroughOptions(playthroughs)
+                setPlaythroughIdNo(playthroughs[0].idNo)
             }
             catch (error) {
                 console.error(error)
@@ -161,6 +163,7 @@ const CreateBattle: FC<{}> = () => {
             try {
                 const regions = (await readRegions({})).reverse()
                 setRegionOptions(regions)
+                setLocation(prev => ({ ...prev, region: regions[0] }))
             }
             catch (error) {
                 console.error(error)
@@ -189,13 +192,14 @@ const CreateBattle: FC<{}> = () => {
     }, [location])
 
     // battle type
-    const [battleType, setBattleType] = useState<string>("Single")
+    const [battleType, setBattleType] = useState<string>("")
     const [battleTypeOptions, setBattleTypeOptions] = useState<string[]>()
     useEffect(() => {
         (async () => {
             try {
                 const battleTypes = await readBattleTypes({})
                 setBattleTypeOptions(battleTypes)
+                setBattleType(battleTypes[0])
             }
             catch (error) {
                 console.error(error)
@@ -317,6 +321,31 @@ const CreateBattle: FC<{}> = () => {
 
     // lost
     const [lost, setLost] = useState<boolean>(false)
+
+    // create battle button
+    const createBattle = async () => {
+        try {
+            // location
+            if (!locationValid) {
+                const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
+                    title: 'Create Location?',
+                    type: 'info',
+                })
+                if (!doCreateNewLocation)
+                    throw new Error("Location does not exist")
+                await createLocation(location)
+                setLocationValid(true)
+            }
+            throw "TODO"
+        }
+        catch (error) {
+            console.error(error)
+            await message(`${error}`, {
+                title: 'Error Creating Battle',
+                type: 'error',
+            })
+        }
+    }
 
     return (
         <div>
@@ -461,7 +490,7 @@ const CreateBattle: FC<{}> = () => {
 
             {/* Add Button */}
             <div>
-                <button>Create Battle</button>
+                <button onClick={createBattle}>Create Battle</button>
             </div>
         </div>
     )
