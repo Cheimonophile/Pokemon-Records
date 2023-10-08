@@ -13,11 +13,12 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             // playthrough handlers
-            crate::api::playthrough::read_playthroughs,
+            crate::api::battle_types::read_battle_types,
+            crate::api::battles::create_battle,
+            crate::api::battles::read_battles,
             crate::api::playthrough::create_playthrough,
-
-            // battle handlers
-            crate::api::battles::read_battles
+            crate::api::playthrough::read_playthroughs,
+            crate::api::trainer_classes::read_trainer_classes,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

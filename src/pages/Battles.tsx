@@ -3,8 +3,10 @@ import { invoke } from '@tauri-apps/api'
 import { readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { message } from '@tauri-apps/api/dialog';
-import { Battle, Playthrough } from '../types';
+import { Battle, Playthrough, Trainer } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
+import { readBattleTypes } from '../backend/battle_types';
+import { readTrainerClasses } from '../backend/trainer_classes';
 
 
 
@@ -25,7 +27,6 @@ export const Battles: FC<{}> = () => {
         (async () => {
             try {
                 const battles = await readBattles()
-                console.log(battles)
                 setBattles(battles)
             }
             catch (error) {
@@ -135,28 +136,67 @@ const CreateBattle: FC<{}> = () => {
 
     // Playthroughs
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string>("")
-    const [playthroughs, setPlaythroughs] = useState<Playthrough[] | null>()
+    const [playthroughOptions, setPlaythroughOptions] = useState<Playthrough[]>()
     useEffect(() => {
         (async () => {
             try {
                 const playthroughs = await readPlaythroughs({})
-                setPlaythroughs(playthroughs)
-                console.log(playthroughs)
+                setPlaythroughOptions(playthroughs)
             }
             catch (error) {
                 console.error(error)
                 await message(`${error}`, {
-                    title: 'Error',
+                    title: 'Error Reading Playthroughs',
                     type: 'error',
                 })
-                setPlaythroughs(null)
             }
         })()
-        return () => {
-            setPlaythroughs(undefined)
-        }
     }, [])
-    
+
+    // battle type
+    const [battleType, setBattleType] = useState<string>("Single")
+    const [battleTypeOptions, setBattleTypeOptions] = useState<string[]>()
+    useEffect(() => {
+        (async () => {
+            try {
+                const battleTypes = await readBattleTypes({})
+                setBattleTypeOptions(battleTypes)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Battle Types',
+                    type: 'error',
+                })
+            }
+        })()
+    }, [])
+
+
+    // opponent 1
+    const [opponent1, setOpponent1] = useState<Trainer>({
+        name: "",
+        class: "",
+    })
+    const [opponent1Validity, setOpponent1Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
+    useEffect(() => {
+        // trainer classes
+        (async () => {
+            try {
+                const trainerClasses = await readTrainerClasses({})
+                const index = trainerClasses.indexOf(opponent1.class)
+                setOpponent1Validity(prev => ({ ...prev, class: index >= 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainer Classes',
+                    type: 'error',
+                })
+            }
+        })()
+        // trainers
+    }, [opponent1])
 
     return (
         <div>
@@ -164,10 +204,38 @@ const CreateBattle: FC<{}> = () => {
             <div>
                 <label>Playthrough:</label>
                 <select value={playthroughIdNo} onChange={e => setPlaythroughIdNo(e.target.value)}>
-                    {playthroughs?.map((playthrough, i) => (
-                        <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0,10)})</option>
+                    {playthroughOptions?.map((playthrough, i) => (
+                        <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
                     ))}
                 </select>
+            </div>
+
+            {/* Battle Type */}
+            <div>
+                <label>Battle Type:</label>
+                <select value={battleType} onChange={e => setBattleType(e.target.value)}>
+                    {battleTypeOptions?.map((battleType, i) => (
+                        <option key={i} value={battleType}>{battleType}</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Opponent 1 */}
+            <div>
+                <label>Opponent 1:</label>
+                <input
+                    type="text"
+                    style={{
+                        color: opponent1Validity.class ? undefined : 'red',
+                    }}
+                    value={opponent1.class}
+                    onChange={e => setOpponent1(prev => ({ ...prev, class: e.target.value }))}
+                />
+                <input
+                    type="text"
+                    value={opponent1.name}
+                    onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
+                />
             </div>
 
             {/* Add Button */}

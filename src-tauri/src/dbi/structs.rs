@@ -10,3 +10,4 @@ pub mod battle_event;
 pub mod item_event;
 pub mod trainer;
 pub mod item;
+pub mod battle_type;
