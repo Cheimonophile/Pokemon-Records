@@ -183,9 +183,8 @@ const CreateBattle: FC<{}> = () => {
         // trainer classes
         (async () => {
             try {
-                const trainerClasses = await readTrainerClasses({})
-                const index = trainerClasses.indexOf(opponent1.class)
-                setOpponent1Validity(prev => ({ ...prev, class: index >= 0 }))
+                const trainerClasses = await readTrainerClasses({ name: opponent1.class })
+                setOpponent1Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
             }
             catch (error) {
                 console.error(error)
@@ -233,6 +232,9 @@ const CreateBattle: FC<{}> = () => {
                 />
                 <input
                     type="text"
+                    style={{
+                        color: opponent1Validity.name ? undefined : 'red',
+                    }}
                     value={opponent1.name}
                     onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
                 />

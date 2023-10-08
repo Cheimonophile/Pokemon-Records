@@ -3,7 +3,9 @@ import { invoke } from "@tauri-apps/api"
 
 const HANDLER = 'read_trainer_classes'
 
-type ReadParams = {}
+type ReadParams = {
+    name?: string
+}
 
 type ReadResult = string[]
 

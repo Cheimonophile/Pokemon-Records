@@ -63,6 +63,5 @@ export async function readBattles(): Promise<Battle[]> {
             },
         }
     })
-    console.log(battles)
     return battles
 }
