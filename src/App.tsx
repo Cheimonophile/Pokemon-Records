@@ -4,21 +4,35 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{
+      height: '100vh',
+      width: '100vw',
+    }}>
+      <div style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0.25rem',
+        gap: '0.25rem',
+      }}>
+
+        {/* Nav Bar */}
+        <div style={{
+          flex: 'none',
+        }}>
+          Home
+        </div>
+
+        {/* Body */}
+        <div className="flex-1" style={{
+          flex: '1 0 auto',
+        }}>
+          Children
+        </div>
+
+
+      </div>
     </div>
   );
 }
