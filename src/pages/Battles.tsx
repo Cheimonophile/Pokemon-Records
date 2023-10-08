@@ -7,6 +7,7 @@ import { Battle, Playthrough, Trainer } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
 import { readBattleTypes } from '../backend/battle_types';
 import { readTrainerClasses } from '../backend/trainer_classes';
+import { readTrainers } from '../backend/trainers';
 
 
 
@@ -193,8 +194,21 @@ const CreateBattle: FC<{}> = () => {
                     type: 'error',
                 })
             }
-        })()
+        })();
         // trainers
+        (async () => {
+            try {
+                const trainers = await readTrainers({ name: opponent1.name, class: opponent1.class })
+                setOpponent1Validity(prev => ({ ...prev, name: trainers.length > 0 }))
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Trainers',
+                    type: 'error',
+                })
+            }
+        })();
     }, [opponent1])
 
     return (

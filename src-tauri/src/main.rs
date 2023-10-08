@@ -19,6 +19,7 @@ fn main() {
             crate::api::playthrough::create_playthrough,
             crate::api::playthrough::read_playthroughs,
             crate::api::trainer_classes::read_trainer_classes,
+            crate::api::trainers::read_trainers,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

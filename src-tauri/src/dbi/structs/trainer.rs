@@ -9,6 +9,7 @@ pub struct InsertTrainer<'a> {
     pub class: &'a str,
 }
 
+#[derive(serde::Serialize)]
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::Trainer)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
