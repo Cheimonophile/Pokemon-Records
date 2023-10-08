@@ -1,35 +1,36 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import { invoke } from '@tauri-apps/api';
-import { ROUTES } from './constants/routes';
+import { Battles } from './pages/Battles';
+import { flexGrow } from './styles';
 // import './App.css';
+
+
+const ROUTES = Object.freeze({
+  Battles: <Battles />,
+})
+
+type Route = keyof typeof ROUTES;
+
+
+
+
 
 function App() {
 
 
-  const [page, setPage] = useState<ReactNode>(ROUTES.Battles)
-
-
-  useEffect(() => {
-    invoke('read_playthroughs', {})
-      .then(console.log)
-      .catch(console.error)
-  }, [])
+  const [route, setRoute] = useState<Route>('Battles');
 
 
   return (
     <div style={{
       height: '100vh',
       width: '100vw',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '0.25rem',
+      gap: '0.25rem',
     }}>
-      <div style={{
-        height: '100%',
-        // width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '0.25rem',
-        gap: '0.25rem',
-      }}>
 
         {/* Nav Bar */}
         <div style={{
@@ -40,12 +41,11 @@ function App() {
 
         {/* Body */}
         <div style={{
-          flex: '1 0 auto',
+          flex: flexGrow,
         }}>
-          {page}
+          {ROUTES[route]}
         </div>
       </div>
-    </div>
   );
 }
 

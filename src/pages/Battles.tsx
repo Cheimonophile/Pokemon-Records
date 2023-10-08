@@ -1,6 +1,7 @@
 import { FC, Fragment, useEffect, useState } from 'react'
 import { invoke } from '@tauri-apps/api'
 import { ReadBattlesResult, readBattles } from '../backend/battles'
+import { flexGrow } from '../styles'
 
 
 
@@ -25,12 +26,25 @@ export const Battles: FC<{}> = () => {
     }, [])
 
     return (
-        <div className="w-full h-full flex flex-col">
-            <h1 className="text-center">Battles</h1>
-            <div className="flex-1 p-2">
+        <div style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            <h1>Battles</h1>
+            <div style={{
+                flex: flexGrow,
+                // padding: "0.5rem"
+            }}>
 
                 {/* Battles Table */}
-                <div className="w-full h-full border-2 p-1 overflow-y-scroll oveflow-x-hidden">
+                <div className="border-2" style={{
+                    width: '100%',
+                    height: '100%',
+                    overflowY: 'auto',
+                    padding: '0.25rem'
+                }}>
                     <table className="border-separate border-spacing-x-2 border-spacing-y-1">
                         <tbody>
                             {battles?.map((battle, i) => (

@@ -28,7 +28,6 @@ pub fn read_battles() -> PkmnResult<Vec<ReadBattlesResult>> {
             .load::<(BattleEvent, Event)>(connection)?;
         QueryResult::<Vec<(BattleEvent, Event)>>::Ok(raw_battles)
     })?;
-
     let battles = raw_battles
         .into_iter()
         .map(|(battle, event)| ReadBattlesResult { battle, event })
