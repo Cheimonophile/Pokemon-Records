@@ -3,7 +3,7 @@
 
 
 import { FC, Fragment, useEffect, useState } from 'react'
-import { ReadBattlesResult, readBattles } from '../../../backend/battles'
+import { ReadBattlesResult, readBattles } from '../../../../src/backend/battles'
 import Link from 'next/link'
 
 

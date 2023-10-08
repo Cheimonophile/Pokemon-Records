@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
+import { invoke } from '@tauri-apps/api';
 // import './App.css';
 
 function App() {
+
+
+  useEffect(() => {
+    invoke('read_playthroughs', {})
+      .then(console.log)
+      .catch(console.error)
+  }, [])
+
+
   return (
     <div style={{
       height: '100vh',
