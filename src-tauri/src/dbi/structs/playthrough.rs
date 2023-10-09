@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 
-use crate::schema;
+use crate::{schema, error::PkmnResult};
 
 #[derive(Insertable)]
 #[diesel(table_name = schema::Playthrough)]
@@ -24,8 +24,8 @@ pub struct Playthrough {
 }
 
 impl Playthrough {
-    pub fn read(id_no: Option<&str>) -> Result<Vec<Playthrough>, Box<dyn std::error::Error>> {
-        let mut connection = crate::dbi::connection::connect();
+    pub fn read(id_no: Option<&str>) -> PkmnResult<Vec<Playthrough>> {
+        let mut connection = crate::dbi::connection::connect()?;
         let results = if let Some(id_no) = id_no {
             schema::Playthrough::table
                 .filter(schema::Playthrough::id_no.eq(id_no))
@@ -45,8 +45,8 @@ impl Playthrough {
         name: &str,
         version: &str,
         adventure_started: &str,
-    ) -> Result<Self, Box<dyn std::error::Error>> {
-        let mut connection = crate::dbi::connection::connect();
+    ) -> PkmnResult<Self> {
+        let mut connection = crate::dbi::connection::connect()?;
         let new_playthrough = InsertPlaythrough {
             id_no,
             name,

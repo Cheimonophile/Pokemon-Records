@@ -12,7 +12,7 @@ use crate::{
 
 #[tauri::command]
 pub fn read_locations(name: Option<&str>, region: Option<&str>) -> PkmnResult<Vec<Location>> {
-    let locations = dbi::connection::connect().transaction(|connection| {
+    let locations = dbi::connection::connect()?.transaction(|connection| {
         let mut query = schema::Location::table.into_boxed();
         if let Some(name) = name {
             query = query.filter(schema::Location::name.eq(name));
@@ -29,7 +29,7 @@ pub fn read_locations(name: Option<&str>, region: Option<&str>) -> PkmnResult<Ve
 
 #[tauri::command]
 pub fn create_location(name: &str, region: &str) -> PkmnResult<Location> {
-    let location = dbi::connection::connect().transaction(|connection| {
+    let location = dbi::connection::connect()?.transaction(|connection| {
         let location = InsertLocation {
             name: name,
             region: region,

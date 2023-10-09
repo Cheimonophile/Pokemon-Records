@@ -3,9 +3,11 @@ use crate::dbi::events::*;
 use crate::dbi::structs::*;
 use crate::schema::Team_Member_Change::level;
 
-pub fn run() {
+use crate::error::PkmnResult;
+
+pub fn run() -> PkmnResult<()> {
     // connection
-    let conn = &mut connect();
+    let conn = &mut connect()?;
 
     let playthrough = create_playthrough(conn, "17053", "Ben", "Diamond", "2023-02-23");
 
@@ -19023,4 +19025,5 @@ pub fn run() {
         &0,
         &true,
     );
+    Ok(())
 }

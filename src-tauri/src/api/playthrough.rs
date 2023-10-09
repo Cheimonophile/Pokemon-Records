@@ -4,7 +4,7 @@ use crate::{dbi::structs::playthrough::Playthrough, error::PkmnResult, schema};
 
 #[tauri::command]
 pub fn read_playthroughs() -> PkmnResult<Vec<Playthrough>> {
-    let mut connection = crate::dbi::connection::connect();
+    let mut connection = crate::dbi::connection::connect()?;
     let results = schema::Playthrough::table
         .order(schema::Playthrough::columns::adventure_started.desc())
         .select(Playthrough::as_select())

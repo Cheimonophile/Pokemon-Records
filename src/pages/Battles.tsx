@@ -19,7 +19,7 @@ import { createLocation, readLocations } from '../backend/locations';
 export const Battles: FC<{}> = () => {
 
     // battle table state
-    const [battles, setBattles] = useState<Battle[] | null>()
+    const [battles, setBattles] = useState<Battle[] | Error | undefined>()
 
     // fetch battles
     useEffect(() => {
@@ -30,11 +30,7 @@ export const Battles: FC<{}> = () => {
             }
             catch (error) {
                 console.error(error)
-                await message(`${error}`, {
-                    title: 'Error',
-                    type: 'error',
-                })
-                setBattles(null)
+                setBattles(new Error(`${error}`))
             }
         }
         getBattles()
@@ -76,6 +72,7 @@ export const Battles: FC<{}> = () => {
             <div style={{
                 flex: flexGrow,
             }}>
+
                 <div style={{
                     width: '100%',
                     height: '100%',
@@ -83,18 +80,28 @@ export const Battles: FC<{}> = () => {
                     padding: '0.25rem',
                     borderStyle: 'solid',
                 }}>
-                    <table style={{
-                        borderCollapse: 'separate',
-                        borderSpacing: '0.5rem 0.25rem',
-                    }}>
-                        <tbody>
-                            {battles?.map(battle => (
-                                <Fragment key={battle.no}>
-                                    <BattleTableRow battle={battle} />
-                                </Fragment>
-                            ))}
-                        </tbody>
-                    </table>
+
+                    {/* table */}
+                    {battles instanceof Error ? (<>
+                        <div style={{
+                            color: 'red',
+                        }}>
+                            {battles.message}
+                        </div>
+                    </>) : (<>
+                        <table style={{
+                            borderCollapse: 'separate',
+                            borderSpacing: '0.5rem 0.25rem',
+                        }}>
+                            <tbody>
+                                {battles?.map(battle => (
+                                    <Fragment key={battle.no}>
+                                        <BattleTableRow battle={battle} />
+                                    </Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                    </>)}
                 </div>
             </div>
         </div>

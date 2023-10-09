@@ -12,7 +12,7 @@ use crate::{
 
 #[tauri::command]
 pub fn read_trainers(name: Option<&str>, class: Option<&str>) -> PkmnResult<Vec<Trainer>> {
-    let trainer_classes = dbi::connection::connect().transaction(|connection| {
+    let trainer_classes = dbi::connection::connect()?.transaction(|connection| {
         let mut query = schema::Trainer::table.into_boxed();
         if let Some(name) = name {
             query = query.filter(schema::Trainer::name.eq(name));
@@ -29,7 +29,7 @@ pub fn read_trainers(name: Option<&str>, class: Option<&str>) -> PkmnResult<Vec<
 
 #[tauri::command]
 pub fn create_trainer(name: &str, class: &str) -> PkmnResult<Trainer> {
-    let trainer = dbi::connection::connect().transaction::<_, diesel::result::Error, _>(|connection| {
+    let trainer = dbi::connection::connect()?.transaction::<_, diesel::result::Error, _>(|connection| {
         let new_trainer = InsertTrainer {
             name,
             class,

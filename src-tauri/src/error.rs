@@ -5,6 +5,10 @@ pub enum PkmnError {
   Io(#[from] std::io::Error),
   #[error(transparent)]
   Diesel(#[from] diesel::result::Error),
+  #[error(transparent)]
+  Var(#[from] std::env::VarError),
+  #[error(transparent)]
+  ConnectionError(#[from] diesel::ConnectionError),
 }
 
 // we must manually implement serde::Serialize
