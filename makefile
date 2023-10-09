@@ -19,9 +19,10 @@ run: database
 	# cd src && python manage.py shell <master.py
 	time python master.py
 
-database:
-	rm pokemon.sqlite3 || true
-	python migrate.py
+db:
+	rm src-tauri/dev/test-db.sqlite || true
+	cd src-tauri && diesel database reset --database-url dev/test-db.sqlite
+	cd src-tauri && BUILD_DB=true cargo run
 
 shell:
 	cd src && python manage.py shell

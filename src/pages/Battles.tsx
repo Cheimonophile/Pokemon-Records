@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from 'react'
+import { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { createBattle, readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
@@ -38,7 +38,7 @@ export const Battles: FC<{}> = () => {
             }
         }
         getBattles()
-        const interval = setInterval(getBattles, 1000)
+        const interval = setInterval(getBattles, 250)
         return () => {
             clearInterval(interval)
         }
@@ -55,11 +55,21 @@ export const Battles: FC<{}> = () => {
         }}>
             <h1>Battles</h1>
 
-            {/* Create Battle */}
+            {/* Above Table */}
             <div style={{
-                flex: 'none'
+                flex: 'none',
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '0.5rem',
             }}>
-                <CreateBattle />
+                {/* Make Battle */}
+                <div>
+                    <CreateBattle />
+                </div>
+
+                <div>
+                    Levels
+                </div>
             </div>
 
             {/* Battles Table */}
@@ -97,6 +107,9 @@ const BattleTableRow: FC<{
     battle: Battle
 }> = (props) => {
 
+    // ui
+    const [disabled, setDisabled] = useState<number>(0)
+
     // make battle title
     let title = `${props.battle.opponent1.class} ${props.battle.opponent1.name}`
     if (props.battle.opponent2) {
@@ -109,7 +122,34 @@ const BattleTableRow: FC<{
         title += " (lost)"
     }
 
+    // delete battle
+    const deleteBattle = useCallback(async () => {
+        setDisabled(prev => prev + 1)
+        try {
+            const sure = await ask(`Are you sure you want to delete battle ${props.battle.no} against ${title}`, {
+                title: 'Delete Battle?',
+                type: 'info',
+            })
+            if (!sure) {
+                setDisabled(prev => prev - 1)
+                return
+            }
+            await invoke('delete_battle', { no: props.battle.no })
+        }
+        catch (error) {
+            console.error(error)
+            await message(`${error}`, {
+                title: 'Error Deleting Battle',
+                type: 'error',
+            })
+        }
+        setDisabled(prev => prev - 1)
+    }, [props.battle.no])
+
     return (<tr>
+        <td>
+            <button onClick={deleteBattle} disabled={disabled > 0}>X</button>
+        </td>
         <td>
             {props.battle.no}.
         </td>
@@ -133,6 +173,10 @@ const BattleTableRow: FC<{
  * @returns 
  */
 const CreateBattle: FC<{}> = () => {
+
+
+    // ui
+    const [disabled, setDisabled] = useState<number>(0)
 
 
     // Playthroughs
@@ -324,18 +368,19 @@ const CreateBattle: FC<{}> = () => {
 
     // create battle button
     const createBattleOnClick = async () => {
+        setDisabled(prev => prev + 1)
         try {
             // location
-            tryCreateLocation(locationValid, setLocationValid, location)
+            await tryCreateLocation(locationValid, setLocationValid, location)
             // opponent 1
-            tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
+            await tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
             // opponent 2
             if (useOpponent2) {
-                tryCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
+                await tryCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
             }
             // partner
             if (usePartner) {
-                tryCreateTrainer(partnerValidity, setPartnerValidity, partner)
+                await tryCreateTrainer(partnerValidity, setPartnerValidity, partner)
             }
             // create the battle
             await createBattle({
@@ -367,6 +412,7 @@ const CreateBattle: FC<{}> = () => {
                 type: 'error',
             })
         }
+        setDisabled(prev => prev - 1)
     }
 
     return (
@@ -512,7 +558,11 @@ const CreateBattle: FC<{}> = () => {
 
             {/* Add Button */}
             <div>
-                <button onClick={createBattleOnClick}>Create Battle</button>
+                <button
+                    onClick={createBattleOnClick}
+                    disabled={disabled > 0}>
+                    Create Battle
+                </button>
             </div>
         </div>
     )
@@ -529,6 +579,8 @@ const tryCreateTrainer = async (
     trainer: Trainer,
 ) => {
     if (!validity.class) {
+        if (trainer.class.length < 1)
+            throw new Error("Blank trainer class")
         const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
             title: 'Create Trainer Class?',
             type: 'info',
@@ -539,6 +591,8 @@ const tryCreateTrainer = async (
         setValidity(prev => ({ ...prev, class: true }))
     }
     if (!validity.name) {
+        if (trainer.name.length < 1)
+            throw new Error("Blank trainer name")
         const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
             title: 'Create Trainer?',
             type: 'info',
@@ -557,6 +611,8 @@ const tryCreateLocation = async (
     location: { name: string, region: string },
 ) => {
     if (!locationValid) {
+        if (location.name.length < 1)
+            throw new Error("Blank location name")
         const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
             title: 'Create Location?',
             type: 'info',

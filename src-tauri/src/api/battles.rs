@@ -88,3 +88,13 @@ pub fn create_battle(
     })?;
     Ok(rows_affected)
 }
+
+#[tauri::command]
+pub fn delete_battle(no: i32) -> PkmnResult<()> {
+    let result = dbi::connection::connect().transaction(|connection| {
+        let result = diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
+            .execute(connection)?;
+        QueryResult::<usize>::Ok(result)
+    })?;
+    Ok(())
+}
