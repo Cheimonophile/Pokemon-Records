@@ -90,3 +90,16 @@ export async function createBattle(params: CreateParams): Promise<CreateResult> 
     const result = await invoke<CreateResult>('create_battle', params)
     return result
 }
+
+
+type DeleteParams = {
+    no: number,
+}
+
+type DeleteResult = void
+
+
+export async function deleteBattle(params: DeleteParams): Promise<DeleteResult> {
+    const result = await invoke<DeleteResult>('delete_battle', params)
+    return result
+}

@@ -92,9 +92,23 @@ pub fn create_battle(
 #[tauri::command]
 pub fn delete_battle(no: i32) -> PkmnResult<()> {
     let result = dbi::connection::connect().transaction(|connection| {
-        let result = diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
-            .execute(connection)?;
+        let result =
+            diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
+                .execute(connection)?;
         QueryResult::<usize>::Ok(result)
+    })?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn update_battle(no: i32, lost: Option<bool>) -> PkmnResult<()> {
+    dbi::connection::connect().transaction(move |connection| {
+        if let Some(lost) = lost {
+            diesel::update(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
+                .set(schema::Battle_Event::lost.eq(lost))
+                .execute(connection)?;
+        }
+        QueryResult::<()>::Ok(())
     })?;
     Ok(())
 }

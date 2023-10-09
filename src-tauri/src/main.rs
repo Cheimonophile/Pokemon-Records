@@ -16,8 +16,9 @@ fn main() {
             .invoke_handler(tauri::generate_handler![
                 crate::api::battle_types::read_battle_types,
                 crate::api::battles::create_battle,
-                crate::api::battles::delete_battle,
                 crate::api::battles::read_battles,
+                crate::api::battles::update_battle,
+                crate::api::battles::delete_battle,
                 crate::api::locations::create_location,
                 crate::api::locations::read_locations,
                 crate::api::playthrough::create_playthrough,

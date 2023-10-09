@@ -1,5 +1,5 @@
 import { FC, Fragment, useCallback, useEffect, useState } from 'react'
-import { createBattle, readBattles } from '../backend/battles'
+import { createBattle, deleteBattle, readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, Playthrough, Trainer } from '../types';
@@ -83,13 +83,13 @@ export const Battles: FC<{}> = () => {
                     padding: '0.25rem',
                     borderStyle: 'solid',
                 }}>
-                    <table className="border-separate border-spacing-x-2 border-spacing-y-1" style={{
+                    <table style={{
                         borderCollapse: 'separate',
                         borderSpacing: '0.5rem 0.25rem',
                     }}>
                         <tbody>
-                            {battles?.map((battle, i) => (
-                                <Fragment key={i}>
+                            {battles?.map(battle => (
+                                <Fragment key={battle.no}>
                                     <BattleTableRow battle={battle} />
                                 </Fragment>
                             ))}
@@ -118,12 +118,9 @@ const BattleTableRow: FC<{
     if (props.battle.partner) {
         title += ` with ${props.battle.partner.class}` + (props.battle.partner.name ? ` ${props.battle.partner.name}` : '')
     }
-    if (props.battle.lost) {
-        title += " (lost)"
-    }
 
     // delete battle
-    const deleteBattle = useCallback(async () => {
+    const onClickDeleteBattle = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
             const sure = await ask(`Are you sure you want to delete battle ${props.battle.no} against ${title}`, {
@@ -134,7 +131,7 @@ const BattleTableRow: FC<{
                 setDisabled(prev => prev - 1)
                 return
             }
-            await invoke('delete_battle', { no: props.battle.no })
+            await deleteBattle({ no: props.battle.no })
         }
         catch (error) {
             console.error(error)
@@ -146,15 +143,41 @@ const BattleTableRow: FC<{
         setDisabled(prev => prev - 1)
     }, [props.battle.no])
 
+    // const on toggle lost
+    const onClickToggleLost = useCallback(async () => {
+        setDisabled(prev => prev + 1)
+        try {
+            await invoke('update_battle', { no: props.battle.no, lost: !props.battle.lost })
+            props.battle.lost = !props.battle.lost
+        }
+        catch (error) {
+            console.error(error)
+            await message(`${error}`, {
+                title: 'Error Deleting Battle',
+                type: 'error',
+            })
+        }
+        setDisabled(prev => prev - 1)
+    }, [props.battle])
+
     return (<tr>
         <td>
-            <button onClick={deleteBattle} disabled={disabled > 0}>X</button>
+            <button onClick={onClickDeleteBattle} disabled={disabled > 0}>X</button>
         </td>
         <td>
             {props.battle.no}.
         </td>
         <td>
             {title}
+        </td>
+        <td>
+            <label>Lost</label>
+            <input
+                type="checkbox"
+                checked={props.battle.lost}
+                onChange={onClickToggleLost}
+                disabled={disabled > 0}
+            />
         </td>
         <td>
             {props.battle.location.name}
