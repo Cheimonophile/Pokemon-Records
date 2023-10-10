@@ -718,13 +718,11 @@ const TeamMemberRow: FC<{
     const onClickLevelChange = async (change: number) => {
         setDisabled(prev => prev + 1)
         try {
-            const ok = await ask(`Are you sure you want to level ${props.teamMember.caughtSpeciesName} from ${props.teamMember.level} to ${props.teamMember.level + change}?`, {
-                title: 'Level Up?',
-                type: 'info',
+            await invoke('create_team_member_change', {
+                eventNo: props.teamMember.id,
+                teamMemberId: props.teamMember.id,
+                level: props.teamMember.level + change
             })
-            if (ok) {
-                await invoke('create_team_member_change', { eventNo: props.teamMember.id, teamMemberId: props.teamMember.id, level: props.teamMember.level + change })
-            }
         }
         catch (error) {
             console.error(error)

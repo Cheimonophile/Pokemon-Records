@@ -32,6 +32,9 @@
           "--manifest-path=./src-tauri/Cargo.toml"
         ]
       },
+      "env": {
+        "DATABASE_URL": "sqlite://pokemon.sqlite"
+      },
       // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
       "preLaunchTask": "ui:build"
     },

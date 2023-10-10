@@ -1,12 +1,15 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use diesel::SqliteConnection;
+
 mod schema;
 
 mod api;
 mod dbi;
 mod error;
 mod master;
+mod state;
 
 fn main() {
     if let Ok(_) = std::env::var("BUILD_DB") {

@@ -9,7 +9,6 @@ use crate::error::PkmnResult;
 
 
 pub fn connect() -> PkmnResult<SqliteConnection> {
-    dotenv().ok();
     let database_url = env::var("DATABASE_URL")?;
     Ok(SqliteConnection::establish(&database_url)?)
 }
