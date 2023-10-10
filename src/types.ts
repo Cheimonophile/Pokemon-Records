@@ -45,4 +45,13 @@ export type TeamMember = {
     ball: string,
     gender: 'M' | 'F' | 'N',
     level: number,
+    species: Species
+}
+
+export type Species = {
+    dexNo: number,
+    generation: number,
+    name: string,
+    type1: string,
+    type2: string | null,
 }

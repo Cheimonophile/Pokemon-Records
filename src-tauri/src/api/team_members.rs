@@ -15,6 +15,7 @@ pub struct ReadTeamMembersResult {
     team_member: TeamMember,
     playthrough: Playthrough,
     level: i32,
+    species: Species,
 }
 
 type ReadTeamMembersResults = Vec<ReadTeamMembersResult>;
@@ -43,15 +44,29 @@ pub fn read_team_members(playthrough_id_no: Option<String>) -> PkmnResult<ReadTe
                     .single_value(),
             ))
             .load::<(TeamMember, Playthrough, Option<i32>)>(connection)?;
-        QueryResult::<Vec<(TeamMember, Playthrough, Option<i32>)>>::Ok(team_members)
+        let team_member_results = team_members
+            .into_iter()
+            .map(|(team_member, playthrough, level)| {
+                let species = schema::Team_Member_Change::table
+                    .inner_join(schema::Species::table)
+                    .filter(
+                        schema::Team_Member_Change::team_member_id
+                            .eq(team_member.id)
+                            .and(schema::Team_Member_Change::species_name.is_not_null()),
+                    )
+                    .order(schema::Team_Member_Change::id.desc())
+                    .select(schema::Species::all_columns)
+                    .first::<Species>(connection)?;
+
+                QueryResult::<ReadTeamMembersResult>::Ok(ReadTeamMembersResult {
+                    team_member,
+                    playthrough,
+                    level: level.unwrap_or(0),
+                    species,
+                })
+            })
+            .collect::<QueryResult::<Vec<ReadTeamMembersResult>>>()?;
+        QueryResult::<Vec<ReadTeamMembersResult>>::Ok(team_member_results)
     })?;
-    let team_member_results = team_members
-        .into_iter()
-        .map(|(team_member, playthrough, level)| ReadTeamMembersResult {
-            team_member,
-            playthrough,
-            level: level.unwrap_or(0),
-        })
-        .collect::<Vec<ReadTeamMembersResult>>();
-    Ok(team_member_results)
+    Ok(team_members)
 }

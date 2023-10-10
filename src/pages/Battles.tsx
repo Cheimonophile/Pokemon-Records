@@ -80,7 +80,6 @@ export const Battles: FC<{}> = () => {
             <div style={{
                 flex: flexGrow,
             }}>
-
                 <div style={{
                     width: '100%',
                     height: '100%',
@@ -665,9 +664,6 @@ const LevelUp: FC<{
     battle: Battle
 }> = (props) => {
 
-    // ui state
-    const [disabled, setDisabled] = useState<number>(0)
-
     // battle table state
     const [teamMembers, setTeamMembers] = useState<TeamMember[] | Error | undefined>()
 
@@ -743,7 +739,7 @@ const TeamMemberRow: FC<{
     return <>
         <tr>
             <td>
-                {props.teamMember.caughtSpeciesName}
+                {props.teamMember.nickname ?? props.teamMember.species.name}
             </td>
             <td>
                 {props.teamMember.level}

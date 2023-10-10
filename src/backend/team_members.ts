@@ -25,6 +25,13 @@ type ReadResult = {
         version: string,
     }
     slot: number,
+    species: {
+        dex_no: number,
+        generation: number,
+        name: string,
+        type1: string,
+        type2: string | null,
+    }
 }[]
 
 
@@ -49,6 +56,13 @@ export async function readTeamMembers(params: ReadParams): Promise<TeamMember[]>
             ball: result.ball,
             gender: result.gender,
             level: result.level,
+            species: {
+                dexNo: result.species.dex_no,
+                generation: result.species.generation,
+                name: result.species.name,
+                type1: result.species.type1,
+                type2: result.species.type2,
+            }
         }
     })
     return teamMembers
