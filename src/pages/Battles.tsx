@@ -684,7 +684,7 @@ const LevelUp: FC<{
             }
         }
         getTeamMembers()
-        const interval = setInterval(getTeamMembers, 1000)
+        const interval = setInterval(getTeamMembers, 250)
         return () => {
             clearInterval(interval)
         }
@@ -699,7 +699,7 @@ const LevelUp: FC<{
                     <tbody>
                         {teamMembers?.map(teamMember => (
                             <Fragment key={teamMember.id}>
-                                <TeamMemberRow teamMember={teamMember} />
+                                <TeamMemberRow teamMember={teamMember} battle={props.battle} />
                             </Fragment>
                         ))}
                     </tbody>
@@ -711,14 +711,15 @@ const LevelUp: FC<{
 
 
 const TeamMemberRow: FC<{
-    teamMember: TeamMember
+    teamMember: TeamMember,
+    battle: Battle,
 }> = (props) => {
 
     // ui state
     const [disabled, setDisabled] = useState<number>(0)
 
     // on click level change
-    const onClickLevelChange = useCallback(async (change: number) => {
+    const onClickLevelChange = async (change: number) => {
         setDisabled(prev => prev + 1)
         try {
             const ok = await ask(`Are you sure you want to level ${props.teamMember.caughtSpeciesName} from ${props.teamMember.level} to ${props.teamMember.level + change}?`, {
@@ -726,7 +727,7 @@ const TeamMemberRow: FC<{
                 type: 'info',
             })
             if (ok) {
-                await invoke('update_team_member', { id: props.teamMember.id, level: props.teamMember.level + 1 })
+                await invoke('create_team_member_change', { eventNo: props.teamMember.id, teamMemberId: props.teamMember.id, level: props.teamMember.level + change })
             }
         }
         catch (error) {
@@ -737,7 +738,7 @@ const TeamMemberRow: FC<{
             })
         }
         setDisabled(prev => prev - 1)
-    }, [props.teamMember])
+    }
 
     return <>
         <tr>

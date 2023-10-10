@@ -6,3 +6,4 @@ pub mod trainers;
 pub mod regions;
 pub mod locations;
 pub mod team_members;
+pub mod team_member_changes;
