@@ -1,7 +1,11 @@
 
 
 
-run:
+db:
 	rm dev/test-db.sqlite
 	diesel database reset
-	time cargo run
+	BUILD_DB=true time cargo run
+
+redo:
+	diesel migration redo
+	diesel migration redo

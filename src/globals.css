@@ -28,3 +28,8 @@ div {
 h1 {
   text-align: center;
 }
+
+table {
+  border-collapse: 'separate';
+  border-spacing: '0.5rem 0.25rem';
+}

@@ -20,9 +20,7 @@ run: database
 	time python master.py
 
 db:
-	rm src-tauri/dev/test-db.sqlite || true
-	cd src-tauri && diesel database reset --database-url dev/test-db.sqlite
-	cd src-tauri && BUILD_DB=true cargo run
+	cd src-tauri && make db
 
 shell:
 	cd src && python manage.py shell

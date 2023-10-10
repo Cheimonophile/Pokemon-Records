@@ -31,3 +31,18 @@ export type Trainer = {
     name: string,
     class: string,
 }
+
+export type TeamMember = {
+    id: number,
+    playthrough: Playthrough,
+    slot: number,
+    nickname: string | null,
+    caughtDate: Date,
+    caughtLocationName: string,
+    caughtLocationRegion: string,
+    caughtSpeciesName: string,
+    caughtLevel: number,
+    ball: string,
+    gender: 'M' | 'F' | 'N',
+    level: number,
+}

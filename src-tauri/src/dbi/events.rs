@@ -125,9 +125,12 @@ pub fn catch_pokemon(
         .values(&new_team_member)
         .execute(conn)
         .expect("Error saving new team member");
+    let team_member = schema::Team_Member::table
+        .order(schema::Team_Member::id.desc())
+        .first::<team_member::TeamMember>(conn)
+        .expect("Error loading team member");
     let new_team_member_change = team_member_change::InsertTeamMemberChange {
-        team_member_playthrough_id_no: &playthrough.id_no,
-        team_member_slot: slot,
+        team_member_id: &team_member.id,
         event_no: &event.no,
         level: Some(caught_level),
         species_name: Some(&species.name),
@@ -248,8 +251,7 @@ pub fn level_up(
     level: &i32,
 ) {
     let new_team_member_change = team_member_change::InsertTeamMemberChange {
-        team_member_playthrough_id_no: &team_member.playthrough_id_no,
-        team_member_slot: &team_member.slot,
+        team_member_id: &team_member.id,
         event_no: &battle.no,
         level: Some(level),
         species_name: None,
@@ -317,8 +319,7 @@ pub fn evolve(
     species: &species::Species,
 ) {
     let new_team_member_change = team_member_change::InsertTeamMemberChange {
-        team_member_playthrough_id_no: &team_member.playthrough_id_no,
-        team_member_slot: &team_member.slot,
+        team_member_id: &team_member.id,
         event_no: &event.no,
         level: None,
         species_name: Some(&species.name),

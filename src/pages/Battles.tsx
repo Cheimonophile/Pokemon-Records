@@ -1,8 +1,8 @@
-import { FC, Fragment, useCallback, useEffect, useState } from 'react'
+import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createBattle, deleteBattle, readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Battle, Playthrough, Trainer } from '../types';
+import { Battle, Playthrough, TeamMember, Trainer } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
 import { readBattleTypes } from '../backend/battle_types';
 import { readTrainerClasses } from '../backend/trainer_classes';
@@ -10,10 +10,7 @@ import { createTrainer, readTrainers } from '../backend/trainers';
 import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/regions';
 import { createLocation, readLocations } from '../backend/locations';
-
-
-
-
+import { readTeamMembers } from '../backend/team_members';
 
 
 export const Battles: FC<{}> = () => {
@@ -64,7 +61,18 @@ export const Battles: FC<{}> = () => {
                 </div>
 
                 <div>
-                    Levels
+                    {((): ReactNode => {
+                        if (battles instanceof Error) {
+                            return <div style={{ color: 'red' }}>{battles.message}</div>
+                        }
+                        const battle = battles?.at(0)
+                        if (battle === undefined) {
+                            return <></>
+                        }
+                        return (<>
+                            <LevelUp battle={battle} />
+                        </>)
+                    })()}
                 </div>
             </div>
 
@@ -89,10 +97,7 @@ export const Battles: FC<{}> = () => {
                             {battles.message}
                         </div>
                     </>) : (<>
-                        <table style={{
-                            borderCollapse: 'separate',
-                            borderSpacing: '0.5rem 0.25rem',
-                        }}>
+                        <table>
                             <tbody>
                                 {battles?.map(battle => (
                                     <Fragment key={battle.no}>
@@ -652,4 +657,102 @@ const tryCreateLocation = async (
         await createLocation(location)
         setLocationValid(true)
     }
+}
+
+
+
+const LevelUp: FC<{
+    battle: Battle
+}> = (props) => {
+
+    // ui state
+    const [disabled, setDisabled] = useState<number>(0)
+
+    // battle table state
+    const [teamMembers, setTeamMembers] = useState<TeamMember[] | Error | undefined>()
+
+    // fetch battles
+    useEffect(() => {
+        const getTeamMembers = async () => {
+            try {
+                const teamMembers = await readTeamMembers({ playthroughIdNo: props.battle.playthrough.idNo })
+                setTeamMembers(teamMembers)
+            }
+            catch (error) {
+                console.error(error)
+                setTeamMembers(new Error(`${error}`))
+            }
+        }
+        getTeamMembers()
+        const interval = setInterval(getTeamMembers, 1000)
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
+
+    return <>
+        <div>
+            {teamMembers instanceof Error ? (<>
+                <div style={{ color: 'red' }}>{teamMembers.message}</div>
+            </>) : (<>
+                <table>
+                    <tbody>
+                        {teamMembers?.map(teamMember => (
+                            <Fragment key={teamMember.id}>
+                                <TeamMemberRow teamMember={teamMember} />
+                            </Fragment>
+                        ))}
+                    </tbody>
+                </table>
+            </>)}
+        </div>
+    </>
+}
+
+
+const TeamMemberRow: FC<{
+    teamMember: TeamMember
+}> = (props) => {
+
+    // ui state
+    const [disabled, setDisabled] = useState<number>(0)
+
+    // on click level change
+    const onClickLevelChange = useCallback(async (change: number) => {
+        setDisabled(prev => prev + 1)
+        try {
+            const ok = await ask(`Are you sure you want to level ${props.teamMember.caughtSpeciesName} from ${props.teamMember.level} to ${props.teamMember.level + change}?`, {
+                title: 'Level Up?',
+                type: 'info',
+            })
+            if (ok) {
+                await invoke('update_team_member', { id: props.teamMember.id, level: props.teamMember.level + 1 })
+            }
+        }
+        catch (error) {
+            console.error(error)
+            await message(`${error}`, {
+                title: 'Error Leveling Up',
+                type: 'error',
+            })
+        }
+        setDisabled(prev => prev - 1)
+    }, [props.teamMember])
+
+    return <>
+        <tr>
+            <td>
+                {props.teamMember.caughtSpeciesName}
+            </td>
+            <td>
+                {props.teamMember.level}
+            </td>
+            <td>
+                <button disabled={disabled > 0} onClick={() => onClickLevelChange(1)}>Level Up</button>
+            </td>
+            <td>
+                <button disabled={disabled > 0} onClick={() => onClickLevelChange(-1)}>Level Down</button>
+            </td>
+        </tr>
+    </>
 }

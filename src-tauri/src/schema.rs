@@ -95,7 +95,8 @@ diesel::table! {
 }
 
 diesel::table! {
-    Team_Member (playthrough_id_no, slot) {
+    Team_Member (id) {
+        id -> Integer,
         playthrough_id_no -> Text,
         slot -> Integer,
         nickname -> Nullable<Text>,
@@ -112,8 +113,7 @@ diesel::table! {
 diesel::table! {
     Team_Member_Change (id) {
         id -> Integer,
-        team_member_playthrough_id_no -> Text,
-        team_member_slot -> Integer,
+        team_member_id -> Integer,
         event_no -> Integer,
         level -> Nullable<Integer>,
         species_name -> Nullable<Text>,
@@ -161,6 +161,7 @@ diesel::joinable!(Team_Member -> Playthrough (playthrough_id_no));
 diesel::joinable!(Team_Member -> Species (caught_species_name));
 diesel::joinable!(Team_Member_Change -> Event (event_no));
 diesel::joinable!(Team_Member_Change -> Species (species_name));
+diesel::joinable!(Team_Member_Change -> Team_Member (team_member_id));
 diesel::joinable!(Trainer -> Trainer_Class (class));
 
 diesel::allow_tables_to_appear_in_same_query!(

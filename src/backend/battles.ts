@@ -1,4 +1,3 @@
-'use client'
 
 import { invoke } from "@tauri-apps/api"
 import { Battle } from "../types"

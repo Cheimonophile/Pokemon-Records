@@ -24,6 +24,7 @@ fn main() {
                 crate::api::playthrough::create_playthrough,
                 crate::api::playthrough::read_playthroughs,
                 crate::api::regions::read_regions,
+                crate::api::team_members::read_team_members,
                 crate::api::trainer_classes::create_trainer_class,
                 crate::api::trainer_classes::read_trainer_classes,
                 crate::api::trainers::create_trainer,
