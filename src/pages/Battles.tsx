@@ -432,11 +432,11 @@ const CreateBattle: FC<{}> = () => {
                 lost: lost,
             })
             setBattleType(battleTypeOptions?.at(0) ?? "Single")
-            setOpponent1({ name: "", class: "", })
+            setOpponent1(prev => ({ ...prev, name: "", }))
             setUseOpponent2(false)
-            setOpponent2({ name: "", class: "", })
+            setOpponent2(prev => ({ ...prev, name: "", }))
             setUsePartner(false)
-            setPartner({ name: "", class: "", })
+            setPartner(prev => ({ ...prev, name: "", }))
             setLost(false)
         }
         catch (error) {
