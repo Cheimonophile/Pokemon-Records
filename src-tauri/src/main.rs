@@ -9,16 +9,9 @@ mod schema;
 mod api;
 mod dbi;
 mod error;
-mod master;
 mod state;
 
 fn main() {
-    if let Ok(_) = std::env::var("BUILD_DB") {
-        match master::run() {
-            Ok(_) => println!("Database built successfully"),
-            Err(e) => println!("Error building database: {}", e),
-        };
-    } else {
         tauri::Builder::default()
             .manage(GameState::new())
             .invoke_handler(tauri::generate_handler![
@@ -42,5 +35,4 @@ fn main() {
             ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");
-    };
 }

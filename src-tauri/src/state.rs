@@ -27,10 +27,11 @@ impl GameState {
             Ok(StringError::new("Could not lock connection").err()?)
         }
     }
-    pub fn transact<T>(
+    pub fn transact<T, F>(
         &self,
-        callback: fn(conn: &mut SqliteConnection) -> QueryResult<T>,
-    ) -> PkmnResult<T> {
+        callback: F
+    ) -> PkmnResult<T>
+    where F: FnOnce(&mut SqliteConnection) -> QueryResult<T> {
         if let Ok(mut guard) = self.connection.lock() {
             let connection = match guard.deref_mut() {
                 Some(connection) => connection,

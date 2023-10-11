@@ -4,6 +4,7 @@ use diesel::QueryResult;
 
 use crate::dbi::structs::location::InsertLocation;
 use crate::dbi::structs::location::Location;
+use crate::state;
 use crate::{
     dbi::{self},
     error::PkmnResult,
@@ -11,8 +12,12 @@ use crate::{
 };
 
 #[tauri::command]
-pub fn read_locations(name: Option<&str>, region: Option<&str>) -> PkmnResult<Vec<Location>> {
-    let locations = dbi::connection::connect()?.transaction(|connection| {
+pub fn read_locations(
+    state: tauri::State<state::GameState>,
+    name: Option<&str>,
+    region: Option<&str>,
+) -> PkmnResult<Vec<Location>> {
+    let locations = state.transact(|connection| {
         let mut query = schema::Location::table.into_boxed();
         if let Some(name) = name {
             query = query.filter(schema::Location::name.eq(name));
@@ -26,10 +31,13 @@ pub fn read_locations(name: Option<&str>, region: Option<&str>) -> PkmnResult<Ve
     Ok(locations)
 }
 
-
 #[tauri::command]
-pub fn create_location(name: &str, region: &str) -> PkmnResult<Location> {
-    let location = dbi::connection::connect()?.transaction(|connection| {
+pub fn create_location(
+    state: tauri::State<state::GameState>,
+    name: &str,
+    region: &str,
+) -> PkmnResult<Location> {
+    let location = state.transact(|connection| {
         let location = InsertLocation {
             name: name,
             region: region,
@@ -38,7 +46,11 @@ pub fn create_location(name: &str, region: &str) -> PkmnResult<Location> {
             .values(&location)
             .execute(connection)?;
         let location = schema::Location::table
-            .filter(schema::Location::name.eq(name).and(schema::Location::region.eq(region)))
+            .filter(
+                schema::Location::name
+                    .eq(name)
+                    .and(schema::Location::region.eq(region)),
+            )
             .first(connection)?;
         QueryResult::<Location>::Ok(location)
     })?;

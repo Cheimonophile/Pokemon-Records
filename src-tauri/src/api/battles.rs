@@ -43,6 +43,7 @@ pub fn read_battles(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Rea
 
 #[tauri::command]
 pub fn create_battle(
+    state: tauri::State<state::GameState>,
     playthrough_id_no: &str,
     location_name: &str,
     location_region: &str,
@@ -56,7 +57,7 @@ pub fn create_battle(
     round: i32,
     lost: bool,
 ) -> PkmnResult<usize> {
-    let rows_affected = dbi::connection::connect()?.transaction(|connection| {
+    let rows_affected = state.transact(|connection| {
         let new_event = InsertEvent {
             playthrough_id_no: playthrough_id_no,
             location_name: &location_name,
@@ -91,8 +92,8 @@ pub fn create_battle(
 }
 
 #[tauri::command]
-pub fn delete_battle(no: i32) -> PkmnResult<()> {
-    let result = dbi::connection::connect()?.transaction(|connection| {
+pub fn delete_battle(state: tauri::State<state::GameState>, no: i32) -> PkmnResult<()> {
+    let result = state.transact(|connection| {
         let result =
             diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
                 .execute(connection)?;
@@ -102,8 +103,12 @@ pub fn delete_battle(no: i32) -> PkmnResult<()> {
 }
 
 #[tauri::command]
-pub fn update_battle(no: i32, lost: Option<bool>) -> PkmnResult<()> {
-    dbi::connection::connect()?.transaction(move |connection| {
+pub fn update_battle(
+    state: tauri::State<state::GameState>,
+    no: i32,
+    lost: Option<bool>,
+) -> PkmnResult<()> {
+    state.transact(move |connection| {
         if let Some(lost) = lost {
             diesel::update(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
                 .set(schema::Battle_Event::lost.eq(lost))

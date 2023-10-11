@@ -1,14 +1,23 @@
 use diesel::prelude::*;
 
 use crate::{
-    dbi::{self, structs::{team_member_change::InsertTeamMemberChange, species}},
+    dbi::{
+        self,
+        structs::{species, team_member_change::InsertTeamMemberChange},
+    },
     error::PkmnResult,
-    schema,
+    schema, state,
 };
 
 #[tauri::command]
-pub fn create_team_member_change(event_no: i32, team_member_id: i32, level: Option<i32>, species_name: Option<&str>) -> PkmnResult<()> {
-    dbi::connection::connect()?.transaction(|connection| {
+pub fn create_team_member_change(
+    state: tauri::State<state::GameState>,
+    event_no: i32,
+    team_member_id: i32,
+    level: Option<i32>,
+    species_name: Option<&str>,
+) -> PkmnResult<()> {
+    state.transact(|connection| {
         let new_team_member_change = InsertTeamMemberChange {
             event_no: &event_no,
             team_member_id: &team_member_id,

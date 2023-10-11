@@ -23,46 +23,6 @@ pub struct Playthrough {
     pub adventure_started: String,
 }
 
-impl Playthrough {
-    pub fn read(id_no: Option<&str>) -> PkmnResult<Vec<Playthrough>> {
-        let mut connection = crate::dbi::connection::connect()?;
-        let results = if let Some(id_no) = id_no {
-            schema::Playthrough::table
-                .filter(schema::Playthrough::id_no.eq(id_no))
-                .select(Playthrough::as_select())
-                .load(&mut connection)?
-        }
-        else {
-            schema::Playthrough::table
-                .select(Playthrough::as_select())
-                .load(&mut connection)?
-        };
-        Ok(results)
-    }
-
-    pub fn create(
-        id_no: &str,
-        name: &str,
-        version: &str,
-        adventure_started: &str,
-    ) -> PkmnResult<Self> {
-        let mut connection = crate::dbi::connection::connect()?;
-        let new_playthrough = InsertPlaythrough {
-            id_no,
-            name,
-            version,
-            adventure_started,
-        };
-        diesel::insert_into(schema::Playthrough::table)
-            .values(&new_playthrough)
-            .execute(&mut connection)?;
-        let playthrough = schema::Playthrough::table
-            .filter(schema::Playthrough::id_no.eq(id_no))
-            .first::<Playthrough>(&mut connection)?;
-        Ok(playthrough)
-    }
-}
-
 impl std::fmt::Display for Playthrough {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} {}", self.version, self.adventure_started)

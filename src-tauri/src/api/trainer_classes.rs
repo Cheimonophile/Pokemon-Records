@@ -3,6 +3,7 @@ use diesel::prelude::*;
 use diesel::QueryResult;
 
 use crate::dbi::structs::trainer_class::TrainerClass;
+use crate::state;
 use crate::{
     dbi::{self},
     error::PkmnResult,
@@ -10,8 +11,11 @@ use crate::{
 };
 
 #[tauri::command]
-pub fn read_trainer_classes(name: Option<&str>) -> PkmnResult<Vec<String>> {
-    let trainer_classes = dbi::connection::connect()?.transaction(|connection| {
+pub fn read_trainer_classes(
+    state: tauri::State<state::GameState>,
+    name: Option<&str>,
+) -> PkmnResult<Vec<String>> {
+    let trainer_classes = state.transact(|connection| {
         let mut query = schema::Trainer_Class::table.into_boxed();
         if let Some(name) = name {
             query = query.filter(schema::Trainer_Class::name.eq(name));
@@ -23,8 +27,11 @@ pub fn read_trainer_classes(name: Option<&str>) -> PkmnResult<Vec<String>> {
 }
 
 #[tauri::command]
-pub fn create_trainer_class(name: &str) -> PkmnResult<String> {
-    let trainer_class = dbi::connection::connect()?.transaction::<_, diesel::result::Error, _>(|connection| {
+pub fn create_trainer_class(
+    state: tauri::State<state::GameState>,
+    name: &str,
+) -> PkmnResult<String> {
+    let trainer_class = state.transact(|connection| {
         diesel::insert_into(schema::Trainer_Class::table)
             .values(schema::Trainer_Class::name.eq(name))
             .execute(connection)?;

@@ -1,31 +1,42 @@
 use diesel::{prelude::*, query_dsl::InternalJoinDsl, dsl::max, sql_query};
 
-use crate::{dbi::structs::playthrough::Playthrough, error::PkmnResult, schema};
+use crate::{dbi::structs::playthrough::{Playthrough, InsertPlaythrough}, error::PkmnResult, schema, state};
 
 #[tauri::command]
-pub fn read_playthroughs() -> PkmnResult<Vec<Playthrough>> {
-    let mut connection = crate::dbi::connection::connect()?;
-    let results = schema::Playthrough::table
-        .order(schema::Playthrough::columns::adventure_started.desc())
-        .select(Playthrough::as_select())
-        .distinct()
-        .load(&mut connection)?;
+pub fn read_playthroughs(state: tauri::State<state::GameState>,) -> PkmnResult<Vec<Playthrough>> {
+    let results = state.transact(|connection| {
+        let results = schema::Playthrough::table
+            .order(schema::Playthrough::columns::adventure_started.desc())
+            .select(Playthrough::as_select())
+            .distinct()
+            .load::<Playthrough>(connection)?;
+        QueryResult::<Vec<Playthrough>>::Ok(results)
+    })?;
     Ok(results)
 }
 
 #[tauri::command]
 pub fn create_playthrough(
+    state: tauri::State<state::GameState>,
     id_no: &str,
     name: &str,
     version: &str,
     adventure_started: &str,
-) -> Option<Playthrough> {
-    let playthrough = match Playthrough::create(id_no, name, version, adventure_started) {
-        Ok(playthrough) => Some(playthrough),
-        Err(error) => {
-            eprintln!("Error creating playthrough: {}", error);
-            None
-        }
-    };
-    playthrough
+) -> PkmnResult<Playthrough> {
+    let playthrough = state.transact(|connection| {
+        let new_playthrough = InsertPlaythrough {
+            id_no,
+            name,
+            version,
+            adventure_started,
+        };
+        diesel::insert_into(schema::Playthrough::table)
+            .values(&new_playthrough)
+            .execute(connection)?;
+        let playthrough = schema::Playthrough::table
+            .filter(schema::Playthrough::id_no.eq(id_no))
+            .first::<Playthrough>(connection)?;
+        QueryResult::<Playthrough>::Ok(playthrough)
+    })?;
+    Ok(playthrough)
 }

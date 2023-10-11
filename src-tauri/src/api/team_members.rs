@@ -6,7 +6,7 @@ use crate::{
         structs::{playthrough::Playthrough, species::Species, team_member::TeamMember},
     },
     error::PkmnResult,
-    schema,
+    schema, state,
 };
 
 #[derive(serde::Serialize)]
@@ -21,8 +21,11 @@ pub struct ReadTeamMembersResult {
 type ReadTeamMembersResults = Vec<ReadTeamMembersResult>;
 
 #[tauri::command]
-pub fn read_team_members(playthrough_id_no: Option<String>) -> PkmnResult<ReadTeamMembersResults> {
-    let team_members = dbi::connection::connect()?.transaction(|connection| {
+pub fn read_team_members(
+    state: tauri::State<state::GameState>,
+    playthrough_id_no: Option<String>,
+) -> PkmnResult<ReadTeamMembersResults> {
+    let team_members = state.transact(|connection| {
         let mut query = schema::Team_Member::table
             .inner_join(schema::Playthrough::table)
             .into_boxed();
@@ -65,7 +68,7 @@ pub fn read_team_members(playthrough_id_no: Option<String>) -> PkmnResult<ReadTe
                     species,
                 })
             })
-            .collect::<QueryResult::<Vec<ReadTeamMembersResult>>>()?;
+            .collect::<QueryResult<Vec<ReadTeamMembersResult>>>()?;
         QueryResult::<Vec<ReadTeamMembersResult>>::Ok(team_member_results)
     })?;
     Ok(team_members)
