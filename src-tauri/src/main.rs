@@ -13,7 +13,10 @@ mod state;
 
 fn main() {
     if let Ok(_) = std::env::var("BUILD_DB") {
-        master::run();
+        match master::run() {
+            Ok(_) => println!("Database built successfully"),
+            Err(e) => println!("Error building database: {}", e),
+        };
     } else {
         tauri::Builder::default()
             .invoke_handler(tauri::generate_handler![

@@ -7,7 +7,7 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Tauri Development Debug",
+      "name": "Dev",
       "cargo": {
         "args": [
           "build",
@@ -17,6 +17,23 @@
       },
       "env": {
         "DATABASE_URL": "sqlite://src-tauri/dev/test-db.sqlite"
+      },
+      // task for the `beforeDevCommand` if used, must be configured in `.vscode/tasks.json`
+      "preLaunchTask": "ui:dev"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Game",
+      "cargo": {
+        "args": [
+          "build",
+          "--manifest-path=./src-tauri/Cargo.toml",
+          "--no-default-features"
+        ]
+      },
+      "env": {
+        "DATABASE_URL": "sqlite://pokemon.sqlite"
       },
       // task for the `beforeDevCommand` if used, must be configured in `.vscode/tasks.json`
       "preLaunchTask": "ui:dev"
