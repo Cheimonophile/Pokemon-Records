@@ -46,7 +46,7 @@ export const Battles: FC<{}> = () => {
             gap: '0.25rem',
             flexDirection: 'column'
         }}>
-            <h1>Battles</h1>
+            <h3>Battles</h3>
 
             {/* Above Table */}
             <div style={{
@@ -152,7 +152,7 @@ const BattleTableRow: FC<{
             })
         }
         setDisabled(prev => prev - 1)
-    }, [props.battle.no])
+    }, [props.battle.no, title])
 
     // const on toggle lost
     const onClickToggleLost = useCallback(async () => {
@@ -684,7 +684,9 @@ const LevelUp: FC<{
         return () => {
             clearInterval(interval)
         }
-    }, [])
+    }, [
+        props.battle.playthrough.idNo
+    ])
 
     return <>
         <div>

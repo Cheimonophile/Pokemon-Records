@@ -1,24 +1,60 @@
-import React, { useState } from 'react';
+import React, { Fragment, ReactNode, createContext, useMemo, useState } from 'react';
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
+import { Open } from './pages/Open';
+import { Link } from './components/Link';
 // import './App.css';
 
 
-const ROUTES = Object.freeze({
-  Battles: <Battles />,
-})
 
-type Route = keyof typeof ROUTES;
 
+
+interface NavItem {
+  name: string;
+  page: ReactNode;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    name: 'Open',
+    page: <Open />,
+  },
+  {
+    name: 'Battles',
+    page: <Battles />,
+  },
+]
+
+export type AppContextState = {
+  page: ReactNode;
+  setPage: (page: ReactNode) => void;
+};
+
+
+export const AppContext = createContext<AppContextState | null>(null);
+
+
+export function useAppContext(): AppContextState {
+  const appContext = React.useContext(AppContext);
+  if (!appContext) {
+    throw new Error("useAppContext must be used within the app");
+  }
+  return appContext;
+}
 
 
 
 
 function App() {
 
+  const [page, setPage] = useState<ReactNode>(<Open />);
 
-  const [route,] = useState<Route>('Battles');
-
+  const appContextState = useMemo(() => {
+    return {
+      page,
+      setPage,
+    };
+  }, [page]);
 
   return (
     <div style={{
@@ -33,15 +69,31 @@ function App() {
       {/* Nav Bar */}
       <div style={{
         flex: 'none',
+        display: 'flex',
+        gap: '0.25rem',
       }}>
-        Home
+        {NAV_ITEMS.map((navItem) => (
+          <Fragment key={navItem.name}>
+            <div>
+              <span style={{
+                appearance: 'none',
+                cursor: 'pointer',
+              }}
+                onClick={() => setPage(navItem.page)}>
+                {navItem.name}
+              </span>
+            </div>
+          </Fragment>
+        ))}
       </div>
 
       {/* Body */}
       <div style={{
         flex: flexGrow,
       }}>
-        {ROUTES[route]}
+        <AppContext.Provider value={appContextState}>
+          {page}
+        </AppContext.Provider>
       </div>
     </div>
   );
