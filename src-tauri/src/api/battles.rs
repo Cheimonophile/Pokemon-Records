@@ -1,4 +1,5 @@
 use diesel::prelude::*;
+use std::ops::DerefMut;
 
 use serde;
 
@@ -13,6 +14,7 @@ use crate::{
     },
     error::PkmnResult,
     schema::{self},
+    state,
 };
 
 #[derive(serde::Serialize)]
@@ -23,16 +25,15 @@ pub struct ReadBattlesResult {
 }
 
 #[tauri::command]
-pub fn read_battles() -> PkmnResult<Vec<ReadBattlesResult>> {
-    let raw_battles =
-        dbi::connection::connect()?.transaction(|connection: &mut SqliteConnection| {
-            let raw_battles = schema::Battle_Event::table
-                .inner_join(schema::Event::table)
-                .order(schema::Battle_Event::no.desc())
-                .select((BattleEvent::as_select(), Event::as_select()))
-                .load::<(BattleEvent, Event)>(connection)?;
-            QueryResult::<Vec<(BattleEvent, Event)>>::Ok(raw_battles)
-        })?;
+pub fn read_battles(state: tauri::State<state::GameState>) -> PkmnResult<Vec<ReadBattlesResult>> {
+    let raw_battles = state.transact(|connection: &mut SqliteConnection| {
+        let raw_battles = schema::Battle_Event::table
+            .inner_join(schema::Event::table)
+            .order(schema::Battle_Event::no.desc())
+            .select((BattleEvent::as_select(), Event::as_select()))
+            .load::<(BattleEvent, Event)>(connection)?;
+        QueryResult::<Vec<(BattleEvent, Event)>>::Ok(raw_battles)
+    })?;
     let battles = raw_battles
         .into_iter()
         .map(|(battle, event)| ReadBattlesResult { battle, event })

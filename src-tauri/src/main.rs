@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use diesel::SqliteConnection;
+use state::GameState;
 
 mod schema;
 
@@ -19,6 +20,7 @@ fn main() {
         };
     } else {
         tauri::Builder::default()
+            .manage(GameState::new())
             .invoke_handler(tauri::generate_handler![
                 crate::api::battle_types::read_battle_types,
                 crate::api::battles::create_battle,
@@ -30,6 +32,7 @@ fn main() {
                 crate::api::playthrough::create_playthrough,
                 crate::api::playthrough::read_playthroughs,
                 crate::api::regions::read_regions,
+                crate::api::state::set_db_connection,
                 crate::api::team_member_changes::create_team_member_change,
                 crate::api::team_members::read_team_members,
                 crate::api::trainer_classes::create_trainer_class,
