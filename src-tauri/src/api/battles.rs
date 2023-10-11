@@ -1,16 +1,11 @@
 use diesel::prelude::*;
-use std::ops::DerefMut;
 
 use serde;
 
 use crate::{
-    dbi::{
-        self,
-        structs::{
-            battle_event::{BattleEvent, InsertBattleEvent},
-            event::{Event, InsertEvent},
-            playthrough,
-        },
+    dbi::structs::{
+        battle_event::{BattleEvent, InsertBattleEvent},
+        event::{Event, InsertEvent},
     },
     error::PkmnResult,
     schema::{self},
@@ -93,7 +88,7 @@ pub fn create_battle(
 
 #[tauri::command]
 pub fn delete_battle(state: tauri::State<state::GameState>, no: i32) -> PkmnResult<()> {
-    let result = state.transact(|connection| {
+    state.transact(|connection| {
         let result =
             diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
                 .execute(connection)?;

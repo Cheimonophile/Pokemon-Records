@@ -4,11 +4,7 @@ use diesel::QueryResult;
 
 use crate::dbi::structs::region::Region;
 use crate::state;
-use crate::{
-    dbi::{self},
-    error::PkmnResult,
-    schema,
-};
+use crate::{error::PkmnResult, schema};
 
 #[tauri::command]
 pub fn read_regions(

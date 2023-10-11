@@ -1,10 +1,7 @@
 use diesel::prelude::*;
 
 use crate::{
-    dbi::{
-        self,
-        structs::{playthrough::Playthrough, species::Species, team_member::TeamMember},
-    },
+    dbi::structs::{playthrough::Playthrough, species::Species, team_member::TeamMember},
     error::PkmnResult,
     schema, state,
 };

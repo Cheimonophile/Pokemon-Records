@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 
-use crate::{schema, error::PkmnResult};
+use crate::schema;
 
 #[derive(Insertable)]
 #[diesel(table_name = schema::Playthrough)]
@@ -11,8 +11,7 @@ pub struct InsertPlaythrough<'a> {
     pub adventure_started: &'a str,
 }
 
-#[derive(serde::Deserialize, serde::Serialize)]
-#[derive(Queryable, Selectable, Identifiable)]
+#[derive(serde::Deserialize, serde::Serialize, Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::Playthrough)]
 #[diesel(primary_key(id_no))]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]

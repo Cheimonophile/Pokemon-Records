@@ -1,9 +1,13 @@
-use diesel::{prelude::*, query_dsl::InternalJoinDsl, dsl::max, sql_query};
+use diesel::prelude::*;
 
-use crate::{dbi::structs::playthrough::{Playthrough, InsertPlaythrough}, error::PkmnResult, schema, state};
+use crate::{
+    dbi::structs::playthrough::{InsertPlaythrough, Playthrough},
+    error::PkmnResult,
+    schema, state,
+};
 
 #[tauri::command]
-pub fn read_playthroughs(state: tauri::State<state::GameState>,) -> PkmnResult<Vec<Playthrough>> {
+pub fn read_playthroughs(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Playthrough>> {
     let results = state.transact(|connection| {
         let results = schema::Playthrough::table
             .order(schema::Playthrough::columns::adventure_started.desc())

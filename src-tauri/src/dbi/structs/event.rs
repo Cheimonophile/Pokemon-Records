@@ -1,7 +1,6 @@
 use diesel::prelude::*;
 
 use crate::schema;
-use super::*;
 
 #[derive(Insertable)]
 #[diesel(table_name = schema::Event)]

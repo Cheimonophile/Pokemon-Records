@@ -1,12 +1,7 @@
 use diesel::prelude::*;
 
 use crate::{
-    dbi::{
-        self,
-        structs::{species, team_member_change::InsertTeamMemberChange},
-    },
-    error::PkmnResult,
-    schema, state,
+    dbi::structs::team_member_change::InsertTeamMemberChange, error::PkmnResult, schema, state,
 };
 
 #[tauri::command]

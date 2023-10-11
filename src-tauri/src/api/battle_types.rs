@@ -3,11 +3,7 @@ use diesel::prelude::*;
 use diesel::QueryResult;
 
 use crate::state;
-use crate::{
-    dbi::{self, structs::battle_type::BattleType},
-    error::PkmnResult,
-    schema,
-};
+use crate::{dbi::structs::battle_type::BattleType, error::PkmnResult, schema};
 
 #[tauri::command]
 pub fn read_battle_types(state: tauri::State<state::GameState>) -> PkmnResult<Vec<BattleType>> {

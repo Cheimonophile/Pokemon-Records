@@ -17,14 +17,3 @@ pub struct Trainer {
     pub name: String,
     pub class: String,
 }
-
-impl Trainer {
-    pub fn format(&self, _: &mut SqliteConnection) -> String {
-        let mut display = self.class.clone();
-        if self.name.len() > 0 {
-            display.push(' ');
-            display.push_str(self.name.as_ref());
-        };
-        display
-    }
-}

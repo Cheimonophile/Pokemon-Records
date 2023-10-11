@@ -5,11 +5,7 @@ use diesel::QueryResult;
 use crate::dbi::structs::location::InsertLocation;
 use crate::dbi::structs::location::Location;
 use crate::state;
-use crate::{
-    dbi::{self},
-    error::PkmnResult,
-    schema,
-};
+use crate::{ error::PkmnResult, schema};
 
 #[tauri::command]
 pub fn read_locations(

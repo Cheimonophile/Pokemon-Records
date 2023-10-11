@@ -5,7 +5,6 @@
 use diesel::prelude::*;
 
 use crate::schema;
-use super::*;
 
 #[derive(serde::Serialize)]
 #[derive(Queryable, Selectable, Identifiable)]

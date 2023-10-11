@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 
-use crate::schema::{self, Ball::name};
+use crate::schema;
 
 #[derive(Insertable)]
 #[diesel(table_name = schema::Species)]

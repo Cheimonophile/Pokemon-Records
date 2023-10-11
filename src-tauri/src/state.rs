@@ -1,11 +1,9 @@
-use std::borrow::BorrowMut;
-use std::ops::{Deref, DerefMut};
+use std::ops::DerefMut;
 use std::sync::Mutex;
 
-use diesel::{prelude::*, result};
+use diesel::prelude::*;
 
 use diesel::sqlite::SqliteConnection;
-use dotenvy::dotenv;
 
 use crate::error::{PkmnError, PkmnResult, StringError};
 
@@ -27,11 +25,10 @@ impl GameState {
             Ok(StringError::new("Could not lock connection").err()?)
         }
     }
-    pub fn transact<T, F>(
-        &self,
-        callback: F
-    ) -> PkmnResult<T>
-    where F: FnOnce(&mut SqliteConnection) -> QueryResult<T> {
+    pub fn transact<T, F>(&self, callback: F) -> PkmnResult<T>
+    where
+        F: FnOnce(&mut SqliteConnection) -> QueryResult<T>,
+    {
         if let Ok(mut guard) = self.connection.lock() {
             let connection = match guard.deref_mut() {
                 Some(connection) => connection,
