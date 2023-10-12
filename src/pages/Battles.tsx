@@ -179,7 +179,7 @@ const BattleTableRow: FC<{
             {props.battle.no}.
         </td>
         <td>
-            {title}
+            {title}{props.battle.round > 0 && ` (Round ${props.battle.round})`}
         </td>
         <td>
             <label>Lost</label>
