@@ -13,7 +13,8 @@
     "allowlist": {
       "dialog": {
         "message": true,
-        "ask": true
+        "ask": true,
+        "open": true
       }
     },
     "bundle": {

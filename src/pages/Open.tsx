@@ -1,5 +1,4 @@
-import { invoke } from "@tauri-apps/api";
-import { message } from "@tauri-apps/api/dialog";
+import { message, open } from "@tauri-apps/api/dialog";
 import { FC, useCallback, useState } from "react"
 import { setDBConnection } from "../backend/state";
 
@@ -15,11 +14,13 @@ export const Open: FC = () => {
     const getFile = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            await setDBConnection({ databaseUrl: "sqlite://src-tauri/dev/test-db.sqlite" });
+            const db_file = await open();
+            const db_url = `sqlite://${db_file}`;
+            await setDBConnection({ databaseUrl: db_url });
         }
         catch (error) {
             await message(`${error}`, {
-                title: 'Error Leveling Up',
+                title: 'Error Opening Database',
                 type: 'error',
             })
             console.error(error);

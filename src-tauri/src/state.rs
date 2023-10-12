@@ -5,7 +5,11 @@ use diesel::prelude::*;
 
 use diesel::sqlite::SqliteConnection;
 
-use crate::error::{PkmnError, PkmnResult, StringError};
+use crate::{
+    dbi::structs,
+    error::{PkmnError, PkmnResult, StringError},
+    schema,
+};
 
 pub struct GameState {
     connection: Mutex<Option<SqliteConnection>>,
@@ -17,7 +21,17 @@ impl GameState {
             connection: Mutex::new(None),
         }
     }
-    pub fn set_connection(&self, connection: SqliteConnection) -> PkmnResult<()> {
+    pub fn set_connection(&self, mut connection: SqliteConnection) -> PkmnResult<()> {
+        // test the sqlite connection
+        // TODO run the migration here
+        if let Err(error) =
+            schema::Playthrough::table.first::<structs::playthrough::Playthrough>(&mut connection)
+        {
+            return Ok(
+                StringError::new(&format!("Could not connect to database: {}", error)).err()?,
+            );
+        }
+
         if let Ok(mut guard) = self.connection.lock() {
             *guard = Some(connection);
             Ok(())
