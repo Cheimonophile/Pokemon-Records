@@ -19,9 +19,8 @@ run: database
 	# cd src && python manage.py shell <master.py
 	time python master.py
 
-database:
-	rm pokemon.sqlite3 || true
-	python migrate.py
+db:
+	cd src-tauri && make db
 
 shell:
 	cd src && python manage.py shell
