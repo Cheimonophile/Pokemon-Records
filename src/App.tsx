@@ -1,8 +1,11 @@
-import React, { Fragment, ReactNode, createContext, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
 import { Link } from './components/Link';
+import { setDBConnection } from './backend/state';
+import { DATABASE_URL } from './constants';
+import { message } from '@tauri-apps/api/dialog';
 // import './App.css';
 
 
@@ -48,6 +51,29 @@ export function useAppContext(): AppContextState {
 function App() {
 
   const [page, setPage] = useState<ReactNode>(<Open />);
+
+
+
+  // load db connection
+  useEffect(() => {
+    (async () => {
+      try {
+        const db_url = localStorage.getItem(DATABASE_URL);
+        if (!db_url) {
+          return;
+        }
+        await setDBConnection({ databaseUrl: db_url });
+      }
+      catch (error) {
+        await message(`${error}`, {
+          title: 'Error Opening Database',
+          type: 'error',
+        })
+        console.error(error);
+      }
+    })()
+  }, [])
+
 
   const appContextState = useMemo(() => {
     return {
