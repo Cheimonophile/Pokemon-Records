@@ -829,6 +829,7 @@ const TeamMemberLevelChart: FC<{
                     series: Array.from(data).map(([team_member_id, team_member_data]) => ({
                         symbol: 'none',
                         type: 'line',
+                        name: team_member_id,
                         data: team_member_data,
                     })),
                     // options: {

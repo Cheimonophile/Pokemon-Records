@@ -32,7 +32,10 @@ pub fn team_over_time(
                     .left_join(schema::Species::table),
             )
             .filter(schema::Event::playthrough_id_no.eq(playthrough_id_no))
-            .order(schema::Team_Member_Change::id.asc())
+            .order((
+                schema::Event::no.asc(),
+                schema::Team_Member_Change::id.asc()
+            ))
             .select((
                 Event::as_select(),
                 Option::<TeamMemberChange>::as_select(),
