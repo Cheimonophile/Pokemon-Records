@@ -16,84 +16,11 @@ import { teamOverTime } from '../backend/data/teamOverTime';
 import { EChartsOption } from 'echarts';
 
 
-const option = {
-    title: {
-        text: 'Stacked Line'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-    },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
-    },
-    xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [
-        {
-            name: 'Email',
-            type: 'line',
-            stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210]
-        },
-        {
-            name: 'Union Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310]
-        },
-        {
-            name: 'Video Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410]
-        },
-        {
-            name: 'Direct',
-            type: 'line',
-            stack: 'Total',
-            data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-            name: 'Search Engine',
-            type: 'line',
-            stack: 'Total',
-            data: [null, null, 1290, null, 1330, 1320]
-        }
-    ]
-};
-
-
 export const Battles: FC<{}> = () => {
 
     // battle table state
-    const [battles, setBattles] = useState<Battle[] | Error | undefined>()
-    const currentBattle = battles instanceof Error ? undefined : battles?.at(0)
-
-    // test fetch
-    useEffect(() => {
-        if (currentBattle) {
-            teamOverTime({
-                playthroughIdNo: currentBattle.playthrough.idNo,
-            })
-        }
-    }, [currentBattle?.playthrough.idNo])
+    const [battles, setBattles] = useState<Battle[] | null | undefined>()
+    console.log(battles)
 
     // fetch battles
     useEffect(() => {
@@ -104,7 +31,7 @@ export const Battles: FC<{}> = () => {
             }
             catch (error) {
                 console.error(error)
-                setBattles(new Error(`${error}`))
+                setBattles(null)
             }
         }
         getBattles()
@@ -157,14 +84,10 @@ export const Battles: FC<{}> = () => {
 
                 {/* Level up over time */}
                 <div style={{
-                    height: '15rem',
-                    width: '25rem',
+                    height: '10rem',
+                    width: '15rem',
                 }}>
-                    <TeamMemberLevelChart mostRecentBattle={currentBattle} />
-                    <ReactECharts option={option} style={{
-                        width: '100%',
-                        height: '100%',
-                    }} />
+                    <TeamMemberLevelChart mostRecentBattle={battles?.at(0)} />
                 </div>
             </div>
 
@@ -855,7 +778,7 @@ const TeamMemberLevelChart: FC<{
 
 
     useEffect(() => {
-        (async () => {
+        const load = async () => {
             try {
                 if (props.mostRecentBattle === undefined)
                     throw new Error("Most Recent Battle not defined")
@@ -877,7 +800,7 @@ const TeamMemberLevelChart: FC<{
                         if (data.get(cell.team_member.id) === undefined) {
                             data.set(cell.team_member.id, [])
                         }
-                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1/4), 1 / Math.pow(1 + maxLevel - cell.level, 1/4)])
+                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1 / 5), 1 / Math.pow(1 + maxLevel - cell.level, 1 / 5)])
                     }
                 })
                 const logBase = 1.5
@@ -885,19 +808,32 @@ const TeamMemberLevelChart: FC<{
                     // tooltip: {
                     //     trigger: 'axis'
                     // },
+                    grid: {
+                        left: 1,
+                        top: 1,
+                        right: 1,
+                        bottom: 1
+                    },
                     xAxis: {
                         show: false,
                         type: 'value',
+                        min: (val) => val.min,
+                        max: (val) => val.max
                     },
                     yAxis: {
                         show: false,
                         type: 'value',
+                        min: (val) => val.min,
+                        max: (val) => val.max
                     },
                     series: Array.from(data).map(([team_member_id, team_member_data]) => ({
                         symbol: 'none',
                         type: 'line',
                         data: team_member_data,
-                    }))
+                    })),
+                    // options: {
+                    //     responsive: false
+                    // }
                 };
                 setData(option)
             }
@@ -905,7 +841,12 @@ const TeamMemberLevelChart: FC<{
                 console.error(error)
                 setData(new Error(`${error}`))
             }
-        })()
+        }
+        load()
+        const interval = setInterval(load, 1000)
+        return () => {
+            clearInterval(interval)
+        }
     }, [props.mostRecentBattle])
 
 
