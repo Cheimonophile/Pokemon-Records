@@ -799,7 +799,8 @@ const TeamMemberLevelChart: FC<{
                         if (data.get(cell.team_member.id) === undefined) {
                             data.set(cell.team_member.id, [])
                         }
-                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1 / 5), 1 / Math.pow(1 + maxLevel - cell.level, 1 / 5)])
+                        const antiPow = 10
+                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1 / antiPow), 1 / Math.pow(1 + maxLevel - cell.level, 1 / antiPow)])
                     }
                 })
                 const option: EChartsOption = {
