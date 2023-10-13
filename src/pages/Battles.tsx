@@ -13,10 +13,15 @@ import { createLocation, readLocations } from '../backend/locations';
 import { readTeamMembers } from '../backend/team_members';
 import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from '../backend/data/teamOverTime';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, use } from 'echarts';
+import { useAppContext } from '../App';
 
 
 export const Battles: FC<{}> = () => {
+
+
+    // context
+    const { addEffect } = useAppContext()
 
     // battle table state
     const [battles, setBattles] = useState<Battle[] | null | undefined>()
@@ -24,7 +29,7 @@ export const Battles: FC<{}> = () => {
 
     // fetch battles
     useEffect(() => {
-        const getBattles = async () => {
+        return addEffect(async () => {
             try {
                 const battles = await readBattles()
                 setBattles(battles)
@@ -33,12 +38,7 @@ export const Battles: FC<{}> = () => {
                 console.error(error)
                 setBattles(null)
             }
-        }
-        getBattles()
-        const interval = setInterval(getBattles, 250)
-        return () => {
-            clearInterval(interval)
-        }
+        })
     }, [])
 
 
@@ -133,6 +133,9 @@ const BattleTableRow: FC<{
     battle: Battle
 }> = (props) => {
 
+    // context
+    const { refresh } = useAppContext()
+
     // ui
     const [disabled, setDisabled] = useState<number>(0)
 
@@ -167,6 +170,7 @@ const BattleTableRow: FC<{
             })
         }
         setDisabled(prev => prev - 1)
+        refresh()
     }, [props.battle.no, title])
 
     // const on toggle lost
@@ -184,6 +188,7 @@ const BattleTableRow: FC<{
             })
         }
         setDisabled(prev => prev - 1)
+        refresh()
     }, [props.battle])
 
     return (<tr>
@@ -223,6 +228,8 @@ const BattleTableRow: FC<{
  */
 const CreateBattle: FC<{}> = () => {
 
+    // context
+    const { refresh } = useAppContext()
 
     // ui
     const [disabled, setDisabled] = useState<number>(0)
@@ -462,6 +469,7 @@ const CreateBattle: FC<{}> = () => {
             })
         }
         setDisabled(prev => prev - 1)
+        refresh()
     }
 
     return (
@@ -679,12 +687,15 @@ const LevelUp: FC<{
     battle: Battle
 }> = (props) => {
 
+    // context
+    const { addEffect } = useAppContext()
+
     // battle table state
     const [teamMembers, setTeamMembers] = useState<TeamMember[] | Error | undefined>()
 
     // fetch battles
     useEffect(() => {
-        const getTeamMembers = async () => {
+        return addEffect(async () => {
             try {
                 const teamMembers = await readTeamMembers({ playthroughIdNo: props.battle.playthrough.idNo })
                 setTeamMembers(teamMembers)
@@ -693,12 +704,7 @@ const LevelUp: FC<{
                 console.error(error)
                 setTeamMembers(new Error(`${error}`))
             }
-        }
-        getTeamMembers()
-        const interval = setInterval(getTeamMembers, 250)
-        return () => {
-            clearInterval(interval)
-        }
+        })
     }, [
         props.battle.playthrough.idNo
     ])
@@ -728,6 +734,9 @@ const TeamMemberRow: FC<{
     battle: Battle,
 }> = (props) => {
 
+    // context
+    const { refresh } = useAppContext()
+
     // ui state
     const [disabled, setDisabled] = useState<number>(0)
 
@@ -749,6 +758,7 @@ const TeamMemberRow: FC<{
             })
         }
         setDisabled(prev => prev - 1)
+        refresh()
     }
 
     return <>
@@ -774,11 +784,14 @@ const TeamMemberLevelChart: FC<{
     mostRecentBattle?: Battle,
 }> = (props) => {
 
+    // context
+    const { addEffect } = useAppContext()
+
+    // state
     const [data, setData] = useState<EChartsOption | Error | undefined>()
 
-
     useEffect(() => {
-        const load = async () => {
+        return addEffect(async () => {
             try {
                 if (props.mostRecentBattle === undefined)
                     throw new Error("Most Recent Battle not defined")
@@ -841,12 +854,7 @@ const TeamMemberLevelChart: FC<{
                 console.error(error)
                 setData(new Error(`${error}`))
             }
-        }
-        load()
-        const interval = setInterval(load, 1000)
-        return () => {
-            clearInterval(interval)
-        }
+        })
     }, [props.mostRecentBattle])
 
 

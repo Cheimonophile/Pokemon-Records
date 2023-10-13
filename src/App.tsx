@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
@@ -30,6 +30,8 @@ const NAV_ITEMS: NavItem[] = [
 export type AppContextState = {
   page: ReactNode;
   setPage: (page: ReactNode) => void;
+  addEffect: (callback: () => Promise<void>) => () => void;
+  refresh: () => Promise<void>;
 };
 
 
@@ -50,8 +52,23 @@ export function useAppContext(): AppContextState {
 function App() {
 
   const [page, setPage] = useState<ReactNode>(<Open />);
+  const refreshCallbackRef = useRef<Set<() => Promise<void>>>(new Set());
 
+  // add an effect to the refreshCallbackRef
+  const addEffect = useCallback((callback: () => Promise<void>) => {
+    refreshCallbackRef.current.add(callback);
+    callback();
+    return () => {
+      refreshCallbackRef.current.delete(callback);
+    }
+  }, [])
 
+  // call all refresh callbacks
+  const refresh = useCallback(async () => {
+    for (const callback of Array.from(refreshCallbackRef.current)) {
+      await callback();
+    }
+  }, [])
 
   // load db connection
   useEffect(() => {
@@ -74,12 +91,14 @@ function App() {
   }, [])
 
 
-  const appContextState = useMemo(() => {
+  const appContextState = useMemo<AppContextState>(() => {
     return {
       page,
       setPage,
+      addEffect,
+      refresh
     };
-  }, [page]);
+  }, [page, addEffect]);
 
   return (
     <div style={{
