@@ -32,6 +32,7 @@ fn main() {
                 crate::api::trainer_classes::read_trainer_classes,
                 crate::api::trainers::create_trainer,
                 crate::api::trainers::read_trainers,
+                crate::api::types::read_types,
             ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");

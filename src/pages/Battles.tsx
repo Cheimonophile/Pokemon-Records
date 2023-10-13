@@ -15,6 +15,7 @@ import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from '../backend/data/teamOverTime';
 import { EChartsOption, use } from 'echarts';
 import { useAppContext } from '../App';
+import { readTypes } from '../backend/types';
 
 
 export const Battles: FC<{}> = () => {
@@ -798,6 +799,7 @@ const TeamMemberLevelChart: FC<{
                 const results = await teamOverTime({
                     playthroughIdNo: props.mostRecentBattle.playthrough.idNo,
                 })
+                const types = await readTypes({})
                 let maxLevel = 0
                 results.forEach(row => {
                     row.forEach(cell => {
@@ -806,14 +808,20 @@ const TeamMemberLevelChart: FC<{
                         }
                     })
                 })
-                const data: Map<number, [number, number][]> = new Map()
+                const data: Map<number, {
+                    color: string | undefined,
+                    data: [number, number][]
+                }> = new Map()
                 results.forEach((row, r) => {
                     for (const cell of row) {
                         if (data.get(cell.team_member.id) === undefined) {
-                            data.set(cell.team_member.id, [])
+                            data.set(cell.team_member.id, {
+                                color: types.find(type => type.name === cell.species.type1)?.color ?? undefined,
+                                data: []
+                            })
                         }
                         const antiPow = 10
-                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1 / antiPow), 1 / Math.pow(1 + maxLevel - cell.level, 1 / antiPow)])
+                        data.get(cell.team_member.id)?.data.push([1 / Math.pow(1 + results.length - r, 1 / antiPow), 1 / Math.pow(1 + maxLevel - cell.level, 1 / antiPow)])
                     }
                 })
                 const option: EChartsOption = {
@@ -842,7 +850,10 @@ const TeamMemberLevelChart: FC<{
                         symbol: 'none',
                         type: 'line',
                         name: team_member_id,
-                        data: team_member_data,
+                        data: team_member_data.data,
+                        lineStyle: {
+                            color: team_member_data.color
+                        }
                     })),
                     // options: {
                     //     responsive: false

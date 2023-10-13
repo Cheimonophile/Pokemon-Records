@@ -12,3 +12,4 @@ pub mod trainer;
 pub mod item;
 pub mod battle_type;
 pub mod region;
+pub mod types;
