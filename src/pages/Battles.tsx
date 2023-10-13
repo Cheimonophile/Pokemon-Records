@@ -11,12 +11,89 @@ import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/regions';
 import { createLocation, readLocations } from '../backend/locations';
 import { readTeamMembers } from '../backend/team_members';
+import ReactECharts from 'echarts-for-react';
+import { teamOverTime } from '../backend/data/teamOverTime';
+import { EChartsOption } from 'echarts';
+
+
+const option = {
+    title: {
+        text: 'Stacked Line'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name: 'Email',
+            type: 'line',
+            stack: 'Total',
+            data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name: 'Union Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name: 'Video Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name: 'Direct',
+            type: 'line',
+            stack: 'Total',
+            data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            data: [null, null, 1290, null, 1330, 1320]
+        }
+    ]
+};
 
 
 export const Battles: FC<{}> = () => {
 
     // battle table state
     const [battles, setBattles] = useState<Battle[] | Error | undefined>()
+    const currentBattle = battles instanceof Error ? undefined : battles?.at(0)
+
+    // test fetch
+    useEffect(() => {
+        if (currentBattle) {
+            teamOverTime({
+                playthroughIdNo: currentBattle.playthrough.idNo,
+            })
+        }
+    }, [currentBattle?.playthrough.idNo])
 
     // fetch battles
     useEffect(() => {
@@ -60,7 +137,10 @@ export const Battles: FC<{}> = () => {
                     <CreateBattle />
                 </div>
 
-                <div>
+                {/* Level Up */}
+                <div style={{
+                    width: '18rem',
+                }}>
                     {((): ReactNode => {
                         if (battles instanceof Error) {
                             return <div style={{ color: 'red' }}>{battles.message}</div>
@@ -73,6 +153,18 @@ export const Battles: FC<{}> = () => {
                             <LevelUp battle={battle} />
                         </>)
                     })()}
+                </div>
+
+                {/* Level up over time */}
+                <div style={{
+                    height: '15rem',
+                    width: '25rem',
+                }}>
+                    <TeamMemberLevelChart mostRecentBattle={currentBattle} />
+                    <ReactECharts option={option} style={{
+                        width: '100%',
+                        height: '100%',
+                    }} />
                 </div>
             </div>
 
@@ -721,7 +813,7 @@ const TeamMemberRow: FC<{
         setDisabled(prev => prev + 1)
         try {
             await invoke('create_team_member_change', {
-                eventNo: props.teamMember.id,
+                eventNo: props.battle.no,
                 teamMemberId: props.teamMember.id,
                 level: props.teamMember.level + change
             })
@@ -751,5 +843,81 @@ const TeamMemberRow: FC<{
                 <button disabled={disabled > 0} onClick={() => onClickLevelChange(-1)}>Level Down</button>
             </td>
         </tr>
+    </>
+}
+
+
+const TeamMemberLevelChart: FC<{
+    mostRecentBattle?: Battle,
+}> = (props) => {
+
+    const [data, setData] = useState<EChartsOption | Error | undefined>()
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                if (props.mostRecentBattle === undefined)
+                    throw new Error("Most Recent Battle not defined")
+                const results = await teamOverTime({
+                    playthroughIdNo: props.mostRecentBattle.playthrough.idNo,
+                })
+                let maxLevel = 0
+                results.forEach(row => {
+                    row.forEach(cell => {
+                        if (cell.level > maxLevel) {
+                            maxLevel = cell.level
+                        }
+                    })
+                })
+                const maxRow = results.length
+                const data: Map<number, [number, number][]> = new Map()
+                results.forEach((row, r) => {
+                    for (const cell of row) {
+                        if (data.get(cell.team_member.id) === undefined) {
+                            data.set(cell.team_member.id, [])
+                        }
+                        data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1/4), 1 / Math.pow(1 + maxLevel - cell.level, 1/4)])
+                    }
+                })
+                const logBase = 1.5
+                const option: EChartsOption = {
+                    // tooltip: {
+                    //     trigger: 'axis'
+                    // },
+                    xAxis: {
+                        show: false,
+                        type: 'value',
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'value',
+                    },
+                    series: Array.from(data).map(([team_member_id, team_member_data]) => ({
+                        symbol: 'none',
+                        type: 'line',
+                        data: team_member_data,
+                    }))
+                };
+                setData(option)
+            }
+            catch (error) {
+                console.error(error)
+                setData(new Error(`${error}`))
+            }
+        })()
+    }, [props.mostRecentBattle])
+
+
+
+    return <>
+        {data === undefined
+            ? <></>
+            : data instanceof Error
+                ? <div style={{ color: 'red' }}>{data.message}</div>
+                : <ReactECharts option={data} style={{
+                    width: '100%',
+                    height: '100%',
+                }} />}
     </>
 }

@@ -12,7 +12,7 @@ pub struct InsertSpecies<'a> {
     pub type2: Option<&'a str>,
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, Clone)]
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::Species)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]

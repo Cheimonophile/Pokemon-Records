@@ -19,6 +19,7 @@ fn main() {
                 crate::api::battles::read_battles,
                 crate::api::battles::update_battle,
                 crate::api::battles::delete_battle,
+                crate::api::data::playthrough_data::team_over_time,
                 crate::api::locations::create_location,
                 crate::api::locations::read_locations,
                 crate::api::playthrough::create_playthrough,

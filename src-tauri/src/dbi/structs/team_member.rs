@@ -17,7 +17,7 @@ pub struct InsertTeamMember<'a> {
     pub gender: &'a str,
 }
 
-#[derive(serde::Serialize, Queryable, Selectable)]
+#[derive(serde::Serialize, Queryable, Selectable, Clone)]
 #[diesel(table_name = schema::Team_Member)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct TeamMember {
