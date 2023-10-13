@@ -2,7 +2,6 @@ import React, { Fragment, ReactNode, createContext, useEffect, useMemo, useState
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
-import { Link } from './components/Link';
 import { setDBConnection } from './backend/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';

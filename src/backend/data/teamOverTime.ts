@@ -5,9 +5,6 @@
 
 
 import { invoke } from "@tauri-apps/api"
-import { NonNullChain } from "typescript"
-
-const HANDLER = 'read_battle_types'
 
 type Params = {
     playthroughIdNo: string

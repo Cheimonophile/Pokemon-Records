@@ -793,7 +793,6 @@ const TeamMemberLevelChart: FC<{
                         }
                     })
                 })
-                const maxRow = results.length
                 const data: Map<number, [number, number][]> = new Map()
                 results.forEach((row, r) => {
                     for (const cell of row) {
@@ -803,7 +802,6 @@ const TeamMemberLevelChart: FC<{
                         data.get(cell.team_member.id)?.push([1 / Math.pow(1 + results.length - r, 1 / 5), 1 / Math.pow(1 + maxLevel - cell.level, 1 / 5)])
                     }
                 })
-                const logBase = 1.5
                 const option: EChartsOption = {
                     // tooltip: {
                     //     trigger: 'axis'

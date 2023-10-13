@@ -9,7 +9,6 @@ export const Open: FC = () => {
 
     // state
     const [disabled, setDisabled] = useState<number>(0);
-    const [file, setFile] = useState<File | null>(null);
 
 
     const getFile = useCallback(async () => {

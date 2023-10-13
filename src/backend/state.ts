@@ -3,7 +3,6 @@
 
 
 import { invoke } from "@tauri-apps/api"
-import { Trainer } from "../types"
 
 type ReadParams = {
     databaseUrl: string
