@@ -89,10 +89,11 @@ pub fn create_battle(
 #[tauri::command]
 pub fn delete_battle(state: tauri::State<state::GameState>, no: i32) -> PkmnResult<()> {
     state.transact(|connection| {
-        let result =
-            diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
-                .execute(connection)?;
-        QueryResult::<usize>::Ok(result)
+        diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
+            .execute(connection)?;
+        diesel::delete(schema::Event::table.filter(schema::Event::no.eq(no)))
+            .execute(connection)?;
+        QueryResult::<()>::Ok(())
     })?;
     Ok(())
 }
