@@ -820,8 +820,9 @@ const TeamMemberLevelChart: FC<{
                                 data: []
                             })
                         }
-                        const antiPow = 10
-                        data.get(cell.team_member.id)?.data.push([1 / Math.pow(1 + results.length - r, 1 / antiPow), 1 / Math.pow(1 + maxLevel - cell.level, 1 / antiPow)])
+                        const xPowBase = 1.05
+                        const yPowBase = 1.1
+                        data.get(cell.team_member.id)?.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
                     }
                 })
                 const option: EChartsOption = {
