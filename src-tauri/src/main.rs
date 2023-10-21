@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
+use error::{PkmnResult, StringError};
 use state::GameState;
 
 mod schema;
@@ -9,6 +11,17 @@ mod api;
 mod dbi;
 mod error;
 mod state;
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
+
+pub fn run_db_migrations(conn: &mut impl MigrationHarness<diesel::sqlite::Sqlite>) -> PkmnResult<()> {
+    match conn.run_pending_migrations(MIGRATIONS) {
+        Ok(_) => Ok(()),
+        Err(e) => {
+            Err(StringError::new(&format!("Error running migrations: {}", e)).into())
+        },
+    }
+}
 
 fn main() {
         tauri::Builder::default()

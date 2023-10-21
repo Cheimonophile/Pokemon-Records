@@ -8,6 +8,7 @@ use crate::schema;
 pub struct InsertCatchEvent<'a> {
     pub no: &'a i32,
     pub catch_type: &'a str,
+    pub team_member_id: &'a i32,
 }
 
 #[derive(serde::Serialize)]
@@ -17,4 +18,5 @@ pub struct InsertCatchEvent<'a> {
 pub struct CatchEvent {
     pub no: i32,
     pub catch_type: String,
+    pub team_member_id: i32,
 }

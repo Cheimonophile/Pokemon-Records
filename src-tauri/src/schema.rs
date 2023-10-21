@@ -31,6 +31,7 @@ diesel::table! {
     Catch_Event (no) {
         no -> Integer,
         catch_type -> Text,
+        team_member_id -> Integer,
     }
 }
 
@@ -151,6 +152,7 @@ diesel::joinable!(Battle_Event -> Battle_Type (battle_type));
 diesel::joinable!(Battle_Event -> Event (no));
 diesel::joinable!(Catch_Event -> Catch_Type (catch_type));
 diesel::joinable!(Catch_Event -> Event (no));
+diesel::joinable!(Catch_Event -> Team_Member (team_member_id));
 diesel::joinable!(Event -> Playthrough (playthrough_id_no));
 diesel::joinable!(Item_Event -> Event (no));
 diesel::joinable!(Item_Event -> Item (item));

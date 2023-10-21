@@ -7,6 +7,13 @@ import { Battle, Catch } from "../types"
 type ReadResult = {
     catch_type: string,
     no: number,
+    species: {
+        dex_no: number,
+        generation: number,
+        name: string,
+        type1: string,
+        type2: string | null,
+    },
     event: {
         location_name: string,
         location_region: string,
@@ -18,15 +25,22 @@ type ReadResult = {
 
 export async function readCatches(): Promise<Catch[]> {
     const results = await invoke<ReadResult>('read_catches', {})
-    const catches = results.map<Catch>(result => {
+    const catches = results.map((result): Catch => {
         return {
+            playthroughIdNo: result.event.playthrough_id_no,
             type: result.catch_type,
             no: result.no,
             location: {
                 name: result.event.location_name,
                 region: result.event.location_region,
             },
-            playthroughIdNo: result.event.playthrough_id_no,
+            species: {
+                dexNo: result.species.dex_no,
+                generation: result.species.generation,
+                name: result.species.name,
+                type1: result.species.type1,
+                type2: result.species.type2,
+            }
         }
     })
     return catches
@@ -38,12 +52,11 @@ type CreateParams = {
 
 }
 
-type CreateResult = number
+type CreateResult = void
 
 
 export async function createCatch(params: CreateParams): Promise<CreateResult> {
-    const result = await invoke<CreateResult>('create_catch', params)
-    return result
+    await invoke<CreateResult>('create_catch', params)
 }
 
 

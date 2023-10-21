@@ -62,4 +62,5 @@ export type Catch = {
     no: number,
     playthroughIdNo: string,
     location: Location,
+    species: Species
 }

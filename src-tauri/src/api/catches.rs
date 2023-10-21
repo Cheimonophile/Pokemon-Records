@@ -1,13 +1,14 @@
-use diesel::prelude::*;
+use diesel::{dsl::max, prelude::*};
 
 use serde;
 
 use crate::{
     dbi::structs::{
-        battle_event::BattleEvent,
         catch_event::{CatchEvent, InsertCatchEvent},
         event::{Event, InsertEvent},
-        team_member::InsertTeamMember, team_member_change::InsertTeamMemberChange,
+        species::Species,
+        team_member::InsertTeamMember,
+        team_member_change::InsertTeamMemberChange,
     },
     error::PkmnResult,
     schema::{self},
@@ -30,6 +31,28 @@ pub fn create_catch(
     gender: &str,
 ) -> PkmnResult<()> {
     state.transact(|connection| {
+        let new_team_member = InsertTeamMember {
+            playthrough_id_no,
+            slot: &slot,
+            nickname,
+            caught_date: date,
+            caught_location_name: &location_name,
+            caught_location_region: &location_region,
+            caught_species_name: &species_name,
+            caught_level: &level,
+            ball,
+            gender,
+        };
+        diesel::insert_into(schema::Team_Member::table)
+            .values(&new_team_member)
+            .execute(connection)?;
+        let team_member_id = schema::Team_Member::table
+            .select(max(schema::Team_Member::id))
+            .first::<Option<i32>>(connection)?;
+        let team_member_id = match team_member_id {
+            Some(id) => id,
+            None => return Err(diesel::result::Error::NotFound),
+        };
         let new_event = InsertEvent {
             playthrough_id_no: playthrough_id_no,
             location_name: &location_name,
@@ -46,24 +69,10 @@ pub fn create_catch(
         let new_catch_event = InsertCatchEvent {
             no: &event.no,
             catch_type: catch_type,
+            team_member_id: &team_member_id,
         };
         diesel::insert_into(schema::Catch_Event::table)
             .values(&new_catch_event)
-            .execute(connection)?;
-        let new_team_member = InsertTeamMember {
-            playthrough_id_no,
-            slot: &slot,
-            nickname,
-            caught_date: date,
-            caught_location_name: &location_name,
-            caught_location_region: &location_region,
-            caught_species_name: &species_name,
-            caught_level: &level,
-            ball,
-            gender,
-        };
-        diesel::insert_into(schema::Team_Member::table)
-            .values(&new_team_member)
             .execute(connection)?;
         let new_team_member_change = InsertTeamMemberChange {
             team_member_id: &slot,
@@ -84,6 +93,7 @@ pub struct ReadCatchesResult {
     #[serde(flatten)]
     catch: CatchEvent,
     event: Event,
+    species: Species,
 }
 
 #[tauri::command]
@@ -91,14 +101,23 @@ pub fn read_catches(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Rea
     let raw_catches = state.transact(|connection: &mut SqliteConnection| {
         let raw_catches = schema::Catch_Event::table
             .inner_join(schema::Event::table)
+            .inner_join(schema::Team_Member::table.inner_join(schema::Species::table))
             .order(schema::Catch_Event::no.desc())
-            .select((CatchEvent::as_select(), Event::as_select()))
-            .load::<(CatchEvent, Event)>(connection)?;
-        QueryResult::<Vec<(CatchEvent, Event)>>::Ok(raw_catches)
+            .select((
+                CatchEvent::as_select(),
+                Event::as_select(),
+                Species::as_select(),
+            ))
+            .load::<(CatchEvent, Event, Species)>(connection)?;
+        QueryResult::<Vec<(CatchEvent, Event, Species)>>::Ok(raw_catches)
     })?;
     let catches = raw_catches
         .into_iter()
-        .map(|(catch, event)| ReadCatchesResult { catch, event })
+        .map(|(catch, event, species)| ReadCatchesResult {
+            catch,
+            event,
+            species,
+        })
         .collect();
     Ok(catches)
 }

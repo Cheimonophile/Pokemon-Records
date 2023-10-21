@@ -159,9 +159,9 @@ const CatchTableRow: FC<{
         <td>
             {props.catch.no}.
         </td>
-        {/* <td>
-            {}
-        </td> */}
+        <td>
+            {props.catch.species.name}
+        </td>
         <td>
             {props.catch.location.name}
         </td>

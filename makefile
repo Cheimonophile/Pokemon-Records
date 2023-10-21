@@ -20,7 +20,8 @@ run: database
 	time python master.py
 
 db:
-	cd src-tauri && make db
+	rm src-tauri/dev/test-db.sqlite || true
+	cp pokemon.sqlite src-tauri/dev/test-db.sqlite
 
 shell:
 	cd src && python manage.py shell
