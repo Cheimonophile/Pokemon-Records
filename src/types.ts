@@ -55,3 +55,11 @@ export type Species = {
     type1: string,
     type2: string | null,
 }
+
+
+export type Catch = {
+    type: string,
+    no: number,
+    playthroughIdNo: string,
+    location: Location,
+}

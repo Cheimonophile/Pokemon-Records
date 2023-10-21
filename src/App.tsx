@@ -5,6 +5,7 @@ import { Open } from './pages/Open';
 import { setDBConnection } from './backend/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
+import { Catches } from './pages/Catches';
 // import './App.css';
 
 
@@ -25,6 +26,10 @@ const NAV_ITEMS: NavItem[] = [
     name: 'Battles',
     page: <Battles />,
   },
+  {
+    name: 'Catches',
+    page: <Catches />,
+  }
 ]
 
 export type AppContextState = {

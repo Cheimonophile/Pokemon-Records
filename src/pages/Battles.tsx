@@ -26,7 +26,6 @@ export const Battles: FC<{}> = () => {
 
     // battle table state
     const [battles, setBattles] = useState<Battle[] | null | undefined>()
-    console.log(battles)
 
     // fetch battles
     useEffect(() => {
@@ -170,8 +169,8 @@ const BattleTableRow: FC<{
                 type: 'error',
             })
         }
+        await refresh()
         setDisabled(prev => prev - 1)
-        refresh()
     }, [props.battle.no, title])
 
     // const on toggle lost
@@ -188,8 +187,9 @@ const BattleTableRow: FC<{
                 type: 'error',
             })
         }
+        await refresh()
         setDisabled(prev => prev - 1)
-        refresh()
+
     }, [props.battle])
 
     return (<tr>
@@ -469,8 +469,8 @@ const CreateBattle: FC<{}> = () => {
                 type: 'error',
             })
         }
+        await refresh()
         setDisabled(prev => prev - 1)
-        refresh()
     }
 
     return (
@@ -758,8 +758,8 @@ const TeamMemberRow: FC<{
                 type: 'error',
             })
         }
+        await refresh()
         setDisabled(prev => prev - 1)
-        refresh()
     }
 
     return <>
