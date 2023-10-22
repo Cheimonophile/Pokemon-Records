@@ -35,6 +35,7 @@ fn main() {
                 crate::api::catches::create_catch,
                 crate::api::catches::read_catches,
                 crate::api::catches::delete_catch,
+                crate::api::catch_types::read_catch_types,
                 crate::api::data::playthrough_data::team_over_time,
                 crate::api::locations::create_location,
                 crate::api::locations::read_locations,

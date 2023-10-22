@@ -31,7 +31,7 @@ export const Battles: FC<{}> = () => {
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const battles = await readBattles()
+                const battles = await readBattles({})
                 setBattles(battles)
             }
             catch (error) {
@@ -262,9 +262,15 @@ const CreateBattle: FC<{}> = () => {
     useEffect(() => {
         (async () => {
             try {
-                const regions = (await readRegions({})).reverse()
-                setRegionOptions(regions)
-                setLocation(prev => ({ ...prev, region: regions[0] }))
+                const [regions, mostRecentBattle] = await Promise.all([
+                    readRegions({}),
+                    readBattles({ howMany: 1 }),
+                ])
+                setRegionOptions(regions.reverse())
+                setLocation({
+                    region: mostRecentBattle[0].location.region,
+                    name: mostRecentBattle[0].location.name
+                })
             }
             catch (error) {
                 console.error(error)

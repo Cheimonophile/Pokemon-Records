@@ -13,3 +13,4 @@ pub mod item;
 pub mod battle_type;
 pub mod region;
 pub mod types;
+pub mod catch_type;

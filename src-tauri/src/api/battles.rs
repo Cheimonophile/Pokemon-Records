@@ -20,11 +20,15 @@ pub struct ReadBattlesResult {
 }
 
 #[tauri::command]
-pub fn read_battles(state: tauri::State<state::GameState>) -> PkmnResult<Vec<ReadBattlesResult>> {
+pub fn read_battles(
+    state: tauri::State<state::GameState>,
+    how_many: Option<i32>,
+) -> PkmnResult<Vec<ReadBattlesResult>> {
     let raw_battles = state.transact(|connection: &mut SqliteConnection| {
         let raw_battles = schema::Battle_Event::table
             .inner_join(schema::Event::table)
             .order(schema::Battle_Event::no.desc())
+            .limit(how_many.unwrap_or(500) as i64)
             .select((BattleEvent::as_select(), Event::as_select()))
             .load::<(BattleEvent, Event)>(connection)?;
         QueryResult::<Vec<(BattleEvent, Event)>>::Ok(raw_battles)

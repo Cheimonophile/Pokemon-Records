@@ -11,3 +11,4 @@ pub mod state;
 pub mod data;
 pub mod types;
 pub mod catches;
+pub mod catch_types;

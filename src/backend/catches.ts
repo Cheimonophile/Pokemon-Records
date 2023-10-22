@@ -49,7 +49,17 @@ export async function readCatches(): Promise<Catch[]> {
 
 
 type CreateParams = {
-
+    playthroughIdNo: string,
+    locationName: string,
+    locationRegion: string,
+    catchType: string,
+    slot: number,
+    speciesName: string,
+    nickname: string | null,
+    date: string,
+    level: number,
+    ball: string,
+    gender: string,
 }
 
 type CreateResult = void

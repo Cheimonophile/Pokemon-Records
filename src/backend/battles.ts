@@ -2,7 +2,9 @@
 import { invoke } from "@tauri-apps/api"
 import { Battle } from "../types"
 
-
+type ReadParams = {
+    howMany?: number,
+}
 
 type ReadResult = {
     battle_type: string,
@@ -24,8 +26,8 @@ type ReadResult = {
 }[]
 
 
-export async function readBattles(): Promise<Battle[]> {
-    const results = await invoke<ReadResult>('read_battles', {})
+export async function readBattles(params: ReadParams): Promise<Battle[]> {
+    const results = await invoke<ReadResult>('read_battles', params)
     let battles = results.map((result): Battle => {
         const opponent2 = result.opponent2_name && result.opponent2_class
             ? {
