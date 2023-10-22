@@ -18,6 +18,8 @@ import { useAppContext } from '../App';
 import { readTypes } from '../backend/types';
 import { createCatch, readCatches } from '../backend/catches';
 import { readCatchTypes } from '../backend/catch_types';
+import { readSpecies } from '../backend/species';
+import { readBalls } from '../backend/balls';
 
 
 export const Catches: FC<{}> = () => {
@@ -180,7 +182,7 @@ const CatchTableRow: FC<{
 const CatchPokemon: FC<{}> = () => {
 
     // context
-    const { refresh } = useAppContext()
+    const { refresh, addEffect } = useAppContext()
 
     // ui
     const [disabled, setDisabled] = useState<number>(0)
@@ -189,7 +191,7 @@ const CatchPokemon: FC<{}> = () => {
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string>("")
     const [playthroughOptions, setPlaythroughOptions] = useState<Playthrough[]>()
     useEffect(() => {
-        (async () => {
+        return addEffect(async () => {
             try {
                 const playthroughs = await readPlaythroughs({})
                 setPlaythroughOptions(playthroughs)
@@ -202,14 +204,14 @@ const CatchPokemon: FC<{}> = () => {
                     type: 'error',
                 })
             }
-        })()
+        })
     }, [])
 
     // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
     const [regionOptions, setRegionOptions] = useState<string[]>()
     useEffect(() => {
-        (async () => {
+        return addEffect(async () => {
             try {
                 const [regions, mostRecentBattle] = await Promise.all([
                     readRegions({}),
@@ -228,11 +230,11 @@ const CatchPokemon: FC<{}> = () => {
                     type: 'error',
                 })
             }
-        })()
+        })
     }, [])
     const [locationValid, setLocationValid] = useState<boolean>(false)
     useEffect(() => {
-        (async () => {
+        return addEffect(async () => {
             try {
                 const locations = await readLocations({ name: location.name, region: location.region })
                 setLocationValid(locations.length > 0)
@@ -244,14 +246,14 @@ const CatchPokemon: FC<{}> = () => {
                     type: 'error',
                 })
             }
-        })()
+        })
     }, [location])
 
     // catch type
     const [catchType, setCatchType] = useState<string>("Grass")
     const [catchTypeOptions, setCatchTypeOptions] = useState<string[]>()
     useEffect(() => {
-        (async () => {
+        return addEffect(async () => {
             try {
                 const catchTypes = (await readCatchTypes({})).map(ct => ct.name)
                 setCatchTypeOptions(catchTypes)
@@ -263,9 +265,61 @@ const CatchPokemon: FC<{}> = () => {
                     type: 'error',
                 })
             }
-        })()
+        })
     }, [])
 
+    // slot
+    const [slot, setSlot] = useState<number>(1)
+
+    // species
+    const [species, setSpecies] = useState<string>("")
+    const [speciesValid, setSpeciesValid] = useState<boolean>(false)
+    useEffect(() => {
+        return addEffect(async () => {
+            try {
+                const speciesList = await readSpecies({ name: species })
+                setSpeciesValid(speciesList.length > 0)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Species',
+                    type: 'error',
+                })
+            }
+        })
+    }, [species])
+
+    // nickname
+    const [nickname, setNickname] = useState<string>("")
+
+    // date
+    const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10))
+
+    // level
+    const [level, setLevel] = useState<number>(1)
+
+    // ball
+    const [ball, setBall] = useState<string>("Poké Ball")
+    const [ballOptions, setBallOptions] = useState<string[]>()
+    useEffect(() => {
+        return addEffect(async () => {
+            try {
+                const balls = (await readBalls({})).map(t => t.name)
+                setBallOptions(balls)
+            }
+            catch (error) {
+                console.error(error)
+                await message(`${error}`, {
+                    title: 'Error Reading Balls',
+                    type: 'error',
+                })
+            }
+        })
+    }, [])
+
+    // gender
+    const [gender, setGender] = useState<string>("M")
 
 
     // create battle button
@@ -275,24 +329,26 @@ const CatchPokemon: FC<{}> = () => {
             // location
             await tryCreateLocation(locationValid, setLocationValid, location)
             // create the battle
-            // await createCatch({
-            //     playthroughIdNo: playthroughIdNo,
-            //     locationName: location.name,
-            //     locationRegion: location.region,
-            //     catchType: undefined,
-            //     slot: undefined,
-            //     speciesName: undefined,
-            //     nickname: undefined,
-            //     date: undefined,
-            //     level: undefined,
-            //     ball: undefined,
-            //     gender: undefined,
-            // })
+            await createCatch({
+                playthroughIdNo: playthroughIdNo,
+                locationName: location.name,
+                locationRegion: location.region,
+                catchType,
+                slot,
+                speciesName: species,
+                nickname: nickname || null,
+                date,
+                level,
+                ball,
+                gender,
+            })
+            // reset params
+            setSpecies("")
         }
         catch (error) {
             console.error(error)
             await message(`${error}`, {
-                title: 'Error Creating Battle',
+                title: 'Error Catching Pokemon',
                 type: 'error',
             })
         }
@@ -340,6 +396,99 @@ const CatchPokemon: FC<{}> = () => {
                         <option key={i} value={ct}>{ct}</option>
                     ))}
                 </select>
+            </div>
+
+            {/* Slot */}
+            <div>
+                <label>Slot:</label>
+                <input
+                    type="number"
+                    value={slot}
+                    onChange={e => setSlot(parseInt(e.target.value))}
+                    min={1}
+                    max={6}
+                />
+            </div>
+
+
+            {/* Species */}
+            <div>
+                <label>Species:</label>
+                <input
+                    type="text"
+                    style={{
+                        color: speciesValid ? undefined : 'red',
+                    }}
+                    value={species}
+                    onChange={e => setSpecies(e.target.value)}
+                />
+            </div>
+
+            {/* Nickname */}
+            <div>
+                <label>Nickname:</label>
+                <input
+                    type="text"
+                    value={nickname}
+                    onChange={e => setNickname(e.target.value)}
+                />
+            </div>
+
+            {/* Date */}
+            <div>
+                <label>Date:</label>
+                <input
+                    type="date"
+                    style={{
+                        color: isNaN(new Date(date).valueOf()) ? 'red' : undefined,
+                    }}
+                    value={date}
+                    onChange={e => setDate(e.target.value)}
+                />
+            </div>
+
+            {/* Level */}
+            <div>
+                <label>Level:</label>
+                <input
+                    type="number"
+                    style={{
+                        color: level < 1 || level > 100 ? 'red' : undefined,
+                    }}
+                    value={level}
+                    onChange={e => setLevel(parseInt(e.target.value))}
+                    min={1}
+                    max={100}
+                />
+            </div>
+
+            {/* Ball */}
+            <div>
+                <label>Ball:</label>
+                <select value={ball} onChange={e => setBall(e.target.value)}>
+                    {ballOptions?.map((ball, i) => (
+                        <option key={i} value={ball}>{ball}</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Gender */}
+            <div>
+                <label>Gender:</label>
+                <select value={ball} onChange={e => setBall(e.target.value)}>
+                    {['M', 'F', 'N'].map((ball, i) => (
+                        <option key={i} value={ball}>{ball}</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Add Button */}
+            <div>
+                <button
+                    onClick={createCatchOnClick}
+                    disabled={disabled > 0}>
+                    Create Catch
+                </button>
             </div>
 
         </div>

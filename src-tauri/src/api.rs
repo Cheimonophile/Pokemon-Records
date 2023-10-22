@@ -12,3 +12,5 @@ pub mod data;
 pub mod types;
 pub mod catches;
 pub mod catch_types;
+pub mod species;
+pub mod balls;

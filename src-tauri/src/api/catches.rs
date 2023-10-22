@@ -7,7 +7,7 @@ use crate::{
         catch_event::{CatchEvent, InsertCatchEvent},
         event::{Event, InsertEvent},
         species::Species,
-        team_member::InsertTeamMember,
+        team_member::{InsertTeamMember, TeamMember},
         team_member_change::InsertTeamMemberChange,
     },
     error::PkmnResult,
@@ -46,13 +46,9 @@ pub fn create_catch(
         diesel::insert_into(schema::Team_Member::table)
             .values(&new_team_member)
             .execute(connection)?;
-        let team_member_id = schema::Team_Member::table
-            .select(max(schema::Team_Member::id))
-            .first::<Option<i32>>(connection)?;
-        let team_member_id = match team_member_id {
-            Some(id) => id,
-            None => return Err(diesel::result::Error::NotFound),
-        };
+        let team_member = schema::Team_Member::table
+            .order(schema::Team_Member::id.desc())
+            .first::<TeamMember>(connection)?;
         let new_event = InsertEvent {
             playthrough_id_no: playthrough_id_no,
             location_name: &location_name,
@@ -69,13 +65,13 @@ pub fn create_catch(
         let new_catch_event = InsertCatchEvent {
             no: &event.no,
             catch_type: catch_type,
-            team_member_id: &team_member_id,
+            team_member_id: &team_member.id,
         };
         diesel::insert_into(schema::Catch_Event::table)
             .values(&new_catch_event)
             .execute(connection)?;
         let new_team_member_change = InsertTeamMemberChange {
-            team_member_id: &slot,
+            team_member_id: &team_member.id,
             event_no: &event.no,
             level: Some(&level),
             species_name: Some(species_name),

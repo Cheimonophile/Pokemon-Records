@@ -27,6 +27,7 @@ fn main() {
         tauri::Builder::default()
             .manage(GameState::new())
             .invoke_handler(tauri::generate_handler![
+                crate::api::balls::read_balls,
                 crate::api::battle_types::read_battle_types,
                 crate::api::battles::create_battle,
                 crate::api::battles::read_battles,
@@ -42,6 +43,7 @@ fn main() {
                 crate::api::playthrough::create_playthrough,
                 crate::api::playthrough::read_playthroughs,
                 crate::api::regions::read_regions,
+                crate::api::species::read_species,
                 crate::api::state::set_db_connection,
                 crate::api::team_member_changes::create_team_member_change,
                 crate::api::team_members::read_team_members,
