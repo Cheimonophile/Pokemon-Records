@@ -103,7 +103,7 @@ function App() {
       addEffect,
       refresh
     };
-  }, [page, addEffect]);
+  }, [page, addEffect, refresh]);
 
   return (
     <div style={{

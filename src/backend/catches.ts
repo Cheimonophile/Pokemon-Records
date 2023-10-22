@@ -1,6 +1,6 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Battle, Catch } from "../types"
+import { Catch } from "../types"
 
 
 

@@ -1,21 +1,12 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
-import { createBattle, deleteBattle, readBattles } from '../backend/battles'
+import { readBattles } from '../backend/battles'
 import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Battle, Catch, Playthrough, TeamMember, Trainer } from '../types';
+import { Catch, Playthrough } from '../types';
 import { readPlaythroughs } from '../backend/playthroughs';
-import { readBattleTypes } from '../backend/battle_types';
-import { readTrainerClasses } from '../backend/trainer_classes';
-import { createTrainer, readTrainers } from '../backend/trainers';
-import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/regions';
 import { createLocation, readLocations } from '../backend/locations';
-import { readTeamMembers } from '../backend/team_members';
-import ReactECharts from 'echarts-for-react';
-import { teamOverTime } from '../backend/data/teamOverTime';
-import { EChartsOption, use } from 'echarts';
 import { useAppContext } from '../App';
-import { readTypes } from '../backend/types';
 import { createCatch, readCatches } from '../backend/catches';
 import { readCatchTypes } from '../backend/catch_types';
 import { readSpecies } from '../backend/species';
@@ -43,7 +34,7 @@ export const Catches: FC<{}> = () => {
                 setCatches(new Error(`${error}`))
             }
         })
-    }, [])
+    }, [addEffect])
 
 
     return (
@@ -156,7 +147,7 @@ const CatchTableRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }, [props.catch])
+    }, [refresh])
 
     return (<tr>
         <td>
@@ -205,7 +196,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [])
+    }, [addEffect])
 
     // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
@@ -231,7 +222,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [])
+    }, [addEffect])
     const [locationValid, setLocationValid] = useState<boolean>(false)
     useEffect(() => {
         return addEffect(async () => {
@@ -247,7 +238,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [location])
+    }, [addEffect, location])
 
     // catch type
     const [catchType, setCatchType] = useState<string>("Grass")
@@ -266,7 +257,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [])
+    }, [addEffect])
 
     // slot
     const [slot, setSlot] = useState<number>(1)
@@ -288,7 +279,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [species])
+    }, [addEffect,species])
 
     // nickname
     const [nickname, setNickname] = useState<string>("")
@@ -316,7 +307,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [])
+    }, [addEffect])
 
     // gender
     const [gender, setGender] = useState<string>("M")
@@ -475,7 +466,7 @@ const CatchPokemon: FC<{}> = () => {
             {/* Gender */}
             <div>
                 <label>Gender:</label>
-                <select value={ball} onChange={e => setBall(e.target.value)}>
+                <select value={ball} onChange={e => setGender(e.target.value)}>
                     {['M', 'F', 'N'].map((ball, i) => (
                         <option key={i} value={ball}>{ball}</option>
                     ))}

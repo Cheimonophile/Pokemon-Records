@@ -1,4 +1,4 @@
-use diesel::{dsl::max, prelude::*};
+use diesel::prelude::*;
 
 use serde;
 

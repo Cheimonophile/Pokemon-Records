@@ -13,7 +13,7 @@ import { createLocation, readLocations } from '../backend/locations';
 import { readTeamMembers } from '../backend/team_members';
 import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from '../backend/data/teamOverTime';
-import { EChartsOption, use } from 'echarts';
+import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
 import { readTypes } from '../backend/types';
 
@@ -39,7 +39,7 @@ export const Battles: FC<{}> = () => {
                 setBattles(null)
             }
         })
-    }, [])
+    }, [addEffect])
 
 
     return (
@@ -171,7 +171,7 @@ const BattleTableRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }, [props.battle.no, title])
+    }, [props.battle.no, title, refresh])
 
     // const on toggle lost
     const onClickToggleLost = useCallback(async () => {
@@ -190,7 +190,7 @@ const BattleTableRow: FC<{
         await refresh()
         setDisabled(prev => prev - 1)
 
-    }, [props.battle])
+    }, [refresh, props.battle])
 
     return (<tr>
         <td>
@@ -713,6 +713,7 @@ const LevelUp: FC<{
             }
         })
     }, [
+        addEffect,
         props.battle.playthrough.idNo
     ])
 
@@ -873,7 +874,7 @@ const TeamMemberLevelChart: FC<{
                 setData(new Error(`${error}`))
             }
         })
-    }, [props.mostRecentBattle])
+    }, [addEffect, props.mostRecentBattle])
 
 
 
