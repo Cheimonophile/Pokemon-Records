@@ -12,7 +12,7 @@
       // "problemMatcher": "$tsc-watch",
       "isBackground": true,
       // change this to your `beforeDevCommand`:
-      "command": "nvm use && npm start",
+      "command": "npm start",
       // "args": ["run","dev"]
     },
     {

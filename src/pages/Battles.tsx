@@ -771,17 +771,21 @@ const TeamMemberRow: FC<{
 
     return <>
         <tr>
-            <td>
+            <td style={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+            }}>
                 {props.teamMember.nickname ?? props.teamMember.species.name}
             </td>
             <td>
                 {props.teamMember.level}
             </td>
             <td>
-                <button disabled={disabled > 0} onClick={() => onClickLevelChange(1)}>Level Up</button>
+                <button disabled={disabled > 0} onClick={() => onClickLevelChange(1)}>+</button>
             </td>
             <td>
-                <button disabled={disabled > 0} onClick={() => onClickLevelChange(-1)}>Level Down</button>
+                <button disabled={disabled > 0} onClick={() => onClickLevelChange(-1)}>-</button>
             </td>
         </tr>
     </>
