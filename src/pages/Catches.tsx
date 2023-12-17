@@ -466,9 +466,9 @@ const CatchPokemon: FC<{}> = () => {
             {/* Gender */}
             <div>
                 <label>Gender:</label>
-                <select value={ball} onChange={e => setGender(e.target.value)}>
-                    {['M', 'F', 'N'].map((ball, i) => (
-                        <option key={i} value={ball}>{ball}</option>
+                <select value={gender} onChange={e => setGender(e.target.value)}>
+                    {['M', 'F', 'N'].map((gender, i) => (
+                        <option key={i} value={gender}>{gender}</option>
                     ))}
                 </select>
             </div>
