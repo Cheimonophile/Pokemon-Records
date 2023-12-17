@@ -1,15 +1,15 @@
-name: Release
+name: Build
 
-run-name: Release
+run-name: Build ${{ github.ref_name }}
 
 on:
-  push:
+  pull_request:
     branches:
       - master
   workflow_dispatch:
 
 jobs:
-  release:
+  build:
     permissions:
       contents: write
     strategy:
@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       # - name: Install dependencies (ubuntu only)
       #   if: matrix.platform == 'ubuntu-20.04'
@@ -50,13 +52,13 @@ jobs:
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
         run: npm install # Change this to npm, yarn or pnpm.
 
-      - name: Build and Release
+      - name: Build
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: v__VERSION__' # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: 'Pokemon Playthrough DB v__VERSION__'
-          releaseBody: 'See the assets to download and install this version.'
-          # releaseDraft: true
-          prerelease: false
+        # with:
+        #   tagName: v__VERSION__' # the action automatically replaces \_\_VERSION\_\_ with the app version
+        #   releaseName: 'Pokemon Playthrough DB v__VERSION__'
+        #   releaseBody: 'See the assets to download and install this version.'
+        #   # releaseDraft: true
+        #   prerelease: false
