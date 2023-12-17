@@ -11,6 +11,7 @@ import { createCatch, readCatches } from '../backend/catches';
 import { readCatchTypes } from '../backend/catch_types';
 import { readSpecies } from '../backend/species';
 import { readBalls } from '../backend/balls';
+import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 
 
 export const Catches: FC<{}> = () => {
@@ -179,24 +180,7 @@ const CatchPokemon: FC<{}> = () => {
     const [disabled, setDisabled] = useState<number>(0)
 
     // Playthroughs
-    const [playthroughIdNo, setPlaythroughIdNo] = useState<string>("")
-    const [playthroughOptions, setPlaythroughOptions] = useState<Playthrough[]>()
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const playthroughs = await readPlaythroughs({})
-                setPlaythroughOptions(playthroughs)
-                setPlaythroughIdNo(playthroughs[0].idNo)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Playthroughs',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect])
+    const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
 
     // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
@@ -319,6 +303,9 @@ const CatchPokemon: FC<{}> = () => {
         try {
             // location
             await tryCreateLocation(locationValid, setLocationValid, location)
+            // errors
+            if (playthroughIdNo === undefined)
+                throw new Error("No Playthrough Selected")
             // create the battle
             await createCatch({
                 playthroughIdNo: playthroughIdNo,
@@ -352,14 +339,10 @@ const CatchPokemon: FC<{}> = () => {
         <div>
 
             {/* Playthrough selector */}
-            <div>
-                <label>Playthrough:</label>
-                <select value={playthroughIdNo} onChange={e => setPlaythroughIdNo(e.target.value)}>
-                    {playthroughOptions?.map((playthrough, i) => (
-                        <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
-                    ))}
-                </select>
-            </div>
+            <PlaythroughInput 
+                playthroughIdNo={playthroughIdNo}
+                setPlaythroughIdNo={setPlaythroughIdNo}
+            />
 
             {/* Location */}
             <div>
