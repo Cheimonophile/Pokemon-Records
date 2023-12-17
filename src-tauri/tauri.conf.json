@@ -6,7 +6,7 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "Pokemon Playthrough CRM",
+    "productName": "Pokemon Playthrough DB",
     "version": "0.1.0"
   },
   "tauri": {
