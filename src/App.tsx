@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, Fragment, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { flexGrow } from './styles';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
@@ -6,35 +6,25 @@ import { setDBConnection } from './backend/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
 import { Catches } from './pages/Catches';
+import { Nav } from './components/Nav';
 // import './App.css';
 
 
+/**
+ * The pages in the application
+ */
+export const PAGES = Object.freeze({
+  Open: Open,
+  Battles: Battles,
+  Catches: Catches
+} satisfies {
+  [key: string]: FC<{}>
+})
+export type PageKey = keyof typeof PAGES;
 
-
-
-interface NavItem {
-  name: string;
-  page: ReactNode;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  {
-    name: 'Open',
-    page: <Open />,
-  },
-  {
-    name: 'Battles',
-    page: <Battles />,
-  },
-  {
-    name: 'Catches',
-    page: <Catches />,
-  }
-]
-
-export type AppContextState = {
-  page: ReactNode;
-  setPage: (page: ReactNode) => void;
+type AppContextState = {
+  currentPage: ReactNode;
+  setCurrentPage: (page: PageKey) => void;
   addEffect: (callback: () => Promise<void>) => () => void;
   refresh: () => Promise<void>;
 };
@@ -56,7 +46,7 @@ export function useAppContext(): AppContextState {
 
 function App() {
 
-  const [page, setPage] = useState<ReactNode>(<Open />);
+  const [currentPage, setCurrentPage] = useState<PageKey>('Open');
   const refreshCallbackRef = useRef<Set<() => Promise<void>>>(new Set());
 
   // add an effect to the refreshCallbackRef
@@ -98,37 +88,34 @@ function App() {
 
   const appContextState = useMemo<AppContextState>(() => {
     return {
-      page,
-      setPage,
+      currentPage,
+      setCurrentPage,
       addEffect,
       refresh
     };
-  }, [page, addEffect, refresh]);
+  }, [currentPage, addEffect, refresh]);
+
+  /**
+   * The component for the page
+   */
+  const CurrentPage = PAGES[currentPage]
 
   return (
-    <div className="h-full w-full flex flex-col p-1 g-1">
+    <AppContext.Provider value={appContextState}>
+      <div className="h-full w-full flex flex-col">
 
-      {/* Nav Bar */}
-      <div className="flex-none flex flex-row gap-1">
-        {NAV_ITEMS.map((navItem) => (
-          <Fragment key={navItem.name}>
-            <div>
-              <button
-                onClick={() => setPage(navItem.page)}>
-                {navItem.name}
-              </button>
-            </div>
-          </Fragment>
-        ))}
-      </div>
+        {/* Nav Bar */}
+        <Nav />
+        <hr/>
 
-      {/* Body */}
-      <div className="flex-1">
-        <AppContext.Provider value={appContextState}>
-          {page}
-        </AppContext.Provider>
+        {/* Body */}
+        <div className="flex-1">
+
+          <CurrentPage />
+
+        </div>
       </div>
-    </div>
+    </AppContext.Provider>
   );
 }
 

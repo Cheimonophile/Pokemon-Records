@@ -4,7 +4,7 @@ import { setDBConnection } from "../backend/state";
 import { DATABASE_URL } from "../constants";
 
 
-export const Open: FC = () => {
+export const Open: FC<{}> = () => {
 
 
     // state
@@ -31,7 +31,6 @@ export const Open: FC = () => {
 
     return (<>
         <div className="h-full w-full flex flex-col gap-1">
-            <h3>Open</h3>
             <div>
                 <button disabled={disabled > 0} onClick={getFile}>Get File</button>
             </div>

@@ -40,7 +40,6 @@ export const Catches: FC<{}> = () => {
 
     return (
         <div className="h-full w-full flex flex-col gap-1">
-            <h3>Catches</h3>
 
             {/* Above Table */}
             <div className="flex flex-row gap-2">
