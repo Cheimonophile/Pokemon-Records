@@ -21,7 +21,7 @@ export const Nav: FC<{}> = () => {
                 return (
                     <Fragment key={page}>
                         <button
-                            className={`${selected ? 'underline': ''}`}
+                            className={`${selected ? 'underline' : ''}`}
                             onClick={() => setCurrentPage(page as PageKey)}>
                             {page}
                         </button>
