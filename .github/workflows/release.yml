@@ -1,6 +1,6 @@
 name: Release
 
-run-name: Release ${{ github.event.repository.updated_at }}
+run-name: Release
 
 on:
   push:
