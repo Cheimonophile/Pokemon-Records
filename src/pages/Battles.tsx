@@ -44,34 +44,22 @@ export const Battles: FC<{}> = () => {
 
 
     return (
-        <div style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            gap: '0.25rem',
-            flexDirection: 'column'
-        }}>
+        <div className="h-full w-full flex flex-col gap-1">
             <h3>Battles</h3>
 
             {/* Above Table */}
-            <div style={{
-                flex: 'none',
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '0.5rem',
-            }}>
+            <div className="flex-none flex flex-row gap-2">
+
                 {/* Make Battle */}
                 <div>
                     <CreateBattle />
                 </div>
 
                 {/* Level Up */}
-                <div style={{
-                    width: '18rem',
-                }}>
+                <div className="min-w-fit">
                     {((): ReactNode => {
                         if (battles instanceof Error) {
-                            return <div style={{ color: 'red' }}>{battles.message}</div>
+                            return <div className="text-red-500">{battles.message}</div>
                         }
                         const battle = battles?.at(0)
                         if (battle === undefined) {
@@ -84,31 +72,18 @@ export const Battles: FC<{}> = () => {
                 </div>
 
                 {/* Level up over time */}
-                <div style={{
-                    height: '10rem',
-                    width: '15rem',
-                }}>
+                <div className="h-40 w-64">
                     <TeamMemberLevelChart mostRecentBattle={battles?.at(0)} />
                 </div>
             </div>
 
             {/* Battles Table */}
-            <div style={{
-                flex: flexGrow,
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    overflowY: 'auto',
-                    padding: '0.25rem',
-                    borderStyle: 'solid',
-                }}>
+            <div className="flex-1">
+                <div className="w-full h-full overflow-y-auto p-1 border">
 
                     {/* table */}
                     {battles instanceof Error ? (<>
-                        <div style={{
-                            color: 'red',
-                        }}>
+                        <div className="text-red-500">
                             {battles.message}
                         </div>
                     </>) : (<>
@@ -407,9 +382,6 @@ const CreateBattle: FC<{}> = () => {
         })();
     }, [partner])
 
-    // round
-    const [round, setRound] = useState<number>(0)
-
     // lost
     const [lost, setLost] = useState<boolean>(false)
 
@@ -444,7 +416,7 @@ const CreateBattle: FC<{}> = () => {
                 opponent2Name: useOpponent2 ? opponent2.name : undefined,
                 partnerClass: usePartner ? partner.class : undefined,
                 partnerName: usePartner ? partner.name : undefined,
-                round: round,
+                round: 0,
                 lost: lost,
             })
             setBattleType(battleTypeOptions?.at(0) ?? "Single")
@@ -484,9 +456,7 @@ const CreateBattle: FC<{}> = () => {
                 </select>
                 <input
                     type="text"
-                    style={{
-                        color: locationValid ? undefined : 'red',
-                    }}
+                    className={`${locationValid || 'text-red-500'}`}
                     value={location.name}
                     onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
                 />
@@ -507,17 +477,13 @@ const CreateBattle: FC<{}> = () => {
                 <label>Opponent 1:</label>
                 <input
                     type="text"
-                    style={{
-                        color: opponent1Validity.class ? undefined : 'red',
-                    }}
+                    className={`${opponent1Validity.class || 'text-red-500'}`}
                     value={opponent1.class}
                     onChange={e => setOpponent1(prev => ({ ...prev, class: e.target.value }))}
                 />
                 <input
                     type="text"
-                    style={{
-                        color: opponent1Validity.name ? undefined : 'red',
-                    }}
+                    className={`${opponent1Validity.name || 'text-red-500'}`}
                     value={opponent1.name}
                     onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
                 />
@@ -535,17 +501,13 @@ const CreateBattle: FC<{}> = () => {
                 {useOpponent2 && (<>
                     <input
                         type="text"
-                        style={{
-                            color: opponent2Validity.class ? undefined : 'red',
-                        }}
+                        className={`${opponent2Validity.class || 'text-red-500'}`}
                         value={opponent2.class}
                         onChange={e => setOpponent2(prev => ({ ...prev, class: e.target.value }))}
                     />
                     <input
                         type="text"
-                        style={{
-                            color: opponent2Validity.name ? undefined : 'red',
-                        }}
+                        className={`${opponent2Validity.name || 'text-red-500'}`}
                         value={opponent2.name}
                         onChange={e => setOpponent2(prev => ({ ...prev, name: e.target.value }))}
                     />
@@ -563,34 +525,17 @@ const CreateBattle: FC<{}> = () => {
                 {usePartner && (<>
                     <input
                         type="text"
-                        style={{
-                            color: partnerValidity.class ? undefined : 'red',
-                        }}
+                        className={`${partnerValidity.class || 'text-red-500'}`}
                         value={partner.class}
                         onChange={e => setPartner(prev => ({ ...prev, class: e.target.value }))}
                     />
                     <input
                         type="text"
-                        style={{
-                            color: partnerValidity.name ? undefined : 'red',
-                        }}
+                        className={`${partnerValidity.name || 'text-red-500'}`}
                         value={partner.name}
                         onChange={e => setPartner(prev => ({ ...prev, name: e.target.value }))}
                     />
                 </>)}
-            </div>
-
-            {/* Round */}
-            <div>
-                <label>Round:</label>
-                <input
-                    type="number"
-                    style={{
-                        color: isNaN(round) ? 'red' : undefined,
-                    }}
-                    value={round}
-                    onChange={e => setRound(parseInt(e.target.value))}
-                />
             </div>
 
             {/* Lost */}
@@ -703,7 +648,7 @@ const LevelUp: FC<{
     return <>
         <div>
             {teamMembers instanceof Error ? (<>
-                <div style={{ color: 'red' }}>{teamMembers.message}</div>
+                <div className="text-red-500">{teamMembers.message}</div>
             </>) : (<>
                 <table>
                     <tbody>
@@ -754,11 +699,7 @@ const TeamMemberRow: FC<{
 
     return <>
         <tr>
-            <td style={{
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-            }}>
+            <td className="truncate">
                 {props.teamMember.nickname ?? props.teamMember.species.name}
             </td>
             <td>
@@ -869,7 +810,7 @@ const TeamMemberLevelChart: FC<{
         {data === undefined
             ? <></>
             : data instanceof Error
-                ? <div style={{ color: 'red' }}>{data.message}</div>
+                ? <div className="text-red-500">{data.message}</div>
                 : <ReactECharts option={data} style={{
                     width: '100%',
                     height: '100%',

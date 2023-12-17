@@ -106,40 +106,24 @@ function App() {
   }, [page, addEffect, refresh]);
 
   return (
-    <div style={{
-      height: '100vh',
-      width: '100vw',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '0.25rem',
-      gap: '0.25rem',
-    }}>
+    <div className="h-full w-full flex flex-col p-1 g-1">
 
       {/* Nav Bar */}
-      <div style={{
-        flex: 'none',
-        display: 'flex',
-        gap: '0.25rem',
-      }}>
+      <div className="flex-none flex flex-row gap-1">
         {NAV_ITEMS.map((navItem) => (
           <Fragment key={navItem.name}>
             <div>
-              <span style={{
-                appearance: 'none',
-                cursor: 'pointer',
-              }}
+              <button
                 onClick={() => setPage(navItem.page)}>
                 {navItem.name}
-              </span>
+              </button>
             </div>
           </Fragment>
         ))}
       </div>
 
       {/* Body */}
-      <div style={{
-        flex: flexGrow,
-      }}>
+      <div className="flex-1">
         <AppContext.Provider value={appContextState}>
           {page}
         </AppContext.Provider>

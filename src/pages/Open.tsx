@@ -30,13 +30,7 @@ export const Open: FC = () => {
     }, [])
 
     return (<>
-        <div style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            gap: '0.25rem',
-            flexDirection: 'column'
-        }}>
+        <div className="h-full w-full flex flex-col gap-1">
             <h3>Open</h3>
             <div>
                 <button disabled={disabled > 0} onClick={getFile}>Get File</button>

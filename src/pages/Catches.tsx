@@ -39,62 +39,24 @@ export const Catches: FC<{}> = () => {
 
 
     return (
-        <div style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            gap: '0.25rem',
-            flexDirection: 'column'
-        }}>
+        <div className="h-full w-full flex flex-col gap-1">
             <h3>Catches</h3>
 
             {/* Above Table */}
-            <div style={{
-                flex: 'none',
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '0.5rem',
-            }}>
+            <div className="flex flex-row gap-2">
                 {/* Catch Pokemon */}
                 <div>
                     <CatchPokemon />
                 </div>
-
-                {/* Level Up */}
-                <div style={{
-                    width: '18rem',
-                }}>
-                    {((): ReactNode => {
-                        if (catches instanceof Error) {
-                            return <div style={{ color: 'red' }}>{catches.message}</div>
-                        }
-                        if (catches?.at(0) === undefined) {
-                            return <>No Catches</>
-                        }
-                        return (<>
-                            {/* <LevelUp battle={battle} /> */}
-                        </>)
-                    })()}
-                </div>
             </div>
 
             {/* Battles Table */}
-            <div style={{
-                flex: flexGrow,
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    overflowY: 'auto',
-                    padding: '0.25rem',
-                    borderStyle: 'solid',
-                }}>
+            <div className="flex-1">
+                <div className="h-full w-full overflow-y-auto p-1 border">
 
                     {/* table */}
                     {catches instanceof Error ? (<>
-                        <div style={{
-                            color: 'red',
-                        }}>
+                        <div className='text-red-500'>
                             {catches.message}
                         </div>
                     </>) : (<>

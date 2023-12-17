@@ -12,11 +12,9 @@ export const Link: FC<{
     const { setPage } = useAppContext();
 
     return (<>
-        <span style={{
-            appearance: 'none',
-        }}
+        <button
             onClick={() => setPage(props.page)}>
             {props.children}
-        </span>
+        </button>
     </>)
 }

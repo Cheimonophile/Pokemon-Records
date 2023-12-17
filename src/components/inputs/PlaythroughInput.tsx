@@ -11,7 +11,7 @@ import { message } from "@tauri-apps/api/dialog";
 export const PlaythroughInput: FC<{
     playthroughIdNo?: string,
     setPlaythroughIdNo?: (playthroughIdNo: string) => void
-}> = (props) => {
+}> = ({ playthroughIdNo, setPlaythroughIdNo }) => {
 
 
     const [playthroughOptions, setPlaythroughOptions] = useState<Playthrough[]>()
@@ -20,8 +20,8 @@ export const PlaythroughInput: FC<{
             try {
                 const playthroughs = await readPlaythroughs({})
                 setPlaythroughOptions(playthroughs)
-                if (!props.playthroughIdNo) {
-                    props.setPlaythroughIdNo?.(playthroughs[0].idNo)
+                if (!playthroughIdNo) {
+                    setPlaythroughIdNo?.(playthroughs[0].idNo)
                 }
             }
             catch (error) {
@@ -32,7 +32,7 @@ export const PlaythroughInput: FC<{
                 })
             }
         })()
-    }, [])
+    }, [playthroughIdNo, setPlaythroughIdNo])
 
 
     return (
@@ -41,7 +41,7 @@ export const PlaythroughInput: FC<{
                 <label>Playthrough:</label>
             </div>
             <div>
-                <select value={props.playthroughIdNo} onChange={e => props.setPlaythroughIdNo?.(e.target.value)}>
+                <select value={playthroughIdNo} onChange={e => setPlaythroughIdNo?.(e.target.value)}>
                     {playthroughOptions?.map((playthrough, i) => (
                         <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
                     ))}
