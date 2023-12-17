@@ -52,8 +52,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
-          releaseName: ${{ github.event.repository.updated_at }} # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          tagName: v__VERSION__' # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: 'Pokemon Playthrough DB v__VERSION__'
           releaseBody: 'See the assets to download and install this version.'
           # releaseDraft: true
           prerelease: false
