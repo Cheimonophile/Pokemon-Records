@@ -1,5 +1,4 @@
-import React, { FC, Fragment, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { flexGrow } from './styles';
+import React, { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
 import { setDBConnection } from './backend/state';
@@ -106,7 +105,7 @@ function App() {
 
         {/* Nav Bar */}
         <Nav />
-        <hr/>
+        <hr />
 
         {/* Body */}
         <div className="flex-1">

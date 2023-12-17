@@ -1,9 +1,7 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createBattle, deleteBattle, readBattles } from '../backend/battles'
-import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Battle, Playthrough, TeamMember, Trainer } from '../types';
-import { readPlaythroughs } from '../backend/playthroughs';
+import { Battle, TeamMember, Trainer } from '../types';
 import { readBattleTypes } from '../backend/battle_types';
 import { readTrainerClasses } from '../backend/trainer_classes';
 import { createTrainer, readTrainers } from '../backend/trainers';
@@ -443,7 +441,7 @@ const CreateBattle: FC<{}> = () => {
             <PlaythroughInput
                 playthroughIdNo={playthroughIdNo}
                 setPlaythroughIdNo={setPlaythroughIdNo}
-             />
+            />
 
             {/* Location */}
             <div>

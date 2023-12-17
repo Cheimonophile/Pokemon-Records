@@ -1,9 +1,7 @@
-import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { readBattles } from '../backend/battles'
-import { flexGrow } from '../styles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Catch, Playthrough } from '../types';
-import { readPlaythroughs } from '../backend/playthroughs';
+import { Catch } from '../types';
 import { readRegions } from '../backend/regions';
 import { createLocation, readLocations } from '../backend/locations';
 import { useAppContext } from '../App';
@@ -224,7 +222,7 @@ const CatchPokemon: FC<{}> = () => {
                 })
             }
         })
-    }, [addEffect,species])
+    }, [addEffect, species])
 
     // nickname
     const [nickname, setNickname] = useState<string>("")
@@ -300,7 +298,7 @@ const CatchPokemon: FC<{}> = () => {
         <div>
 
             {/* Playthrough selector */}
-            <PlaythroughInput 
+            <PlaythroughInput
                 playthroughIdNo={playthroughIdNo}
                 setPlaythroughIdNo={setPlaythroughIdNo}
             />
