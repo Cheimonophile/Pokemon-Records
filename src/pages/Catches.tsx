@@ -10,6 +10,7 @@ import { readCatchTypes } from '../backend/catch_types';
 import { readSpecies } from '../backend/species';
 import { readBalls } from '../backend/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
+import { startOfToday, formatISO } from 'date-fns'
 
 
 export const Catches: FC<{}> = () => {
@@ -37,7 +38,7 @@ export const Catches: FC<{}> = () => {
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-1">
+        <div className="h-full w-full flex flex-col gap-1 p-1">
 
             {/* Above Table */}
             <div className="flex flex-row gap-2">
@@ -228,7 +229,7 @@ const CatchPokemon: FC<{}> = () => {
     const [nickname, setNickname] = useState<string>("")
 
     // date
-    const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10))
+    const [date, setDate] = useState<string>(formatISO(startOfToday(), { representation: 'date' }))
 
     // level
     const [level, setLevel] = useState<number>(1)
@@ -372,9 +373,6 @@ const CatchPokemon: FC<{}> = () => {
                 <label>Date:</label>
                 <input
                     type="date"
-                    style={{
-                        color: isNaN(new Date(date).valueOf()) ? 'red' : undefined,
-                    }}
                     value={date}
                     onChange={e => setDate(e.target.value)}
                 />

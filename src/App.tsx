@@ -110,7 +110,7 @@ function App() {
         {/* Body */}
         <div className="flex-1">
 
-          <CurrentPage />
+          <CurrentPage key={currentPage} />
 
         </div>
       </div>
