@@ -18,7 +18,7 @@ export type Playthrough = {
     idNo: string,
     name: string,
     version: string,
-    adventureStarted: Date,
+    adventureStarted: string,
 }
 
 
@@ -37,7 +37,7 @@ export type TeamMember = {
     playthrough: Playthrough,
     slot: number,
     nickname: string | null,
-    caughtDate: Date,
+    caughtDate: string,
     caughtLocationName: string,
     caughtLocationRegion: string,
     caughtSpeciesName: string,

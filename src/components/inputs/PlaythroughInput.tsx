@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Playthrough } from "../../types";
 import { readPlaythroughs } from "../../backend/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
+import { Switch, SwitchOption } from "./generic/Switch";
 
 
 
@@ -37,15 +38,24 @@ export const PlaythroughInput: FC<{
     }, [playthroughIdNo, setPlaythroughIdNo])
 
 
+    /**
+     * Switch Options
+     */
+    const switchOptions = useMemo(() => {
+        return playthroughOptions?.map(playthrough => {
+            return {
+                value: playthrough.idNo,
+                label: <>{playthrough.version} ({playthrough.adventureStarted})</>,
+            } satisfies SwitchOption
+        })
+    }, [playthroughOptions])
+
+
     return (
-        <div className="rounded hover:bg-gray-100">
-            <select
-                className="appearance-none w-full cursor-pointer px-1 bg-transparent"
-                value={playthroughIdNo} onChange={e => setPlaythroughIdNo?.(e.target.value)}>
-                {playthroughOptions?.map((playthrough, i) => (
-                    <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
-                ))}
-            </select>
-        </div>
+        <Switch
+            value={playthroughIdNo}
+            setValue={setPlaythroughIdNo}
+            options={switchOptions}
+        />
     )
 }

@@ -21,7 +21,7 @@ export async function readPlaythroughs(params: ReadParams): Promise<Playthrough[
             idNo: result.id_no,
             name: result.name,
             version: result.version,
-            adventureStarted: new Date(result.adventure_started),
+            adventureStarted: result.adventure_started,
         }
     })
     return playthroughs

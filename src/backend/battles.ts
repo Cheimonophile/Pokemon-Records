@@ -60,7 +60,7 @@ export async function readBattles(params: ReadParams): Promise<Battle[]> {
                 idNo: result.event.playthrough_id_no,
                 name: '',
                 version: '',
-                adventureStarted: new Date(),
+                adventureStarted: "",
             },
         }
     })
