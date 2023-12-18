@@ -12,7 +12,7 @@ export const PlaythroughInput: FC<{
     playthroughIdNo?: string,
     setPlaythroughIdNo?: (playthroughIdNo: string) => void
 }> = ({ playthroughIdNo, setPlaythroughIdNo }) => {
-    
+
     /**
      * Playthrough Options
      */
@@ -38,13 +38,13 @@ export const PlaythroughInput: FC<{
 
 
     return (
-        <div className="border">
+        <div className="rounded hover:bg-gray-100">
             <select
-                className="appearance-none w-full cursor-pointer"
+                className="appearance-none w-full cursor-pointer px-1 bg-transparent"
                 value={playthroughIdNo} onChange={e => setPlaythroughIdNo?.(e.target.value)}>
                 {playthroughOptions?.map((playthrough, i) => (
                     <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
-                ))} 
+                ))}
             </select>
         </div>
     )

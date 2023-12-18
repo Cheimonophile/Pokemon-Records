@@ -37,7 +37,7 @@ export const Catches: FC<{}> = () => {
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-1">
+        <div className="h-full w-full flex flex-col gap-1 p-1">
 
             {/* Above Table */}
             <div className="flex flex-row gap-2">
