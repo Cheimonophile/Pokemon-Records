@@ -12,8 +12,10 @@ export const PlaythroughInput: FC<{
     playthroughIdNo?: string,
     setPlaythroughIdNo?: (playthroughIdNo: string) => void
 }> = ({ playthroughIdNo, setPlaythroughIdNo }) => {
-
-
+    
+    /**
+     * Playthrough Options
+     */
     const [playthroughOptions, setPlaythroughOptions] = useState<Playthrough[]>()
     useEffect(() => {
         (async () => {
@@ -36,17 +38,14 @@ export const PlaythroughInput: FC<{
 
 
     return (
-        <div>
-            <div>
-                <label>Playthrough:</label>
-            </div>
-            <div>
-                <select value={playthroughIdNo} onChange={e => setPlaythroughIdNo?.(e.target.value)}>
-                    {playthroughOptions?.map((playthrough, i) => (
-                        <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
-                    ))}
-                </select>
-            </div>
+        <div className="border">
+            <select
+                className="appearance-none w-full cursor-pointer"
+                value={playthroughIdNo} onChange={e => setPlaythroughIdNo?.(e.target.value)}>
+                {playthroughOptions?.map((playthrough, i) => (
+                    <option key={i} value={playthrough.idNo}>{playthrough.version} ({playthrough.adventureStarted.toISOString().slice(0, 10)})</option>
+                ))} 
+            </select>
         </div>
     )
 }
