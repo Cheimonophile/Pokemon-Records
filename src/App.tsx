@@ -108,7 +108,7 @@ function App() {
         <hr />
 
         {/* Body */}
-        <div className="flex-1">
+        <div className="flex-1 p-1">
 
           <CurrentPage />
 
