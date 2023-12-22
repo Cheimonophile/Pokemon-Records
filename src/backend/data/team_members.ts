@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api"
-import { TeamMember } from "../types"
+import { TeamMember } from "types"
 
 
 type ReadParams = {

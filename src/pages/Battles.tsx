@@ -1,19 +1,19 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
-import { createBattle, deleteBattle, readBattles } from '../backend/battles'
+import { createBattle, deleteBattle, readBattles } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, TeamMember, Trainer } from '../types';
-import { readBattleTypes } from '../backend/battle_types';
-import { readTrainerClasses } from '../backend/trainer_classes';
-import { createTrainer, readTrainers } from '../backend/trainers';
+import { readBattleTypes } from '../backend/data/battle_types';
+import { readTrainerClasses } from '../backend/data/trainer_classes';
+import { createTrainer, readTrainers } from '../backend/data/trainers';
 import { invoke } from '@tauri-apps/api';
-import { readRegions } from '../backend/regions';
-import { createLocation, readLocations } from '../backend/locations';
-import { readTeamMembers } from '../backend/team_members';
+import { readRegions } from '../backend/data/regions';
+import { createLocation, readLocations } from '../backend/data/locations';
+import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
-import { teamOverTime } from '../backend/data/teamOverTime';
+import { teamOverTime } from 'backend/data/teamOverTime';
 import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
-import { readTypes } from '../backend/types';
+import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 
 

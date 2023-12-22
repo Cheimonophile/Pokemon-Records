@@ -1,6 +1,6 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Location } from "../types"
+import { Location } from "types"
 
 
 const HANDLER = 'read_locations'

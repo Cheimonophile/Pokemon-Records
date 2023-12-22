@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Playthrough } from "../../types";
-import { readPlaythroughs } from "../../backend/playthroughs";
+import { readPlaythroughs } from "../../backend/data/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
 import { Switch, SwitchOption } from "./generic/Switch";
 

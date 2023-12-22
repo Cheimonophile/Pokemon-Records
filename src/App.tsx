@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Battles } from './pages/Battles';
 import { Open } from './pages/Open';
-import { setDBConnection } from './backend/state';
+import { setDBConnection } from './backend/data/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
 import { Catches } from './pages/Catches';

@@ -1,14 +1,14 @@
 import { FC, Fragment, useCallback, useEffect, useState } from 'react'
-import { readBattles } from '../backend/battles'
+import { readBattles } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Catch } from '../types';
-import { readRegions } from '../backend/regions';
-import { createLocation, readLocations } from '../backend/locations';
+import { readRegions } from '../backend/data/regions';
+import { createLocation, readLocations } from '../backend/data/locations';
 import { useAppContext } from '../App';
-import { createCatch, readCatches } from '../backend/catches';
-import { readCatchTypes } from '../backend/catch_types';
-import { readSpecies } from '../backend/species';
-import { readBalls } from '../backend/balls';
+import { createCatch, readCatches } from '../backend/data/catches';
+import { readCatchTypes } from '../backend/data/catch_types';
+import { readSpecies } from '../backend/data/species';
+import { readBalls } from '../backend/data/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { startOfToday, formatISO } from 'date-fns'
 

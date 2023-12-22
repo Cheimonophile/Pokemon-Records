@@ -1,6 +1,6 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Battle } from "../types"
+import { Battle } from "../../types"
 
 type ReadParams = {
     howMany?: number,

@@ -1,6 +1,6 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Trainer } from "../types"
+import { Trainer } from "types"
 
 const HANDLER = 'read_trainers'
 

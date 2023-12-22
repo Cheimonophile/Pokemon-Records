@@ -1,6 +1,6 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Species } from "../types"
+import { Species } from "types"
 
 
 type ReadParams = {
