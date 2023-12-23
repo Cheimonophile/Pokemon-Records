@@ -3,6 +3,7 @@ import { Playthrough } from "../../types";
 import { readPlaythroughs } from "../../backend/data/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
 import { Switch, SwitchOption } from "./generic/Switch";
+import { pl } from "date-fns/locale";
 
 
 
@@ -21,7 +22,15 @@ export const PlaythroughInput: FC<{
     useEffect(() => {
         (async () => {
             try {
-                const playthroughs = await readPlaythroughs({})
+                const readPlaythroughResponse = await readPlaythroughs({})
+                const playthroughs = readPlaythroughResponse.map(playthrough => {
+                    return {
+                        idNo: playthrough.id_no,
+                        version: playthrough.version,
+                        adventureStarted: playthrough.adventure_started,
+                        name: playthrough.name,
+                    } satisfies Playthrough
+                });
                 setPlaythroughOptions(playthroughs)
                 if (!playthroughIdNo) {
                     setPlaythroughIdNo?.(playthroughs[0].idNo)

@@ -1,16 +1,15 @@
 
 import { invoke } from "@tauri-apps/api"
-
-const HANDLER = 'read_trainer_classes'
+import { Command, command } from "backend/common"
+import { z } from "zod"
 
 type ReadParams = {
     name?: string
 }
 
-type ReadResult = string[]
+const ReadResult = z.string().array()
 
-
-export async function readTrainerClasses(params: ReadParams): Promise<string[]> {
-    const trainer_classes = await invoke<ReadResult>(HANDLER, params)
-    return trainer_classes
-}
+/**
+ * Reads regions from the backend
+ */
+export const readTrainerClasses = command('read_trainer_classes', ReadResult) satisfies Command<ReadParams>

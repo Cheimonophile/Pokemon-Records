@@ -30,7 +30,32 @@ export const Battles: FC<{}> = () => {
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const battles = await readBattles({})
+                const battleResponse = await readBattles({})
+                const battles = battleResponse.map(battle => {
+                    return {
+                        type: battle.battle_type,
+                        lost: battle.lost,
+                        no: battle.no,
+                        round: battle.round,
+                        location: {
+                            name: battle.event.location_name,
+                            region: battle.event.location_region,
+                        },
+                        opponent1: {
+                            class: battle.opponent1_class,
+                            name: battle.opponent1_name,
+                        },
+                        opponent2: (battle.opponent2_class === null || battle.opponent2_name === null) ? undefined : {
+                            class: battle.opponent2_class,
+                            name: battle.opponent2_name,
+                        },
+                        partner: (battle.partner_class === null || battle.partner_name === null) ? undefined : {
+                            class: battle.partner_class,
+                            name: battle.partner_name,
+                        },
+                        playthroughIdNo: battle.event.playthrough_id_no,
+                    } satisfies Battle
+                })
                 setBattles(battles)
             }
             catch (error) {
@@ -224,8 +249,8 @@ const CreateBattle: FC<{}> = () => {
                 ])
                 setRegionOptions(regions.reverse())
                 setLocation({
-                    region: mostRecentBattle[0].location.region,
-                    name: mostRecentBattle[0].location.name
+                    region: mostRecentBattle[0].event.location_region,
+                    name: mostRecentBattle[0].event.location_name
                 })
             }
             catch (error) {
@@ -261,8 +286,9 @@ const CreateBattle: FC<{}> = () => {
         (async () => {
             try {
                 const battleTypes = await readBattleTypes({})
-                setBattleTypeOptions(battleTypes)
-                setBattleType(battleTypes[0])
+                const battleTypeNames = battleTypes.map(battleType => battleType.name)
+                setBattleTypeOptions(battleTypeNames)
+                setBattleType(battleTypeNames[0])
             }
             catch (error) {
                 console.error(error)
@@ -629,7 +655,35 @@ const LevelUp: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const teamMembers = await readTeamMembers({ playthroughIdNo: props.battle.playthrough.idNo })
+                const readTeamMembersResponse = await readTeamMembers({ playthroughIdNo: props.battle.playthroughIdNo })
+                const teamMembers = readTeamMembersResponse.map(teamMember => {
+                    return {
+                        id: teamMember.id,
+                        level: teamMember.level,
+                        nickname: teamMember.nickname,
+                        species: {
+                            name: teamMember.species.name,
+                            generation: teamMember.species.generation,
+                            dexNo: teamMember.species.dex_no,
+                            type1: teamMember.species.type1,
+                            type2: teamMember.species.type2,
+                        },
+                        playthrough: {
+                            idNo: teamMember.playthrough.id_no,
+                            version: teamMember.playthrough.version,
+                            adventureStarted: teamMember.playthrough.adventure_started,
+                            name: teamMember.playthrough.name,
+                        },
+                        slot: teamMember.slot,
+                        caughtDate: teamMember.caught_date,
+                        caughtLocationName: teamMember.caught_location_name,
+                        caughtLocationRegion: teamMember.caught_location_region,
+                        caughtSpeciesName: teamMember.caught_species_name,
+                        caughtLevel: teamMember.caught_level,
+                        ball: teamMember.ball,
+                        gender: teamMember.gender
+                    } satisfies TeamMember
+                })
                 setTeamMembers(teamMembers)
             }
             catch (error) {
@@ -639,7 +693,7 @@ const LevelUp: FC<{
         })
     }, [
         addEffect,
-        props.battle.playthrough.idNo
+        props.battle.playthroughIdNo
     ])
 
     return <>
@@ -729,7 +783,7 @@ const TeamMemberLevelChart: FC<{
                 if (props.mostRecentBattle === undefined)
                     throw new Error("Most Recent Battle not defined")
                 const results = await teamOverTime({
-                    playthroughIdNo: props.mostRecentBattle.playthrough.idNo,
+                    playthroughIdNo: props.mostRecentBattle.playthroughIdNo,
                 })
                 const types = await readTypes({})
                 let maxLevel = 0

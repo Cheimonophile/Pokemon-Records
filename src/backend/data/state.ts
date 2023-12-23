@@ -3,14 +3,17 @@
 
 
 import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
+import { z } from "zod"
 
 type ReadParams = {
     databaseUrl: string
 }
 
-type ReadResult = void
+const ReadResult = z.null()
 
 
-export async function setDBConnection(params: ReadParams): Promise<void> {
-    await invoke<ReadResult>('set_db_connection', params)
-}
+/**
+ * Reads catch types from the backend
+ */
+export const setDBConnection = command('set_db_connection', ReadResult) satisfies Command<ReadParams>

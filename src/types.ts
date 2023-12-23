@@ -9,7 +9,7 @@ export type Battle = {
     partner?: Trainer
     round: number
     location: Location
-    playthrough: Playthrough
+    playthroughIdNo: string
 }
 
 

@@ -1,71 +1,36 @@
 
-import { invoke } from "@tauri-apps/api"
-import { Battle } from "../../types"
+import { Command, command } from "backend/common"
+import { z } from "zod"
+
+
 
 type ReadParams = {
     howMany?: number,
 }
 
-type ReadResult = {
-    battle_type: string,
-    lost: boolean
-    no: number
-    opponent1_class: string
-    opponent1_name: string
-    opponent2_class: string | null
-    opponent2_name: string | null
-    partner_class: string | null
-    partner_name: string | null
-    round: number
-    event: {
-        location_name: string
-        location_region: string
-        no: number
-        playthrough_id_no: string
-    }
-}[]
-
-
-export async function readBattles(params: ReadParams): Promise<Battle[]> {
-    const results = await invoke<ReadResult>('read_battles', params)
-    let battles = results.map((result): Battle => {
-        const opponent2 = result.opponent2_name && result.opponent2_class
-            ? {
-                name: result.opponent2_name,
-                class: result.opponent2_class,
-            } : undefined
-
-        const partner = result.partner_name && result.partner_class
-            ? {
-                name: result.partner_name,
-                class: result.partner_class,
-            } : undefined
-
-        return {
-            type: result.battle_type,
-            lost: result.lost,
-            no: result.no,
-            opponent1: {
-                name: result.opponent1_name,
-                class: result.opponent1_class,
-            },
-            opponent2,
-            partner,
-            round: result.round,
-            location: {
-                name: result.event.location_name,
-                region: result.event.location_region,
-            },
-            playthrough: {
-                idNo: result.event.playthrough_id_no,
-                name: '',
-                version: '',
-                adventureStarted: "",
-            },
-        }
+const TResult = z.object({
+    battle_type: z.string(),
+    lost: z.boolean(),
+    no: z.number(),
+    opponent1_class: z.string(),
+    opponent1_name: z.string(),
+    opponent2_class: z.string().nullable(),
+    opponent2_name: z.string().nullable(),
+    partner_class: z.string().nullable(),
+    partner_name: z.string().nullable(),
+    round: z.number(),
+    event: z.object({
+        location_name: z.string(),
+        location_region: z.string(),
+        no: z.number(),
+        playthrough_id_no: z.string(),
     })
-    return battles
-}
+}).array()
+
+/**
+ * Reads battles from the backend
+ */
+export const readBattles = command('read_battles', TResult) satisfies Command<ReadParams>
 
 
 
@@ -84,23 +49,23 @@ type CreateParams = {
     lost: boolean,
 }
 
-type CreateResult = number
+
+const CreateResult = z.number()
 
 
-export async function createBattle(params: CreateParams): Promise<CreateResult> {
-    const result = await invoke<CreateResult>('create_battle', params)
-    return result
-}
+/**
+ * Creates a battle in the backend
+ */
+export const createBattle = command('create_battle', CreateResult) satisfies Command<CreateParams>
 
 
 type DeleteParams = {
     no: number,
 }
 
-type DeleteResult = void
+const DeleteResult = z.null()
 
-
-export async function deleteBattle(params: DeleteParams): Promise<DeleteResult> {
-    const result = await invoke<DeleteResult>('delete_battle', params)
-    return result
-}
+/**
+ * Deletes a battle from the backend
+ */
+export const deleteBattle = command('delete_battle', DeleteResult) satisfies Command<DeleteParams>

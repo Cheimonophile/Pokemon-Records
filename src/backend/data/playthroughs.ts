@@ -1,6 +1,8 @@
 
 import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
 import { Playthrough } from "types"
+import { z } from "zod"
 
 
 
@@ -13,16 +15,14 @@ type ReadResult = {
     adventure_started: string,
 }[]
 
+const ReadResult = z.object({
+    id_no: z.string(),
+    name: z.string(),
+    version: z.string(),
+    adventure_started: z.string(),
+}).array()
 
-export async function readPlaythroughs(params: ReadParams): Promise<Playthrough[]> {
-    const results = await invoke<ReadResult>('read_playthroughs', params)
-    const playthroughs = results.map((result): Playthrough => {
-        return {
-            idNo: result.id_no,
-            name: result.name,
-            version: result.version,
-            adventureStarted: result.adventure_started,
-        }
-    })
-    return playthroughs
-}
+/**
+ * Reads playthroughs from the backend
+ */
+export const readPlaythroughs = command('read_playthroughs', ReadResult) satisfies Command<ReadParams>

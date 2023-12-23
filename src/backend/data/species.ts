@@ -1,31 +1,24 @@
 
 import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
 import { Species } from "types"
+import { z } from "zod"
 
 
 type ReadParams = {
     name?: string
 }
 
-type ReadResult = {
-    name: string
-    dex_no: number
-    generation: number
-    type1: string
-    type2: string | null
-}[]
+const ReadResult = z.object({
+    name: z.string(),
+    dex_no: z.number(),
+    generation: z.number(),
+    type1: z.string(),
+    type2: z.string().nullable(),
+}).array()
 
 
-export async function readSpecies(params: ReadParams): Promise<Species[]> {
-    const response = await invoke<ReadResult>("read_species", params)
-    const species = response.map((result): Species => {
-        return {
-            name: result.name,
-            dexNo: result.dex_no,
-            generation: result.generation,
-            type1: result.type1,
-            type2: result.type2,
-        }
-    })
-    return species
-}
+/**
+ * Reads species from the backend
+ */
+export const readSpecies = command('read_species', ReadResult) satisfies Command<ReadParams>

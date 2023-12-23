@@ -1,24 +1,25 @@
 
 import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
 import { Trainer } from "types"
-
-const HANDLER = 'read_trainers'
+import { z } from "zod"
 
 type ReadParams = {
     name?: string
     class?: string
 }
 
-type ReadResult = {
-    name: string,
-    class: string,
-}[]
+const ReadResult = z.object({
+    name: z.string(),
+    class: z.string(),
+}).array()
 
 
-export async function readTrainers(params: ReadParams): Promise<Trainer[]> {
-    const trainers = await invoke<ReadResult>(HANDLER, params)
-    return trainers
-}
+/**
+ * Reads trainers from the backend
+ */
+export const readTrainers = command('read_trainers', ReadResult) satisfies Command<ReadParams>
+
 
 
 type CreateParams = {
@@ -26,12 +27,13 @@ type CreateParams = {
     class: string
 }
 
-type CreateResult = {
-    name: string
-    class: string
-}
 
-export async function createTrainer(params: CreateParams): Promise<CreateResult> {
-    const trainer = await invoke<CreateResult>('create_trainer', params)
-    return trainer
-}
+const CreateResult = z.object({
+    name: z.string(),
+    class: z.string(),
+})
+
+/**
+ * Creates a trainer in the backend
+ */
+export const createTrainer = command('create_trainer', CreateResult) satisfies Command<CreateParams>

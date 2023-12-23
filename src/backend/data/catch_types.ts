@@ -3,14 +3,17 @@
 
 
 import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
+import { z } from "zod"
 
 type Params = {}
 
-type Result = {
-    name: string
-}[]
+const Result = z.object({
+    name: z.string(),
+}).array()
 
 
-export async function readCatchTypes(params: Params): Promise<Result> {
-    return await invoke<Result>('read_catch_types', params)
-}
+/**
+ * Reads catch types from the backend
+ */
+export const readCatchTypes = command('read_catch_types', Result) satisfies Command<Params>

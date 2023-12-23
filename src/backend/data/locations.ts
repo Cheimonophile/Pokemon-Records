@@ -1,25 +1,30 @@
 
 import { invoke } from "@tauri-apps/api"
-import { Location } from "types"
+import { Command, command } from "backend/common"
+import { z } from "zod"
 
-
-const HANDLER = 'read_locations'
 
 type ReadParams = {
     name?: string
     region?: string
 }
 
-type ReadResponse = {
-    name: string,
-    region: string,
-}[]
+const ReadResponse = z.object({
+    name: z.string(),
+    region: z.string(),
+}).array()
 
 
-export async function readLocations(params: ReadParams): Promise<Location[]> {
-    const locations = await invoke<ReadResponse>(HANDLER, params)
-    return locations
-}
+/**
+ * Reads locations from the backend
+ */
+export const readLocations = command('read_locations', ReadResponse) satisfies Command<ReadParams>
+
+
+// export async function readLocations(params: ReadParams): Promise<Location[]> {
+//     const locations = await invoke<ReadResponse>(HANDLER, params)
+//     return locations
+// }
 
 
 type CreateParams = {
@@ -27,12 +32,14 @@ type CreateParams = {
     region: string
 }
 
-type CreateResponse = {
-    name: string
-    region: string
-}
+const CreateResponse = z.object({
+    name: z.string(),
+    region: z.string(),
+})
 
-export async function createLocation(params: CreateParams): Promise<CreateResponse> {
-    const location = await invoke<CreateResponse>('create_location', params)
-    return location
-}
+
+
+/**
+ * Creates a location in the backend
+ */
+export const createLocation = command('create_location', CreateResponse) satisfies Command<CreateParams>

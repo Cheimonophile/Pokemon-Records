@@ -26,7 +26,25 @@ export const Catches: FC<{}> = () => {
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const catches = await readCatches()
+                const catchesResult = await readCatches({})
+                const catches = catchesResult.map(c => {
+                    return {
+                        type: c.catch_type,
+                        no: c.no,
+                        species: {
+                            name: c.species.name,
+                            dexNo: c.species.dex_no,
+                            generation: c.species.generation,
+                            type1: c.species.type1,
+                            type2: c.species.type2,
+                        },
+                        location: {
+                            name: c.event.location_name,
+                            region: c.event.location_region,
+                        },
+                        playthroughIdNo: c.event.playthrough_id_no,
+                    } satisfies Catch
+                })
                 setCatches(catches)
             }
             catch (error) {
@@ -154,8 +172,8 @@ const CatchPokemon: FC<{}> = () => {
                 ])
                 setRegionOptions(regions.reverse())
                 setLocation({
-                    region: mostRecentBattle[0].location.region,
-                    name: mostRecentBattle[0].location.name
+                    region: mostRecentBattle[0].event.location_region,
+                    name: mostRecentBattle[0].event.location_name
                 })
             }
             catch (error) {
