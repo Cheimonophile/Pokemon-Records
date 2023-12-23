@@ -2,21 +2,6 @@ import { invoke } from '@tauri-apps/api';
 import { InvokeArgs } from '@tauri-apps/api/tauri';
 import z from 'zod';
 
-
-
-/**
- * Calls the tauri command on the backend
- * 
- * @param command the command to call
- * @param validator zod validator for the backend
- * @param params the parameters to pass to tauri
- * @returns 
- */
-// const tauri = async <TParams extends InvokeArgs, TResult>(command: string, validator: z.ZodType<TResult>, params?: TParams) => {
-//   const result = await invoke(command, params);
-//   return validator.parse(result);
-// }
-
 /**
  * Type of the command function that is returned from the command decorator
  */

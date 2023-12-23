@@ -59,6 +59,19 @@ const CreateResult = z.number()
 export const createBattle = command('create_battle', CreateResult) satisfies Command<CreateParams>
 
 
+
+/**
+ * Updates a battle in the backend
+ */
+export const updateBattle = command(
+    'update_battle', 
+    z.null()
+) satisfies Command<{
+    no: number,
+    lost?: boolean,
+}>
+
+
 type DeleteParams = {
     no: number,
 }

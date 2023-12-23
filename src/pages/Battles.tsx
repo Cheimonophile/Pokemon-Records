@@ -1,11 +1,10 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
-import { createBattle, deleteBattle, readBattles } from '../backend/data/battles'
+import { createBattle, deleteBattle, readBattles, updateBattle } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, TeamMember, Trainer } from '../types';
 import { readBattleTypes } from '../backend/data/battle_types';
-import { readTrainerClasses } from '../backend/data/trainer_classes';
+import { createTrainerClass, readTrainerClasses } from '../backend/data/trainer_classes';
 import { createTrainer, readTrainers } from '../backend/data/trainers';
-import { invoke } from '@tauri-apps/api';
 import { readRegions } from '../backend/data/regions';
 import { createLocation, readLocations } from '../backend/data/locations';
 import { readTeamMembers } from '../backend/data/team_members';
@@ -15,6 +14,7 @@ import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
 import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
+import { createTeamMemberChange } from 'backend/data/team_member_changes';
 
 
 export const Battles: FC<{}> = () => {
@@ -175,7 +175,7 @@ const BattleTableRow: FC<{
     const onClickToggleLost = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            await invoke('update_battle', { no: props.battle.no, lost: !props.battle.lost })
+            await updateBattle({ no: props.battle.no, lost: !props.battle.lost })
             props.battle.lost = !props.battle.lost
         }
         catch (error) {
@@ -602,7 +602,7 @@ const tryCreateTrainer = async (
         })
         if (!doCreateNewTrainerClass)
             throw new Error("Trainer Class does not exist")
-        await invoke('create_trainer_class', { name: trainer.class })
+        await createTrainerClass({ name: trainer.class })
         setValidity(prev => ({ ...prev, class: true }))
     }
     if (!validity.name) {
@@ -731,7 +731,7 @@ const TeamMemberRow: FC<{
     const onClickLevelChange = async (change: number) => {
         setDisabled(prev => prev + 1)
         try {
-            await invoke('create_team_member_change', {
+            await createTeamMemberChange({
                 eventNo: props.battle.no,
                 teamMemberId: props.teamMember.id,
                 level: props.teamMember.level + change

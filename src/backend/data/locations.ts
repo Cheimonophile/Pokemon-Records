@@ -20,12 +20,6 @@ const ReadResponse = z.object({
 export const readLocations = command('read_locations', ReadResponse) satisfies Command<ReadParams>
 
 
-// export async function readLocations(params: ReadParams): Promise<Location[]> {
-//     const locations = await invoke<ReadResponse>(HANDLER, params)
-//     return locations
-// }
-
-
 type CreateParams = {
     name: string
     region: string
