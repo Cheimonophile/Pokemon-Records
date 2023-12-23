@@ -1,8 +1,5 @@
 
 
-
-
-import { invoke } from "@tauri-apps/api"
 import { Command, command } from "backend/common"
 import { z } from "zod"
 

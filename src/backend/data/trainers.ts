@@ -1,7 +1,5 @@
 
-import { invoke } from "@tauri-apps/api"
 import { Command, command } from "backend/common"
-import { Trainer } from "types"
 import { z } from "zod"
 
 type ReadParams = {

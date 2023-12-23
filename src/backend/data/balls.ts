@@ -1,8 +1,4 @@
 import z from "zod";
-
-
-
-import { invoke } from "@tauri-apps/api"
 import { Command, command } from "backend/common";
 
 const TResult = z.object({

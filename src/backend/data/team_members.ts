@@ -1,40 +1,10 @@
-import { invoke } from "@tauri-apps/api"
 import { Command, command } from "backend/common"
-import { TeamMember } from "types"
 import z from "zod"
 
 
 type ReadParams = {
     playthroughIdNo: string
 }
-
-type ReadResult = {
-    ball: string,
-    caught_date: string,
-    caught_level: number,
-    caught_location_name: string,
-    caught_location_region: string,
-    caught_species_name: string,
-    gender: 'M' | 'F' | 'N',
-    id: number,
-    level: number,
-    nickname: string | null,
-    playthrough_id_no: string,
-    playthrough: {
-        adventure_started: string,
-        id_no: string,
-        name: string,
-        version: string,
-    }
-    slot: number,
-    species: {
-        dex_no: number,
-        generation: number,
-        name: string,
-        type1: string,
-        type2: string | null,
-    }
-}[]
 
 
 const ReadResult = z.object({

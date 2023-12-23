@@ -2,16 +2,10 @@
 
 
 
-import { invoke } from "@tauri-apps/api"
 import { Command, command } from "backend/common"
 import z from "zod"
 
 type Params = {}
-
-type Result = {
-    name: string,
-    color: string
-}[]
 
 const Result = z.object({
     name: z.string(),

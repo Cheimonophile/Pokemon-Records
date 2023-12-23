@@ -3,7 +3,6 @@ import { Playthrough } from "../../types";
 import { readPlaythroughs } from "../../backend/data/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
 import { Switch, SwitchOption } from "./generic/Switch";
-import { pl } from "date-fns/locale";
 
 
 
