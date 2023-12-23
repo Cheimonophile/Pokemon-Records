@@ -4,38 +4,40 @@
 
 
 
-import { invoke } from "@tauri-apps/api"
+import { Command, command } from "backend/common"
+import { z } from "zod"
 
 type Params = {
     playthroughIdNo: string
 }
 
-type Result = {
-    level: number,
-    species: {
-        dex_no: number,
-        generation: number,
-        name: string,
-        type1: string,
-        type2: string | null
-    },
-    team_member: {
-        ball: string,
-        caught_date: string,
-        caught_level: number,
-        caught_location_name: string,
-        caught_location_region: string,
-        caught_species_name: string,
-        gender: 'N' | 'M' | 'F',
-        id: number,
-        nickname: string | null,
-        playthrough_id_no: string,
-        slot: number
-    }
-}[][]
+
+const Result = z.object({
+    level: z.number(),
+    species: z.object({
+        dex_no: z.number(),
+        generation: z.number(),
+        name: z.string(),
+        type1: z.string(),
+        type2: z.string().nullable(),
+    }),
+    team_member: z.object({
+        ball: z.string(),
+        caught_date: z.string(),
+        caught_level: z.number(),
+        caught_location_name: z.string(),
+        caught_location_region: z.string(),
+        caught_species_name: z.string(),
+        gender: z.enum(['N', 'M', 'F']),
+        id: z.number(),
+        nickname: z.string().nullable(),
+        playthrough_id_no: z.string(),
+        slot: z.number(),
+    }),
+}).array().array()
 
 
-export async function teamOverTime(params: Params): Promise<Result> {
-    const results = await invoke<Result>('team_over_time', params)
-    return results
-}
+/**
+ * Reads team members from the backend
+ */
+export const teamOverTime = command('team_over_time', Result) satisfies Command<Params>

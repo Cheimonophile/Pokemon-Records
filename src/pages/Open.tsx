@@ -1,6 +1,6 @@
 import { message, open } from "@tauri-apps/api/dialog";
 import { FC, useCallback, useState } from "react"
-import { setDBConnection } from "../backend/state";
+import { setDBConnection } from "../backend/data/state";
 import { DATABASE_URL } from "../constants";
 
 
