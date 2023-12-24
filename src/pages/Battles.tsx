@@ -16,6 +16,7 @@ import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
+import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 
 
 
@@ -239,32 +240,10 @@ const CreateBattle: FC<{}> = () => {
     const [disabled, setDisabled] = useState<number>(0)
 
 
-    // Playthroughs
+    // Form State
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-
-    // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-
-    // battle type
     const [battleType, setBattleType] = useState<string>("")
-    const [battleTypeOptions, setBattleTypeOptions] = useState<string[]>()
-    useEffect(() => {
-        (async () => {
-            try {
-                const battleTypes = await readBattleTypes({})
-                const battleTypeNames = battleTypes.map(battleType => battleType.name)
-                setBattleTypeOptions(battleTypeNames)
-                setBattleType(battleTypeNames[0])
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Battle Types',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [])
 
 
     // opponent 1
@@ -406,7 +385,7 @@ const CreateBattle: FC<{}> = () => {
                 round: 0,
                 lost: lost,
             })
-            setBattleType(battleTypeOptions?.at(0) ?? "Single")
+            setBattleType("Single")
             setOpponent1(prev => ({ ...prev, name: "", }))
             setUseOpponent2(false)
             setOpponent2(prev => ({ ...prev, name: "", }))
@@ -440,14 +419,10 @@ const CreateBattle: FC<{}> = () => {
             />
 
             {/* Battle Type */}
-            <div>
-                <label>Battle Type:</label>
-                <select value={battleType} onChange={e => setBattleType(e.target.value)}>
-                    {battleTypeOptions?.map((battleType, i) => (
-                        <option key={i} value={battleType}>{battleType}</option>
-                    ))}
-                </select>
-            </div>
+            <BattleTypeInput
+                battleType={battleType}
+                setBattleType={setBattleType}
+            />
 
             {/* Opponent 1 */}
             <div>

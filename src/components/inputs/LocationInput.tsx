@@ -3,7 +3,7 @@ import { readBattles } from "backend/data/battles";
 import { readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState } from "react";
-import { Switch, SwitchOption } from "./generic/SwitchInput";
+import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
 import { TextInput } from "./generic/TextInput";
 
 
@@ -74,12 +74,12 @@ export function LocationInput({
 
   return (
     <div>
-      <Switch
+      <SwitchInput
         value={location.region}
         options={regionOptions}
-        setValue={region => setLocation(prev => ({ ...prev, region }))}
+        onChange={region => setLocation(prev => ({ ...prev, region }))}
       />
-      <TextInput 
+      <TextInput
         value={location.name}
         valid={locationValid}
         onChange={name => setLocation(prev => ({ ...prev, name }))}
