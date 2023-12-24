@@ -29,6 +29,14 @@ div {
   @apply w-full h-full;
 }
 
+/* Disable outlines on Input Components */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
 /* h1, h2, h3, h4, h5, h6 {
   margin: 0;
   text-align: center;
