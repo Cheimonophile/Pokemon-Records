@@ -39,10 +39,12 @@ export function BattleTypeInput({
   }, [])
 
   return (
-    <SwitchInput
-      value={battleType ?? undefined}
-      options={battleTypeOptions}
-      onChange={battleType => setBattleType(battleType)}
-    />
+    <div>
+      <SwitchInput
+        value={battleType ?? undefined}
+        options={battleTypeOptions}
+        onChange={battleType => setBattleType(battleType)}
+      />
+    </div>
   );
 }

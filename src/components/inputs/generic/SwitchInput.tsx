@@ -20,12 +20,15 @@ export const SwitchInput = (props: {
   onChange?: (value: string) => void,
 }) => {
   return (
-    <select
-      className="appearance-none cursor-pointer px-1 border-b bg-transparent"
-      value={props.value} onChange={e => props.onChange?.(e.target.value)}>
-      {props.options?.map((option, i) => (
-        <option key={i} value={option.value}>{option.label}</option>
-      ))}
-    </select>
+    <div>
+      <select
+        className="appearance-none cursor-pointer px-1 border-b bg-transparent"
+        value={props.value} onChange={e => props.onChange?.(e.target.value)}>
+        {props.options?.map((option, i) => (
+          <option key={i} value={option.value}>{option.label}</option>
+        ))}
+      </select>
+    </div>
+
   )
 }

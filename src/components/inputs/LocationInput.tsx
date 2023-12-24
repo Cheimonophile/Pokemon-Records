@@ -73,7 +73,7 @@ export function LocationInput({
 
 
   return (
-    <div>
+    <div className="flex flex-row">
       <SwitchInput
         value={location.region}
         options={regionOptions}
@@ -81,6 +81,7 @@ export function LocationInput({
       />
       <TextInput
         value={location.name}
+        placeholder="Location"
         valid={locationValid}
         onChange={name => setLocation(prev => ({ ...prev, name }))}
       />

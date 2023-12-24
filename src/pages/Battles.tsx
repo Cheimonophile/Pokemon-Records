@@ -17,6 +17,7 @@ import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
 import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
+import { TrainerInput } from 'components/inputs/TrainerInput';
 
 
 
@@ -244,111 +245,11 @@ const CreateBattle: FC<{}> = () => {
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
     const [battleType, setBattleType] = useState<string>("")
-
-
-    // opponent 1
     const [opponent1, setOpponent1] = useState<Trainer>({ name: "", class: "", })
-    const [opponent1Validity, setOpponent1Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: opponent1.class })
-                setOpponent1Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: opponent1.name, class: opponent1.class })
-                setOpponent1Validity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [opponent1])
-
-    // opponent 2
     const [opponent2, setOpponent2] = useState<Trainer>({ name: "", class: "", })
     const [useOpponent2, setUseOpponent2] = useState<boolean>(false)
-    const [opponent2Validity, setOpponent2Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: opponent2.class })
-                setOpponent2Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: opponent2.name, class: opponent2.class })
-                setOpponent2Validity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [opponent2])
-
-    // partner
     const [partner, setPartner] = useState<Trainer>({ name: "", class: "", })
     const [usePartner, setUsePartner] = useState<boolean>(false)
-    const [partnerValidity, setPartnerValidity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: partner.class })
-                setPartnerValidity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: partner.name, class: partner.class })
-                setPartnerValidity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [partner])
 
     // lost
     const [lost, setLost] = useState<boolean>(false)
@@ -357,16 +258,6 @@ const CreateBattle: FC<{}> = () => {
     const createBattleOnClick = async () => {
         setDisabled(prev => prev + 1)
         try {
-            // opponent 1
-            await tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
-            // opponent 2
-            if (useOpponent2) {
-                await tryCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
-            }
-            // partner
-            if (usePartner) {
-                await tryCreateTrainer(partnerValidity, setPartnerValidity, partner)
-            }
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
@@ -425,67 +316,45 @@ const CreateBattle: FC<{}> = () => {
             />
 
             {/* Opponent 1 */}
-            <div>
-                <label>Opponent 1:</label>
-                <input
-                    type="text"
-                    className={`${opponent1Validity.class || 'text-red-500'}`}
-                    value={opponent1.class}
-                    onChange={e => setOpponent1(prev => ({ ...prev, class: e.target.value }))}
-                />
-                <input
-                    type="text"
-                    className={`${opponent1Validity.name || 'text-red-500'}`}
-                    value={opponent1.name}
-                    onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
+            <div className="flex flex-row">
+                <div>
+                    Opponent 1:
+                </div>
+                <TrainerInput
+                    trainer={opponent1}
+                    setTrainer={setOpponent1}
                 />
             </div>
 
 
             {/* Opponent 2 */}
-            <div>
-                <label>Opponent 2:</label>
+            <div className="flex flex-row gap-1 items-center">
+                <div>Opponent 2:</div>
                 <input
                     type="checkbox"
                     checked={useOpponent2}
                     onChange={e => setUseOpponent2(prev => !prev)}
                 />
-                {useOpponent2 && (<>
-                    <input
-                        type="text"
-                        className={`${opponent2Validity.class || 'text-red-500'}`}
-                        value={opponent2.class}
-                        onChange={e => setOpponent2(prev => ({ ...prev, class: e.target.value }))}
+                {useOpponent2 && (
+                    <TrainerInput
+                        trainer={opponent2}
+                        setTrainer={setOpponent2}
                     />
-                    <input
-                        type="text"
-                        className={`${opponent2Validity.name || 'text-red-500'}`}
-                        value={opponent2.name}
-                        onChange={e => setOpponent2(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                </>)}
+                )}
             </div>
 
             {/* Partner */}
-            <div>
-                <label>Partner:</label>
+            <div className="flex flex-row gap-1 items-center">
+                <div>Partner:</div>
                 <input
                     type="checkbox"
                     checked={usePartner}
                     onChange={e => setUsePartner(prev => !prev)}
                 />
                 {usePartner && (<>
-                    <input
-                        type="text"
-                        className={`${partnerValidity.class || 'text-red-500'}`}
-                        value={partner.class}
-                        onChange={e => setPartner(prev => ({ ...prev, class: e.target.value }))}
-                    />
-                    <input
-                        type="text"
-                        className={`${partnerValidity.name || 'text-red-500'}`}
-                        value={partner.name}
-                        onChange={e => setPartner(prev => ({ ...prev, name: e.target.value }))}
+                    <TrainerInput
+                        trainer={partner}
+                        setTrainer={setPartner}
                     />
                 </>)}
             </div>
