@@ -15,8 +15,13 @@ import { useAppContext } from '../App';
 import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
+import { LocationInput } from 'components/inputs/LocationInput';
 
 
+
+/**
+ * Battles Page
+ */
 export const Battles: FC<{}> = () => {
 
 
@@ -239,45 +244,6 @@ const CreateBattle: FC<{}> = () => {
 
     // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-    const [regionOptions, setRegionOptions] = useState<string[]>()
-    useEffect(() => {
-        (async () => {
-            try {
-                const [regions, mostRecentBattle] = await Promise.all([
-                    readRegions({}),
-                    readBattles({ howMany: 1 }),
-                ])
-                setRegionOptions(regions.reverse())
-                setLocation({
-                    region: mostRecentBattle[0].event.location_region,
-                    name: mostRecentBattle[0].event.location_name
-                })
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Regions',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [])
-    const [locationValid, setLocationValid] = useState<boolean>(false)
-    useEffect(() => {
-        (async () => {
-            try {
-                const locations = await readLocations({ name: location.name, region: location.region })
-                setLocationValid(locations.length > 0)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Locations',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [location])
 
     // battle type
     const [battleType, setBattleType] = useState<string>("")
@@ -412,8 +378,6 @@ const CreateBattle: FC<{}> = () => {
     const createBattleOnClick = async () => {
         setDisabled(prev => prev + 1)
         try {
-            // location
-            await tryCreateLocation(locationValid, setLocationValid, location)
             // opponent 1
             await tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
             // opponent 2
@@ -470,20 +434,10 @@ const CreateBattle: FC<{}> = () => {
             />
 
             {/* Location */}
-            <div>
-                <label>Location:</label>
-                <select value={location.region} onChange={e => setLocation(prev => ({ ...prev, region: e.target.value }))}>
-                    {regionOptions?.map((region, i) => (
-                        <option key={i} value={region}>{region}</option>
-                    ))}
-                </select>
-                <input
-                    type="text"
-                    className={`${locationValid || 'text-red-500'}`}
-                    value={location.name}
-                    onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
-                />
-            </div>
+            <LocationInput
+                location={location}
+                setLocation={setLocation}
+            />
 
             {/* Battle Type */}
             <div>
@@ -618,27 +572,6 @@ const tryCreateTrainer = async (
         setValidity(prev => ({ ...prev, name: true }))
     }
 }
-
-
-const tryCreateLocation = async (
-    locationValid: boolean,
-    setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
-    location: { name: string, region: string },
-) => {
-    if (!locationValid) {
-        if (location.name.length < 1)
-            throw new Error("Blank location name")
-        const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
-            title: 'Create Location?',
-            type: 'info',
-        })
-        if (!doCreateNewLocation)
-            throw new Error("Location does not exist")
-        await createLocation(location)
-        setLocationValid(true)
-    }
-}
-
 
 
 const LevelUp: FC<{

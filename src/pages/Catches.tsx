@@ -11,6 +11,7 @@ import { readSpecies } from '../backend/data/species';
 import { readBalls } from '../backend/data/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { startOfToday, formatISO } from 'date-fns'
+import { LocationInput } from 'components/inputs/LocationInput';
 
 
 export const Catches: FC<{}> = () => {
@@ -162,45 +163,6 @@ const CatchPokemon: FC<{}> = () => {
 
     // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-    const [regionOptions, setRegionOptions] = useState<string[]>()
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const [regions, mostRecentBattle] = await Promise.all([
-                    readRegions({}),
-                    readBattles({ howMany: 1 }),
-                ])
-                setRegionOptions(regions.reverse())
-                setLocation({
-                    region: mostRecentBattle[0].event.location_region,
-                    name: mostRecentBattle[0].event.location_name
-                })
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Regions',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect])
-    const [locationValid, setLocationValid] = useState<boolean>(false)
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const locations = await readLocations({ name: location.name, region: location.region })
-                setLocationValid(locations.length > 0)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Locations',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect, location])
 
     // catch type
     const [catchType, setCatchType] = useState<string>("Grass")
@@ -279,8 +241,6 @@ const CatchPokemon: FC<{}> = () => {
     const createCatchOnClick = async () => {
         setDisabled(prev => prev + 1)
         try {
-            // location
-            await tryCreateLocation(locationValid, setLocationValid, location)
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
@@ -323,22 +283,10 @@ const CatchPokemon: FC<{}> = () => {
             />
 
             {/* Location */}
-            <div>
-                <label>Location:</label>
-                <select value={location.region} onChange={e => setLocation(prev => ({ ...prev, region: e.target.value }))}>
-                    {regionOptions?.map((region, i) => (
-                        <option key={i} value={region}>{region}</option>
-                    ))}
-                </select>
-                <input
-                    type="text"
-                    style={{
-                        color: locationValid ? undefined : 'red',
-                    }}
-                    value={location.name}
-                    onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
-                />
-            </div>
+            <LocationInput
+                location={location}
+                setLocation={setLocation}
+            />
 
             {/* Catch Type */}
             <div>
