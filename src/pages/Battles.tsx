@@ -2,11 +2,6 @@ import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react
 import { createBattle, deleteBattle, readBattles, updateBattle } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, TeamMember, Trainer } from '../types';
-import { readBattleTypes } from '../backend/data/battle_types';
-import { createTrainerClass, readTrainerClasses } from '../backend/data/trainer_classes';
-import { createTrainer, readTrainers } from '../backend/data/trainers';
-import { readRegions } from '../backend/data/regions';
-import { createLocation, readLocations } from '../backend/data/locations';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from 'backend/data/teamOverTime';
@@ -15,8 +10,15 @@ import { useAppContext } from '../App';
 import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
+import { LocationInput } from 'components/inputs/LocationInput';
+import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
+import { TrainerInput } from 'components/inputs/TrainerInput';
 
 
+
+/**
+ * Battles Page
+ */
 export const Battles: FC<{}> = () => {
 
 
@@ -234,176 +236,15 @@ const CreateBattle: FC<{}> = () => {
     const [disabled, setDisabled] = useState<number>(0)
 
 
-    // Playthroughs
+    // Form State
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-
-    // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-    const [regionOptions, setRegionOptions] = useState<string[]>()
-    useEffect(() => {
-        (async () => {
-            try {
-                const [regions, mostRecentBattle] = await Promise.all([
-                    readRegions({}),
-                    readBattles({ howMany: 1 }),
-                ])
-                setRegionOptions(regions.reverse())
-                setLocation({
-                    region: mostRecentBattle[0].event.location_region,
-                    name: mostRecentBattle[0].event.location_name
-                })
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Regions',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [])
-    const [locationValid, setLocationValid] = useState<boolean>(false)
-    useEffect(() => {
-        (async () => {
-            try {
-                const locations = await readLocations({ name: location.name, region: location.region })
-                setLocationValid(locations.length > 0)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Locations',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [location])
-
-    // battle type
     const [battleType, setBattleType] = useState<string>("")
-    const [battleTypeOptions, setBattleTypeOptions] = useState<string[]>()
-    useEffect(() => {
-        (async () => {
-            try {
-                const battleTypes = await readBattleTypes({})
-                const battleTypeNames = battleTypes.map(battleType => battleType.name)
-                setBattleTypeOptions(battleTypeNames)
-                setBattleType(battleTypeNames[0])
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Battle Types',
-                    type: 'error',
-                })
-            }
-        })()
-    }, [])
-
-
-    // opponent 1
     const [opponent1, setOpponent1] = useState<Trainer>({ name: "", class: "", })
-    const [opponent1Validity, setOpponent1Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: opponent1.class })
-                setOpponent1Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: opponent1.name, class: opponent1.class })
-                setOpponent1Validity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [opponent1])
-
-    // opponent 2
     const [opponent2, setOpponent2] = useState<Trainer>({ name: "", class: "", })
     const [useOpponent2, setUseOpponent2] = useState<boolean>(false)
-    const [opponent2Validity, setOpponent2Validity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: opponent2.class })
-                setOpponent2Validity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: opponent2.name, class: opponent2.class })
-                setOpponent2Validity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [opponent2])
-
-    // partner
     const [partner, setPartner] = useState<Trainer>({ name: "", class: "", })
     const [usePartner, setUsePartner] = useState<boolean>(false)
-    const [partnerValidity, setPartnerValidity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
-    useEffect(() => {
-        // trainer classes
-        (async () => {
-            try {
-                const trainerClasses = await readTrainerClasses({ name: partner.class })
-                setPartnerValidity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainer Classes',
-                    type: 'error',
-                })
-            }
-        })();
-        // trainers
-        (async () => {
-            try {
-                const trainers = await readTrainers({ name: partner.name, class: partner.class })
-                setPartnerValidity(prev => ({ ...prev, name: trainers.length > 0 }))
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Trainers',
-                    type: 'error',
-                })
-            }
-        })();
-    }, [partner])
 
     // lost
     const [lost, setLost] = useState<boolean>(false)
@@ -412,18 +253,6 @@ const CreateBattle: FC<{}> = () => {
     const createBattleOnClick = async () => {
         setDisabled(prev => prev + 1)
         try {
-            // location
-            await tryCreateLocation(locationValid, setLocationValid, location)
-            // opponent 1
-            await tryCreateTrainer(opponent1Validity, setOpponent1Validity, opponent1)
-            // opponent 2
-            if (useOpponent2) {
-                await tryCreateTrainer(opponent2Validity, setOpponent2Validity, opponent2)
-            }
-            // partner
-            if (usePartner) {
-                await tryCreateTrainer(partnerValidity, setPartnerValidity, partner)
-            }
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
@@ -442,7 +271,7 @@ const CreateBattle: FC<{}> = () => {
                 round: 0,
                 lost: lost,
             })
-            setBattleType(battleTypeOptions?.at(0) ?? "Single")
+            setBattleType("Single")
             setOpponent1(prev => ({ ...prev, name: "", }))
             setUseOpponent2(false)
             setOpponent2(prev => ({ ...prev, name: "", }))
@@ -470,93 +299,57 @@ const CreateBattle: FC<{}> = () => {
             />
 
             {/* Location */}
-            <div>
-                <label>Location:</label>
-                <select value={location.region} onChange={e => setLocation(prev => ({ ...prev, region: e.target.value }))}>
-                    {regionOptions?.map((region, i) => (
-                        <option key={i} value={region}>{region}</option>
-                    ))}
-                </select>
-                <input
-                    type="text"
-                    className={`${locationValid || 'text-red-500'}`}
-                    value={location.name}
-                    onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
-                />
-            </div>
+            <LocationInput
+                location={location}
+                setLocation={setLocation}
+            />
 
             {/* Battle Type */}
-            <div>
-                <label>Battle Type:</label>
-                <select value={battleType} onChange={e => setBattleType(e.target.value)}>
-                    {battleTypeOptions?.map((battleType, i) => (
-                        <option key={i} value={battleType}>{battleType}</option>
-                    ))}
-                </select>
-            </div>
+            <BattleTypeInput
+                battleType={battleType}
+                setBattleType={setBattleType}
+            />
 
             {/* Opponent 1 */}
-            <div>
-                <label>Opponent 1:</label>
-                <input
-                    type="text"
-                    className={`${opponent1Validity.class || 'text-red-500'}`}
-                    value={opponent1.class}
-                    onChange={e => setOpponent1(prev => ({ ...prev, class: e.target.value }))}
-                />
-                <input
-                    type="text"
-                    className={`${opponent1Validity.name || 'text-red-500'}`}
-                    value={opponent1.name}
-                    onChange={e => setOpponent1(prev => ({ ...prev, name: e.target.value }))}
+            <div className="flex flex-row">
+                <div>
+                    Opponent 1:
+                </div>
+                <TrainerInput
+                    trainer={opponent1}
+                    setTrainer={setOpponent1}
                 />
             </div>
 
 
             {/* Opponent 2 */}
-            <div>
-                <label>Opponent 2:</label>
+            <div className="flex flex-row gap-1 items-center">
+                <div>Opponent 2:</div>
                 <input
                     type="checkbox"
                     checked={useOpponent2}
                     onChange={e => setUseOpponent2(prev => !prev)}
                 />
-                {useOpponent2 && (<>
-                    <input
-                        type="text"
-                        className={`${opponent2Validity.class || 'text-red-500'}`}
-                        value={opponent2.class}
-                        onChange={e => setOpponent2(prev => ({ ...prev, class: e.target.value }))}
+                {useOpponent2 && (
+                    <TrainerInput
+                        trainer={opponent2}
+                        setTrainer={setOpponent2}
                     />
-                    <input
-                        type="text"
-                        className={`${opponent2Validity.name || 'text-red-500'}`}
-                        value={opponent2.name}
-                        onChange={e => setOpponent2(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                </>)}
+                )}
             </div>
 
             {/* Partner */}
-            <div>
-                <label>Partner:</label>
+            <div className="flex flex-row gap-1 items-center">
+                <div>Partner:</div>
                 <input
                     type="checkbox"
                     checked={usePartner}
                     onChange={e => setUsePartner(prev => !prev)}
                 />
                 {usePartner && (<>
-                    <input
-                        type="text"
-                        className={`${partnerValidity.class || 'text-red-500'}`}
-                        value={partner.class}
-                        onChange={e => setPartner(prev => ({ ...prev, class: e.target.value }))}
-                    />
-                    <input
-                        type="text"
-                        className={`${partnerValidity.name || 'text-red-500'}`}
-                        value={partner.name}
-                        onChange={e => setPartner(prev => ({ ...prev, name: e.target.value }))}
+                    <TrainerInput
+                        trainer={partner}
+                        setTrainer={setPartner}
                     />
                 </>)}
             </div>
@@ -585,60 +378,39 @@ const CreateBattle: FC<{}> = () => {
 
 
 
-const tryCreateTrainer = async (
-    validity: { name: boolean, class: boolean },
-    setValidity: React.Dispatch<React.SetStateAction<{
-        name: boolean;
-        class: boolean;
-    }>>,
-    trainer: Trainer,
-) => {
-    if (!validity.class) {
-        if (trainer.class.length < 1)
-            throw new Error("Blank trainer class")
-        const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
-            title: 'Create Trainer Class?',
-            type: 'info',
-        })
-        if (!doCreateNewTrainerClass)
-            throw new Error("Trainer Class does not exist")
-        await createTrainerClass({ name: trainer.class })
-        setValidity(prev => ({ ...prev, class: true }))
-    }
-    if (!validity.name) {
-        if (trainer.name.length < 1)
-            throw new Error("Blank trainer name")
-        const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
-            title: 'Create Trainer?',
-            type: 'info',
-        })
-        if (!doCreateNewTrainer)
-            throw new Error("Trainer does not exist")
-        await createTrainer({ name: trainer.name, class: trainer.class })
-        setValidity(prev => ({ ...prev, name: true }))
-    }
-}
-
-
-const tryCreateLocation = async (
-    locationValid: boolean,
-    setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
-    location: { name: string, region: string },
-) => {
-    if (!locationValid) {
-        if (location.name.length < 1)
-            throw new Error("Blank location name")
-        const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
-            title: 'Create Location?',
-            type: 'info',
-        })
-        if (!doCreateNewLocation)
-            throw new Error("Location does not exist")
-        await createLocation(location)
-        setLocationValid(true)
-    }
-}
-
+// const tryCreateTrainer = async (
+//     validity: { name: boolean, class: boolean },
+//     setValidity: React.Dispatch<React.SetStateAction<{
+//         name: boolean;
+//         class: boolean;
+//     }>>,
+//     trainer: Trainer,
+// ) => {
+//     if (!validity.class) {
+//         if (trainer.class.length < 1)
+//             throw new Error("Blank trainer class")
+//         const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
+//             title: 'Create Trainer Class?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewTrainerClass)
+//             throw new Error("Trainer Class does not exist")
+//         await createTrainerClass({ name: trainer.class })
+//         setValidity(prev => ({ ...prev, class: true }))
+//     }
+//     if (!validity.name) {
+//         if (trainer.name.length < 1)
+//             throw new Error("Blank trainer name")
+//         const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
+//             title: 'Create Trainer?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewTrainer)
+//             throw new Error("Trainer does not exist")
+//         await createTrainer({ name: trainer.name, class: trainer.class })
+//         setValidity(prev => ({ ...prev, name: true }))
+//     }
+// }
 
 
 const LevelUp: FC<{

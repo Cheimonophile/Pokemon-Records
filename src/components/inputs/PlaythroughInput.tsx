@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { Playthrough } from "../../types";
 import { readPlaythroughs } from "../../backend/data/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
-import { Switch, SwitchOption } from "./generic/Switch";
+import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
 
 
 
@@ -60,9 +60,9 @@ export const PlaythroughInput: FC<{
 
 
     return (
-        <Switch
+        <SwitchInput
             value={playthroughIdNo}
-            setValue={setPlaythroughIdNo}
+            onChange={setPlaythroughIdNo}
             options={switchOptions}
         />
     )

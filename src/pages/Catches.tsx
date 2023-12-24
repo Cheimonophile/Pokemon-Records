@@ -1,16 +1,14 @@
 import { FC, Fragment, useCallback, useEffect, useState } from 'react'
-import { readBattles } from '../backend/data/battles'
-import { ask, message } from '@tauri-apps/api/dialog';
+import { message } from '@tauri-apps/api/dialog';
 import { Catch } from '../types';
-import { readRegions } from '../backend/data/regions';
-import { createLocation, readLocations } from '../backend/data/locations';
 import { useAppContext } from '../App';
 import { createCatch, readCatches } from '../backend/data/catches';
-import { readCatchTypes } from '../backend/data/catch_types';
 import { readSpecies } from '../backend/data/species';
 import { readBalls } from '../backend/data/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { startOfToday, formatISO } from 'date-fns'
+import { LocationInput } from 'components/inputs/LocationInput';
+import { CatchTypeInput } from 'components/inputs/CatchTypeInput';
 
 
 export const Catches: FC<{}> = () => {
@@ -157,69 +155,10 @@ const CatchPokemon: FC<{}> = () => {
     // ui
     const [disabled, setDisabled] = useState<number>(0)
 
-    // Playthroughs
+    // form state
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-
-    // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-    const [regionOptions, setRegionOptions] = useState<string[]>()
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const [regions, mostRecentBattle] = await Promise.all([
-                    readRegions({}),
-                    readBattles({ howMany: 1 }),
-                ])
-                setRegionOptions(regions.reverse())
-                setLocation({
-                    region: mostRecentBattle[0].event.location_region,
-                    name: mostRecentBattle[0].event.location_name
-                })
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Regions',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect])
-    const [locationValid, setLocationValid] = useState<boolean>(false)
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const locations = await readLocations({ name: location.name, region: location.region })
-                setLocationValid(locations.length > 0)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Locations',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect, location])
-
-    // catch type
     const [catchType, setCatchType] = useState<string>("Grass")
-    const [catchTypeOptions, setCatchTypeOptions] = useState<string[]>()
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const catchTypes = (await readCatchTypes({})).map(ct => ct.name)
-                setCatchTypeOptions(catchTypes)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Catch Types',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect])
 
     // slot
     const [slot, setSlot] = useState<number>(1)
@@ -279,8 +218,6 @@ const CatchPokemon: FC<{}> = () => {
     const createCatchOnClick = async () => {
         setDisabled(prev => prev + 1)
         try {
-            // location
-            await tryCreateLocation(locationValid, setLocationValid, location)
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
@@ -323,32 +260,16 @@ const CatchPokemon: FC<{}> = () => {
             />
 
             {/* Location */}
-            <div>
-                <label>Location:</label>
-                <select value={location.region} onChange={e => setLocation(prev => ({ ...prev, region: e.target.value }))}>
-                    {regionOptions?.map((region, i) => (
-                        <option key={i} value={region}>{region}</option>
-                    ))}
-                </select>
-                <input
-                    type="text"
-                    style={{
-                        color: locationValid ? undefined : 'red',
-                    }}
-                    value={location.name}
-                    onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
-                />
-            </div>
+            <LocationInput
+                location={location}
+                setLocation={setLocation}
+            />
 
             {/* Catch Type */}
-            <div>
-                <label>Catch Type:</label>
-                <select value={catchType} onChange={e => setCatchType(e.target.value)}>
-                    {catchTypeOptions?.map((ct, i) => (
-                        <option key={i} value={ct}>{ct}</option>
-                    ))}
-                </select>
-            </div>
+            <CatchTypeInput
+                catchType={catchType}
+                setCatchType={setCatchType}
+            />
 
             {/* Slot */}
             <div>
@@ -445,21 +366,21 @@ const CatchPokemon: FC<{}> = () => {
 }
 
 
-const tryCreateLocation = async (
-    locationValid: boolean,
-    setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
-    location: { name: string, region: string },
-) => {
-    if (!locationValid) {
-        if (location.name.length < 1)
-            throw new Error("Blank location name")
-        const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
-            title: 'Create Location?',
-            type: 'info',
-        })
-        if (!doCreateNewLocation)
-            throw new Error("Location does not exist")
-        await createLocation(location)
-        setLocationValid(true)
-    }
-}
+// const tryCreateLocation = async (
+//     locationValid: boolean,
+//     setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
+//     location: { name: string, region: string },
+// ) => {
+//     if (!locationValid) {
+//         if (location.name.length < 1)
+//             throw new Error("Blank location name")
+//         const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
+//             title: 'Create Location?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewLocation)
+//             throw new Error("Location does not exist")
+//         await createLocation(location)
+//         setLocationValid(true)
+//     }
+// }
