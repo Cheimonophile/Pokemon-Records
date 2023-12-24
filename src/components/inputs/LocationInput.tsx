@@ -2,7 +2,7 @@ import { message } from "@tauri-apps/api/dialog";
 import { readBattles } from "backend/data/battles";
 import { readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
-import { Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
 import { TextInput } from "./generic/TextInput";
 
@@ -39,10 +39,10 @@ export function LocationInput({
           }
         })
         setRegionOptions(regionSwitchOptions);
-        // setLocation({
-        //     region: mostRecentBattle[0].event.location_region,
-        //     name: mostRecentBattle[0].event.location_name
-        // })
+        setLocation({
+            region: mostRecentBattle[0].event.location_region,
+            name: mostRecentBattle[0].event.location_name
+        })
       }
       catch (error) {
         console.error(error)
@@ -52,7 +52,7 @@ export function LocationInput({
         })
       }
     })()
-  }, [])
+  }, [setLocation])
   const [locationValid, setLocationValid] = useState<boolean>(false)
   useEffect(() => {
     (async () => {

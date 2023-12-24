@@ -2,11 +2,6 @@ import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react
 import { createBattle, deleteBattle, readBattles, updateBattle } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { Battle, TeamMember, Trainer } from '../types';
-import { readBattleTypes } from '../backend/data/battle_types';
-import { createTrainerClass, readTrainerClasses } from '../backend/data/trainer_classes';
-import { createTrainer, readTrainers } from '../backend/data/trainers';
-import { readRegions } from '../backend/data/regions';
-import { createLocation, readLocations } from '../backend/data/locations';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from 'backend/data/teamOverTime';
@@ -383,39 +378,39 @@ const CreateBattle: FC<{}> = () => {
 
 
 
-const tryCreateTrainer = async (
-    validity: { name: boolean, class: boolean },
-    setValidity: React.Dispatch<React.SetStateAction<{
-        name: boolean;
-        class: boolean;
-    }>>,
-    trainer: Trainer,
-) => {
-    if (!validity.class) {
-        if (trainer.class.length < 1)
-            throw new Error("Blank trainer class")
-        const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
-            title: 'Create Trainer Class?',
-            type: 'info',
-        })
-        if (!doCreateNewTrainerClass)
-            throw new Error("Trainer Class does not exist")
-        await createTrainerClass({ name: trainer.class })
-        setValidity(prev => ({ ...prev, class: true }))
-    }
-    if (!validity.name) {
-        if (trainer.name.length < 1)
-            throw new Error("Blank trainer name")
-        const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
-            title: 'Create Trainer?',
-            type: 'info',
-        })
-        if (!doCreateNewTrainer)
-            throw new Error("Trainer does not exist")
-        await createTrainer({ name: trainer.name, class: trainer.class })
-        setValidity(prev => ({ ...prev, name: true }))
-    }
-}
+// const tryCreateTrainer = async (
+//     validity: { name: boolean, class: boolean },
+//     setValidity: React.Dispatch<React.SetStateAction<{
+//         name: boolean;
+//         class: boolean;
+//     }>>,
+//     trainer: Trainer,
+// ) => {
+//     if (!validity.class) {
+//         if (trainer.class.length < 1)
+//             throw new Error("Blank trainer class")
+//         const doCreateNewTrainerClass = await ask(`'${trainer.class}' does not exist. Create it?`, {
+//             title: 'Create Trainer Class?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewTrainerClass)
+//             throw new Error("Trainer Class does not exist")
+//         await createTrainerClass({ name: trainer.class })
+//         setValidity(prev => ({ ...prev, class: true }))
+//     }
+//     if (!validity.name) {
+//         if (trainer.name.length < 1)
+//             throw new Error("Blank trainer name")
+//         const doCreateNewTrainer = await ask(`'${trainer.class} ${trainer.name}' does not exist. Create them?`, {
+//             title: 'Create Trainer?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewTrainer)
+//             throw new Error("Trainer does not exist")
+//         await createTrainer({ name: trainer.name, class: trainer.class })
+//         setValidity(prev => ({ ...prev, name: true }))
+//     }
+// }
 
 
 const LevelUp: FC<{

@@ -36,7 +36,7 @@ export function BattleTypeInput({
         })
       }
     })()
-  }, [])
+  }, [setBattleType])
 
   return (
     <div>

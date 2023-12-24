@@ -1,12 +1,8 @@
 import { FC, Fragment, useCallback, useEffect, useState } from 'react'
-import { readBattles } from '../backend/data/battles'
-import { ask, message } from '@tauri-apps/api/dialog';
+import { message } from '@tauri-apps/api/dialog';
 import { Catch } from '../types';
-import { readRegions } from '../backend/data/regions';
-import { createLocation, readLocations } from '../backend/data/locations';
 import { useAppContext } from '../App';
 import { createCatch, readCatches } from '../backend/data/catches';
-import { readCatchTypes } from '../backend/data/catch_types';
 import { readSpecies } from '../backend/data/species';
 import { readBalls } from '../backend/data/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
@@ -370,21 +366,21 @@ const CatchPokemon: FC<{}> = () => {
 }
 
 
-const tryCreateLocation = async (
-    locationValid: boolean,
-    setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
-    location: { name: string, region: string },
-) => {
-    if (!locationValid) {
-        if (location.name.length < 1)
-            throw new Error("Blank location name")
-        const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
-            title: 'Create Location?',
-            type: 'info',
-        })
-        if (!doCreateNewLocation)
-            throw new Error("Location does not exist")
-        await createLocation(location)
-        setLocationValid(true)
-    }
-}
+// const tryCreateLocation = async (
+//     locationValid: boolean,
+//     setLocationValid: React.Dispatch<React.SetStateAction<boolean>>,
+//     location: { name: string, region: string },
+// ) => {
+//     if (!locationValid) {
+//         if (location.name.length < 1)
+//             throw new Error("Blank location name")
+//         const doCreateNewLocation = await ask(`'${location.name}, ${location.region}' does not exist. Create it?`, {
+//             title: 'Create Location?',
+//             type: 'info',
+//         })
+//         if (!doCreateNewLocation)
+//             throw new Error("Location does not exist")
+//         await createLocation(location)
+//         setLocationValid(true)
+//     }
+// }
