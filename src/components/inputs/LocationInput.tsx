@@ -3,7 +3,8 @@ import { readBattles } from "backend/data/battles";
 import { readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState } from "react";
-import { Switch, SwitchOption } from "./generic/Switch";
+import { Switch, SwitchOption } from "./generic/SwitchInput";
+import { TextInput } from "./generic/TextInput";
 
 
 
@@ -78,12 +79,10 @@ export function LocationInput({
         options={regionOptions}
         setValue={region => setLocation(prev => ({ ...prev, region }))}
       />
-      <input
-        type="text"
-        className={`${locationValid || 'text-red-500'} border-b`}
-        placeholder="Location"
+      <TextInput 
         value={location.name}
-        onChange={e => setLocation(prev => ({ ...prev, name: e.target.value }))}
+        valid={locationValid}
+        onChange={name => setLocation(prev => ({ ...prev, name }))}
       />
     </div>
   )
