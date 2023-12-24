@@ -12,6 +12,7 @@ import { readBalls } from '../backend/data/balls';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { startOfToday, formatISO } from 'date-fns'
 import { LocationInput } from 'components/inputs/LocationInput';
+import { CatchTypeInput } from 'components/inputs/CatchTypeInput';
 
 
 export const Catches: FC<{}> = () => {
@@ -158,30 +159,10 @@ const CatchPokemon: FC<{}> = () => {
     // ui
     const [disabled, setDisabled] = useState<number>(0)
 
-    // Playthroughs
+    // form state
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-
-    // location
     const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-
-    // catch type
     const [catchType, setCatchType] = useState<string>("Grass")
-    const [catchTypeOptions, setCatchTypeOptions] = useState<string[]>()
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const catchTypes = (await readCatchTypes({})).map(ct => ct.name)
-                setCatchTypeOptions(catchTypes)
-            }
-            catch (error) {
-                console.error(error)
-                await message(`${error}`, {
-                    title: 'Error Reading Catch Types',
-                    type: 'error',
-                })
-            }
-        })
-    }, [addEffect])
 
     // slot
     const [slot, setSlot] = useState<number>(1)
@@ -289,14 +270,10 @@ const CatchPokemon: FC<{}> = () => {
             />
 
             {/* Catch Type */}
-            <div>
-                <label>Catch Type:</label>
-                <select value={catchType} onChange={e => setCatchType(e.target.value)}>
-                    {catchTypeOptions?.map((ct, i) => (
-                        <option key={i} value={ct}>{ct}</option>
-                    ))}
-                </select>
-            </div>
+            <CatchTypeInput
+                catchType={catchType}
+                setCatchType={setCatchType}
+            />
 
             {/* Slot */}
             <div>
