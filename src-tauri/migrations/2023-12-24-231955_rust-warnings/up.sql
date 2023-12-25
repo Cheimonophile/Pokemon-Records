@@ -4,7 +4,8 @@
 CREATE TABLE new_version (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    generation INTEGER NOT NULL
+    generation INTEGER NOT NULL,
+    UNIQUE(name)
 );
 INSERT INTO new_version (name, generation)
   SELECT name, generation FROM Version;
@@ -12,7 +13,8 @@ INSERT INTO new_version (name, generation)
 -- Regions
 CREATE TABLE new_region (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    UNIQUE(name)
 );
 INSERT INTO new_region (name)
   SELECT name FROM Region;
@@ -20,7 +22,8 @@ INSERT INTO new_region (name)
 -- Balls
 CREATE TABLE new_ball (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    UNIQUE(name)
 );
 INSERT INTO new_ball (name)
   SELECT name FROM Ball;
@@ -29,7 +32,8 @@ INSERT INTO new_ball (name)
 CREATE TABLE new_type (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    color TEXT NOT NULL
+    color TEXT NOT NULL,
+    UNIQUE(name)
 );  
 INSERT INTO new_type (name, color)
   SELECT name, color FROM Type;
@@ -37,7 +41,8 @@ INSERT INTO new_type (name, color)
 -- Battle Types
 CREATE TABLE new_battle_type (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    UNIQUE(name)
 );
 INSERT INTO new_battle_type (name)
   SELECT name FROM Battle_Type;
@@ -45,7 +50,9 @@ INSERT INTO new_battle_type (name)
 -- Catch Types
 CREATE TABLE new_catch_type (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    detail Text,
+    UNIQUE(name, detail)
 );
 INSERT INTO new_catch_type (name)
   SELECT name FROM Catch_Type;
@@ -53,7 +60,8 @@ INSERT INTO new_catch_type (name)
 -- Items
 CREATE TABLE new_item (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    UNIQUE(name)
 );
 INSERT INTO new_item (name)
   SELECT name FROM Item;
@@ -62,7 +70,8 @@ INSERT INTO new_item (name)
 CREATE TABLE new_location (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    region_id INTEGER NOT NULL REFERENCES new_region(id)
+    region_id INTEGER NOT NULL REFERENCES new_region(id),
+    UNIQUE(name, region_id)
 );
 INSERT INTO new_location (name, region_id)
   SELECT 
@@ -156,7 +165,8 @@ INSERT INTO new_team_member
 -- Trainer Classes
 CREATE TABLE new_trainer_class (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL
+  name TEXT NOT NULL,
+  UNIQUE(name)
 );
 INSERT INTO new_trainer_class (name)
   SELECT name FROM Trainer_Class;
@@ -165,7 +175,8 @@ INSERT INTO new_trainer_class (name)
 CREATE TABLE new_trainer (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
-  class_id INTEGER NOT NULL REFERENCES new_trainer_class(id)
+  class_id INTEGER NOT NULL REFERENCES new_trainer_class(id),
+  UNIQUE(name, class_id)
 );
 INSERT INTO new_trainer
   SELECT
@@ -279,7 +290,45 @@ INSERT INTO new_team_member_change
 
 
 
--- TODO rename new tables
+-- rename new tables
+DROP TABLE Version;
+ALTER TABLE new_version RENAME TO version;
+DROP TABLE Region;
+ALTER TABLE new_region RENAME TO region;
+DROP TABLE Ball;
+ALTER TABLE new_ball RENAME TO ball;
+DROP TABLE Type;
+ALTER TABLE new_type RENAME TO type;
+DROP TABLE Battle_Type;
+ALTER TABLE new_battle_type RENAME TO battle_type;
+DROP TABLE Catch_Type;
+ALTER TABLE new_catch_type RENAME TO catch_type;
+DROP TABLE Item;
+ALTER TABLE new_item RENAME TO item;
+DROP TABLE Location;
+ALTER TABLE new_location RENAME TO location;
+DROP VIEW new_location_with_region;
+DROP TABLE Species;
+ALTER TABLE new_species RENAME TO species;
+DROP TABLE Playthrough;
+ALTER TABLE new_playthrough RENAME TO playthrough;
+DROP TABLE Team_Member;
+ALTER TABLE new_team_member RENAME TO team_member;
+DROP TABLE Trainer_Class;
+ALTER TABLE new_trainer_class RENAME TO trainer_class;
+DROP TABLE Trainer;
+ALTER TABLE new_trainer RENAME TO trainer;
+DROP VIEW new_trainer_with_class;
+DROP TABLE Event;
+ALTER TABLE new_event RENAME TO event;
+DROP TABLE Battle_Event;
+ALTER TABLE new_battle_event RENAME TO battle_event;
+DROP TABLE Item_Event;
+ALTER TABLE new_item_event RENAME TO item_event;
+DROP TABLE Catch_Event;
+ALTER TABLE new_catch_event RENAME TO catch_event;
+DROP TABLE Team_Member_Change;
+ALTER TABLE new_team_member_change RENAME TO team_member_change;
 
 
 
