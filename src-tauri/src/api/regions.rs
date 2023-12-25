@@ -12,9 +12,9 @@ pub fn read_regions(
     name: Option<&str>,
 ) -> PkmnResult<Vec<String>> {
     let trainer_classes = state.transact(|connection| {
-        let mut query = schema::Region::table.into_boxed();
+        let mut query = schema::region::table.into_boxed();
         if let Some(name) = name {
-            query = query.filter(schema::Region::name.eq(name));
+            query = query.filter(schema::region::name.eq(name));
         }
         let results = query.load::<Region>(connection)?;
         QueryResult::<Vec<Region>>::Ok(results)

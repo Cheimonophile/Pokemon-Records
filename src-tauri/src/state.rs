@@ -25,7 +25,7 @@ impl GameState {
         // test the sqlite connection
         // TODO run the migration here
         if let Err(error) =
-            schema::Playthrough::table.first::<structs::playthrough::Playthrough>(&mut connection)
+            schema::playthrough::table.first::<structs::playthrough::Playthrough>(&mut connection)
         {
             return Ok(
                 StringError::new(&format!("Could not connect to database: {}", error)).err()?,

@@ -19,64 +19,62 @@ use crate::{
 pub fn create_catch(
     state: tauri::State<state::GameState>,
     playthrough_id_no: &str,
-    location_name: &str,
-    location_region: &str,
-    catch_type: &str,
+    location_id: i32,
+    catch_type_id: i32,
     slot: i32,
-    species_name: &str,
+    species_id: i32,
     nickname: Option<&str>,
     date: &str,
     level: i32,
-    ball: &str,
+    ball_id: i32,
     gender: &str,
 ) -> PkmnResult<()> {
     state.transact(|connection| {
         let new_team_member = InsertTeamMember {
             playthrough_id_no,
-            slot: &slot,
+            slot,
             nickname,
             caught_date: date,
-            caught_location_name: &location_name,
-            caught_location_region: &location_region,
-            caught_species_name: &species_name,
-            caught_level: &level,
-            ball,
+            caught_location_id: location_id,
+            caught_species_id: species_id,
+            caught_level: level,
+            ball_id,
             gender,
         };
-        diesel::insert_into(schema::Team_Member::table)
+        diesel::insert_into(schema::team_member::table)
             .values(&new_team_member)
             .execute(connection)?;
-        let team_member = schema::Team_Member::table
-            .order(schema::Team_Member::id.desc())
+        let team_member = schema::team_member::table
+            .order(schema::team_member::id.desc())
             .first::<TeamMember>(connection)?;
         let new_event = InsertEvent {
             playthrough_id_no: playthrough_id_no,
-            location_name: &location_name,
-            location_region: &location_region,
+            location_id,
+            date: &date,
         };
-        diesel::insert_into(schema::Event::table)
+        diesel::insert_into(schema::event::table)
             .values(&new_event)
             .execute(connection)?;
-        let event = schema::Event::table
-            .filter(schema::Event::playthrough_id_no.eq(&playthrough_id_no))
-            .order(schema::Event::no.desc())
+        let event = schema::event::table
+            .filter(schema::event::playthrough_id_no.eq(&playthrough_id_no))
+            .order(schema::event::no.desc())
             .first::<Event>(connection)
             .expect("Error loading event");
         let new_catch_event = InsertCatchEvent {
-            no: &event.no,
-            catch_type: catch_type,
-            team_member_id: &team_member.id,
+            no: event.no,
+            catch_type_id,
+            team_member_id: team_member.id,
         };
-        diesel::insert_into(schema::Catch_Event::table)
+        diesel::insert_into(schema::catch_event::table)
             .values(&new_catch_event)
             .execute(connection)?;
         let new_team_member_change = InsertTeamMemberChange {
-            team_member_id: &team_member.id,
-            event_no: &event.no,
-            level: Some(&level),
-            species_name: Some(species_name),
+            team_member_id: team_member.id,
+            event_no: event.no,
+            level: Some(level),
+            species_id: Some(species_id),
         };
-        diesel::insert_into(schema::Team_Member_Change::table)
+        diesel::insert_into(schema::team_member_change::table)
             .values(&new_team_member_change)
             .execute(connection)?;
         QueryResult::<()>::Ok(())
@@ -95,10 +93,10 @@ pub struct ReadCatchesResult {
 #[tauri::command]
 pub fn read_catches(state: tauri::State<state::GameState>) -> PkmnResult<Vec<ReadCatchesResult>> {
     let raw_catches = state.transact(|connection: &mut SqliteConnection| {
-        let raw_catches = schema::Catch_Event::table
-            .inner_join(schema::Event::table)
-            .inner_join(schema::Team_Member::table.inner_join(schema::Species::table))
-            .order(schema::Catch_Event::no.desc())
+        let raw_catches = schema::catch_event::table
+            .inner_join(schema::event::table)
+            .inner_join(schema::team_member::table.inner_join(schema::species::table))
+            .order(schema::catch_event::no.desc())
             .select((
                 CatchEvent::as_select(),
                 Event::as_select(),
@@ -121,9 +119,9 @@ pub fn read_catches(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Rea
 #[tauri::command]
 pub fn delete_catch(state: tauri::State<state::GameState>, no: i32) -> PkmnResult<()> {
     state.transact(|connection| {
-        diesel::delete(schema::Catch_Event::table.filter(schema::Catch_Event::no.eq(no)))
+        diesel::delete(schema::catch_event::table.filter(schema::catch_event::no.eq(no)))
             .execute(connection)?;
-        diesel::delete(schema::Event::table.filter(schema::Event::no.eq(no)))
+        diesel::delete(schema::event::table.filter(schema::event::no.eq(no)))
             .execute(connection)?;
         QueryResult::<()>::Ok(())
     })?;

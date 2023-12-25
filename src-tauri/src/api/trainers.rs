@@ -11,15 +11,15 @@ use crate::{error::PkmnResult, schema};
 pub fn read_trainers(
     state: tauri::State<state::GameState>,
     name: Option<&str>,
-    class: Option<&str>,
+    class_id: Option<i32>,
 ) -> PkmnResult<Vec<Trainer>> {
     let trainer_classes = state.transact(|connection| {
-        let mut query = schema::Trainer::table.into_boxed();
+        let mut query = schema::trainer::table.into_boxed();
         if let Some(name) = name {
-            query = query.filter(schema::Trainer::name.eq(name));
+            query = query.filter(schema::trainer::name.eq(name));
         }
-        if let Some(class) = class {
-            query = query.filter(schema::Trainer::class.eq(class));
+        if let Some(class_id) = class_id {
+            query = query.filter(schema::trainer::class_id.eq(class_id));
         }
         let results = query.load::<Trainer>(connection)?;
         QueryResult::<Vec<Trainer>>::Ok(results)
@@ -31,18 +31,18 @@ pub fn read_trainers(
 pub fn create_trainer(
     state: tauri::State<state::GameState>,
     name: &str,
-    class: &str,
+    class_id: i32,
 ) -> PkmnResult<Trainer> {
     let trainer = state.transact(|connection| {
-        let new_trainer = InsertTrainer { name, class };
-        diesel::insert_into(schema::Trainer::table)
+        let new_trainer = InsertTrainer { name, class_id };
+        diesel::insert_into(schema::trainer::table)
             .values(&new_trainer)
             .execute(connection)?;
-        let trainer = schema::Trainer::table
+        let trainer = schema::trainer::table
             .filter(
-                schema::Trainer::name
+                schema::trainer::name
                     .eq(name)
-                    .and(schema::Trainer::class.eq(class)),
+                    .and(schema::trainer::class_id.eq(class_id)),
             )
             .first::<Trainer>(connection)?;
         QueryResult::<Trainer>::Ok(trainer)

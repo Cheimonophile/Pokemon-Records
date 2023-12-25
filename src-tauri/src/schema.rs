@@ -2,14 +2,14 @@
 
 diesel::table! {
     ball (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
     }
 }
 
 diesel::table! {
     battle_event (no) {
-        no -> Nullable<Integer>,
+        no -> Integer,
         battle_type_id -> Integer,
         opponent1_id -> Integer,
         opponent2_id -> Nullable<Integer>,
@@ -21,14 +21,14 @@ diesel::table! {
 
 diesel::table! {
     battle_type (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
     }
 }
 
 diesel::table! {
     catch_event (no) {
-        no -> Nullable<Integer>,
+        no -> Integer,
         catch_type_id -> Integer,
         team_member_id -> Integer,
     }
@@ -36,7 +36,7 @@ diesel::table! {
 
 diesel::table! {
     catch_type (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         detail -> Nullable<Text>,
     }
@@ -44,7 +44,7 @@ diesel::table! {
 
 diesel::table! {
     event (no) {
-        no -> Nullable<Integer>,
+        no -> Integer,
         playthrough_id_no -> Text,
         location_id -> Integer,
         date -> Text,
@@ -53,21 +53,21 @@ diesel::table! {
 
 diesel::table! {
     item (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
     }
 }
 
 diesel::table! {
     item_event (no) {
-        no -> Nullable<Integer>,
+        no -> Integer,
         item_id -> Integer,
     }
 }
 
 diesel::table! {
     location (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         region_id -> Integer,
     }
@@ -75,7 +75,7 @@ diesel::table! {
 
 diesel::table! {
     playthrough (id_no) {
-        id_no -> Nullable<Text>,
+        id_no -> Text,
         name -> Text,
         version_id -> Integer,
         adventure_started -> Text,
@@ -84,14 +84,14 @@ diesel::table! {
 
 diesel::table! {
     region (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
     }
 }
 
 diesel::table! {
     species (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         form -> Nullable<Text>,
         dex_no -> Integer,
@@ -103,12 +103,12 @@ diesel::table! {
 
 diesel::table! {
     team_member (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         playthrough_id_no -> Text,
         slot -> Integer,
         nickname -> Nullable<Text>,
         caught_date -> Text,
-        caught_location_id -> Nullable<Integer>,
+        caught_location_id -> Integer,
         caught_species_id -> Integer,
         caught_level -> Integer,
         ball_id -> Integer,
@@ -118,7 +118,7 @@ diesel::table! {
 
 diesel::table! {
     team_member_change (no) {
-        no -> Nullable<Integer>,
+        no -> Integer,
         event_no -> Integer,
         team_member_id -> Integer,
         level -> Nullable<Integer>,
@@ -128,7 +128,7 @@ diesel::table! {
 
 diesel::table! {
     trainer (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         class_id -> Integer,
     }
@@ -136,7 +136,7 @@ diesel::table! {
 
 diesel::table! {
     trainer_class (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
     }
 }
@@ -144,7 +144,7 @@ diesel::table! {
 diesel::table! {
     #[sql_name = "type"]
     type_ (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         color -> Text,
     }
@@ -152,11 +152,31 @@ diesel::table! {
 
 diesel::table! {
     version (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Text,
         generation -> Integer,
     }
 }
+
+diesel::joinable!(battle_event -> battle_type (battle_type_id));
+diesel::joinable!(battle_event -> event (no));
+diesel::joinable!(catch_event -> catch_type (catch_type_id));
+diesel::joinable!(catch_event -> event (no));
+diesel::joinable!(catch_event -> team_member (team_member_id));
+diesel::joinable!(event -> location (location_id));
+diesel::joinable!(event -> playthrough (playthrough_id_no));
+diesel::joinable!(item_event -> event (no));
+diesel::joinable!(item_event -> item (item_id));
+diesel::joinable!(location -> region (region_id));
+diesel::joinable!(playthrough -> version (version_id));
+diesel::joinable!(team_member -> ball (ball_id));
+diesel::joinable!(team_member -> location (caught_location_id));
+diesel::joinable!(team_member -> playthrough (playthrough_id_no));
+diesel::joinable!(team_member -> species (caught_species_id));
+diesel::joinable!(team_member_change -> event (event_no));
+diesel::joinable!(team_member_change -> species (species_id));
+diesel::joinable!(team_member_change -> team_member (team_member_id));
+diesel::joinable!(trainer -> trainer_class (class_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     ball,

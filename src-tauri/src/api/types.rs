@@ -14,7 +14,7 @@ use crate::{state::GameState, schema};
 #[tauri::command]
 pub fn read_types(state: tauri::State<GameState>) -> PkmnResult<Vec<Type>> {
     let result = state.transact(|connection| {
-        let types = schema::Type::table.load::<Type>(connection)?;
+        let types = schema::type_::table.load::<Type>(connection)?;
 
         QueryResult::<Vec<Type>>::Ok(types)
     })?;

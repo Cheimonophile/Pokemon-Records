@@ -9,8 +9,8 @@ use crate::{
 #[tauri::command]
 pub fn read_playthroughs(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Playthrough>> {
     let results = state.transact(|connection| {
-        let results = schema::Playthrough::table
-            .order(schema::Playthrough::columns::adventure_started.desc())
+        let results = schema::playthrough::table
+            .order(schema::playthrough::columns::adventure_started.desc())
             .select(Playthrough::as_select())
             .distinct()
             .load::<Playthrough>(connection)?;
@@ -24,21 +24,21 @@ pub fn create_playthrough(
     state: tauri::State<state::GameState>,
     id_no: &str,
     name: &str,
-    version: &str,
+    version_id: i32,
     adventure_started: &str,
 ) -> PkmnResult<Playthrough> {
     let playthrough = state.transact(|connection| {
         let new_playthrough = InsertPlaythrough {
             id_no,
             name,
-            version,
+            version_id,
             adventure_started,
         };
-        diesel::insert_into(schema::Playthrough::table)
+        diesel::insert_into(schema::playthrough::table)
             .values(&new_playthrough)
             .execute(connection)?;
-        let playthrough = schema::Playthrough::table
-            .filter(schema::Playthrough::id_no.eq(id_no))
+        let playthrough = schema::playthrough::table
+            .filter(schema::playthrough::id_no.eq(id_no))
             .first::<Playthrough>(connection)?;
         QueryResult::<Playthrough>::Ok(playthrough)
     })?;

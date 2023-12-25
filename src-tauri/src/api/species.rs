@@ -12,9 +12,9 @@ pub fn read_species(
     name: Option<&str>,
 ) -> PkmnResult<Vec<Species>> {
     let species = state.transact(|connection| {
-        let mut query = schema::Species::table.into_boxed();
+        let mut query = schema::species::table.into_boxed();
         if let Some(name) = name {
-            query = query.filter(schema::Species::name.eq(name));
+            query = query.filter(schema::species::name.eq(name));
         }
         let results = query.load::<Species>(connection)?;
         QueryResult::<Vec<Species>>::Ok(results)

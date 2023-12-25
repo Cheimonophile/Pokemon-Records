@@ -330,21 +330,22 @@ INSERT INTO Team_Member_Change
 
 
 -- Drop new tables
-DROP TABLE new_version;
-DROP TABLE new_region;
-DROP TABLE new_ball;
-DROP TABLE new_type;
-DROP TABLE new_battle_type;
-DROP TABLE new_catch_type;
-DROP TABLE new_item;
-DROP TABLE new_location;
-DROP TABLE new_species;
-DROP TABLE new_playthrough;
-DROP TABLE new_team_member;
-DROP TABLE new_trainer_class;
-DROP TABLE new_trainer;
-DROP TABLE new_event;
-DROP TABLE new_battle_event;
-DROP TABLE new_item_event;
-DROP TABLE new_catch_event;
 DROP TABLE new_team_member_change;
+DROP TABLE new_catch_event;
+DROP TABLE new_item_event;
+DROP TABLE new_battle_event;
+DROP TABLE new_event;
+DROP TABLE new_trainer;
+DROP TABLE new_trainer_class;
+DROP TABLE new_team_member;
+DROP TABLE new_playthrough;
+DROP TABLE new_species;
+DROP TABLE new_location;
+DROP TABLE new_item;
+DROP TABLE new_catch_type;
+DROP TABLE new_battle_type;
+DROP TABLE new_type;
+DROP TABLE new_ball;
+DROP TABLE new_region;
+DROP TABLE new_version;
+

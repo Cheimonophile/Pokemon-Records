@@ -8,7 +8,7 @@ use crate::{
         event::{Event, InsertEvent},
     },
     error::PkmnResult,
-    schema::{self},
+    schema,
     state,
 };
 
@@ -25,9 +25,9 @@ pub fn read_battles(
     how_many: Option<i32>,
 ) -> PkmnResult<Vec<ReadBattlesResult>> {
     let raw_battles = state.transact(|connection: &mut SqliteConnection| {
-        let raw_battles = schema::Battle_Event::table
-            .inner_join(schema::Event::table)
-            .order(schema::Battle_Event::no.desc())
+        let raw_battles = schema::battle_event::table
+            .inner_join(schema::event::table)
+            .order(schema::battle_event::no.desc())
             .limit(how_many.unwrap_or(500) as i64)
             .select((BattleEvent::as_select(), Event::as_select()))
             .load::<(BattleEvent, Event)>(connection)?;
@@ -44,45 +44,39 @@ pub fn read_battles(
 pub fn create_battle(
     state: tauri::State<state::GameState>,
     playthrough_id_no: &str,
-    location_name: &str,
-    location_region: &str,
-    battle_type: &str,
-    opponent1_name: &str,
-    opponent1_class: &str,
-    opponent2_name: Option<&str>,
-    opponent2_class: Option<&str>,
-    partner_name: Option<&str>,
-    partner_class: Option<&str>,
-    round: i32,
+    location_id: i32,
+    date: &str,
+    battle_type_id: i32,
+    opponent1_id: i32,
+    opponent2_id: Option<i32>,
+    partner_id: Option<i32>,
+    round: Option<i32>,
     lost: bool,
 ) -> PkmnResult<usize> {
     let rows_affected = state.transact(|connection| {
         let new_event = InsertEvent {
-            playthrough_id_no: playthrough_id_no,
-            location_name: &location_name,
-            location_region: &location_region,
+            playthrough_id_no,
+            location_id,
+            date,
         };
-        diesel::insert_into(schema::Event::table)
+        diesel::insert_into(schema::event::table)
             .values(&new_event)
             .execute(connection)?;
-        let event = schema::Event::table
-            .filter(schema::Event::playthrough_id_no.eq(&playthrough_id_no))
-            .order(schema::Event::no.desc())
+        let event = schema::event::table
+            .filter(schema::event::playthrough_id_no.eq(&playthrough_id_no))
+            .order(schema::event::no.desc())
             .first::<Event>(connection)
             .expect("Error loading event");
         let new_battle_event = InsertBattleEvent {
-            no: &event.no,
-            battle_type,
-            opponent1_name: opponent1_name,
-            opponent1_class: opponent1_class,
-            opponent2_name: opponent2_name,
-            opponent2_class: opponent2_class,
-            partner_name: partner_name,
-            partner_class: partner_class,
-            round: &round,
-            lost: &lost,
+            no: event.no,
+            battle_type_id,
+            opponent1_id,
+            opponent2_id,
+            partner_id,
+            round,
+            lost,
         };
-        let rows_affected = diesel::insert_into(schema::Battle_Event::table)
+        let rows_affected = diesel::insert_into(schema::battle_event::table)
             .values(&new_battle_event)
             .execute(connection)?;
         QueryResult::Ok(rows_affected)
@@ -93,9 +87,9 @@ pub fn create_battle(
 #[tauri::command]
 pub fn delete_battle(state: tauri::State<state::GameState>, no: i32) -> PkmnResult<()> {
     state.transact(|connection| {
-        diesel::delete(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
+        diesel::delete(schema::battle_event::table.filter(schema::battle_event::no.eq(no)))
             .execute(connection)?;
-        diesel::delete(schema::Event::table.filter(schema::Event::no.eq(no)))
+        diesel::delete(schema::event::table.filter(schema::event::no.eq(no)))
             .execute(connection)?;
         QueryResult::<()>::Ok(())
     })?;
@@ -110,8 +104,8 @@ pub fn update_battle(
 ) -> PkmnResult<()> {
     state.transact(move |connection| {
         if let Some(lost) = lost {
-            diesel::update(schema::Battle_Event::table.filter(schema::Battle_Event::no.eq(no)))
-                .set(schema::Battle_Event::lost.eq(lost))
+            diesel::update(schema::battle_event::table.filter(schema::battle_event::no.eq(no)))
+                .set(schema::battle_event::lost.eq(lost))
                 .execute(connection)?;
         }
         QueryResult::<()>::Ok(())

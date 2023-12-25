@@ -11,15 +11,15 @@ use crate::{ error::PkmnResult, schema};
 pub fn read_locations(
     state: tauri::State<state::GameState>,
     name: Option<&str>,
-    region: Option<&str>,
+    region_id: Option<i32>,
 ) -> PkmnResult<Vec<Location>> {
     let locations = state.transact(|connection| {
-        let mut query = schema::Location::table.into_boxed();
+        let mut query = schema::location::table.into_boxed();
         if let Some(name) = name {
-            query = query.filter(schema::Location::name.eq(name));
+            query = query.filter(schema::location::name.eq(name));
         }
-        if let Some(region) = region {
-            query = query.filter(schema::Location::region.eq(region));
+        if let Some(region_id) = region_id {
+            query = query.filter(schema::location::region_id.eq(region_id));
         }
         let results = query.load::<Location>(connection)?;
         QueryResult::<Vec<Location>>::Ok(results)
@@ -31,21 +31,21 @@ pub fn read_locations(
 pub fn create_location(
     state: tauri::State<state::GameState>,
     name: &str,
-    region: &str,
+    region_id: i32,
 ) -> PkmnResult<Location> {
     let location = state.transact(|connection| {
         let location = InsertLocation {
             name: name,
-            region: region,
+            region_id,
         };
-        diesel::insert_into(schema::Location::table)
+        diesel::insert_into(schema::location::table)
             .values(&location)
             .execute(connection)?;
-        let location = schema::Location::table
+        let location = schema::location::table
             .filter(
-                schema::Location::name
+                schema::location::name
                     .eq(name)
-                    .and(schema::Location::region.eq(region)),
+                    .and(schema::location::region_id.eq(region_id)),
             )
             .first(connection)?;
         QueryResult::<Location>::Ok(location)

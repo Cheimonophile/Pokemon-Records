@@ -10,16 +10,16 @@ pub fn create_team_member_change(
     event_no: i32,
     team_member_id: i32,
     level: Option<i32>,
-    species_name: Option<&str>,
+    species_id: Option<i32>,
 ) -> PkmnResult<()> {
     state.transact(|connection| {
         let new_team_member_change = InsertTeamMemberChange {
-            event_no: &event_no,
-            team_member_id: &team_member_id,
-            level: level.as_ref(),
-            species_name,
+            event_no,
+            team_member_id,
+            level,
+            species_id,
         };
-        diesel::insert_into(schema::Team_Member_Change::table)
+        diesel::insert_into(schema::team_member_change::table)
             .values(&new_team_member_change)
             .execute(connection)?;
         QueryResult::<()>::Ok(())
