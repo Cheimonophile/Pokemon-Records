@@ -15,3 +15,4 @@ pub mod region;
 pub mod types;
 pub mod catch_type;
 pub mod ball;
+pub mod version;

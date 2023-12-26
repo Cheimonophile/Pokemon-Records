@@ -2,20 +2,38 @@ use diesel::prelude::*;
 
 use crate::{
     dbi::structs::playthrough::{InsertPlaythrough, Playthrough},
+    dbi::structs::version::Version,
     error::PkmnResult,
     schema, state,
 };
 
+#[derive(serde::Serialize)]
+pub struct ReadResult {
+    #[serde(flatten)]
+    playthrough: Playthrough,
+    version: Version,
+}
+
 #[tauri::command]
-pub fn read_playthroughs(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Playthrough>> {
-    let results = state.transact(|connection| {
+pub fn read_playthroughs(state: tauri::State<state::GameState>) -> PkmnResult<Vec<ReadResult>> {
+    let playthroughs = state.transact(|connection| {
         let results = schema::playthrough::table
-            .order(schema::playthrough::columns::adventure_started.desc())
-            .select(Playthrough::as_select())
-            .distinct()
-            .load::<Playthrough>(connection)?;
-        QueryResult::<Vec<Playthrough>>::Ok(results)
+            .inner_join(schema::version::table)
+            .order(
+                schema::event::table
+                    .filter(schema::event::playthrough_id_no.eq(schema::playthrough::id_no))
+                    .select(diesel::dsl::max(schema::event::no))
+                    .single_value()
+                    .desc(),
+            )
+            .select((Playthrough::as_select(), Version::as_select()))
+            .load::<(Playthrough, Version)>(connection)?;
+        QueryResult::<Vec<(Playthrough, Version)>>::Ok(results)
     })?;
+    let results = playthroughs
+        .into_iter()
+        .map(|(playthrough, version)| ReadResult { playthrough, version })
+        .collect();
     Ok(results)
 }
 
