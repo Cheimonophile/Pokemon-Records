@@ -2,6 +2,8 @@ use diesel::prelude::*;
 
 use crate::schema;
 
+use super::version::VersionResult;
+
 #[derive(Insertable)]
 #[diesel(table_name = schema::playthrough)]
 pub struct InsertPlaythrough<'a> {
@@ -20,4 +22,12 @@ pub struct Playthrough {
     pub name: String,
     pub version_id: i32,
     pub adventure_started: String,
+}
+
+
+#[derive(serde::Serialize)]
+pub struct PlaythroughResult {
+    #[serde(flatten)]
+    playthrough: Playthrough,
+    version: VersionResult,
 }

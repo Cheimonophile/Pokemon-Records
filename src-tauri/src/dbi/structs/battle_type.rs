@@ -15,3 +15,9 @@ pub struct BattleType {
     pub id: i32,
     pub name: String
 }
+
+#[derive(serde::Serialize)]
+pub struct BattleTypeResult {
+    #[serde(flatten)]
+    battle_type: BattleType,
+}

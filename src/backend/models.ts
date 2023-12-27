@@ -26,6 +26,9 @@ export namespace Zod {
     adventure_started: z.string(),
     version: Version.optional(),
   })
+
+
+
 }
 
 // create types from the models

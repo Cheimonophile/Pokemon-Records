@@ -2,6 +2,8 @@ use diesel::prelude::*;
 
 use crate::schema;
 
+use super::region::RegionResult;
+
 #[derive(Insertable)]
 #[diesel(table_name = schema::location)]
 pub struct InsertLocation<'a> {
@@ -17,4 +19,12 @@ pub struct Location {
     pub id: i32,
     pub name: String,
     pub region_id: i32,
+}
+
+
+#[derive(serde::Serialize)]
+pub struct LocationResult {
+    #[serde(flatten)]
+    location: Location,
+    region: RegionResult,
 }

@@ -8,8 +8,7 @@ use crate::{
         event::{Event, InsertEvent},
     },
     error::PkmnResult,
-    schema,
-    state,
+    schema, state,
 };
 
 #[derive(serde::Serialize)]
@@ -22,15 +21,18 @@ pub struct ReadBattlesResult {
 #[tauri::command]
 pub fn read_battles(
     state: tauri::State<state::GameState>,
-    how_many: Option<i32>,
+    playthrough_id: Option<String>,
 ) -> PkmnResult<Vec<ReadBattlesResult>> {
     let raw_battles = state.transact(|connection: &mut SqliteConnection| {
-        let raw_battles = schema::battle_event::table
+        let mut query = schema::battle_event::table
             .inner_join(schema::event::table)
             .order(schema::battle_event::no.desc())
-            .limit(how_many.unwrap_or(500) as i64)
             .select((BattleEvent::as_select(), Event::as_select()))
-            .load::<(BattleEvent, Event)>(connection)?;
+            .into_boxed();
+        if let Some(playthrough_id) = playthrough_id {
+            query = query.filter(schema::event::playthrough_id_no.eq(playthrough_id));
+        }
+        let raw_battles = query.load::<(BattleEvent, Event)>(connection)?;
         QueryResult::<Vec<(BattleEvent, Event)>>::Ok(raw_battles)
     })?;
     let battles = raw_battles
@@ -39,6 +41,7 @@ pub fn read_battles(
         .collect();
     Ok(battles)
 }
+
 
 #[tauri::command]
 pub fn create_battle(

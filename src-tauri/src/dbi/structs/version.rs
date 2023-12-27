@@ -16,3 +16,9 @@ pub struct Version {
     pub name: String,
     pub generation: i32,
 }
+
+#[derive(serde::Serialize)]
+pub struct VersionResult {
+    #[serde(flatten)]
+    version: Version,
+}

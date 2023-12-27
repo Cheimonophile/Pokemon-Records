@@ -10,6 +10,7 @@ pub struct InsertItemEvent<'a> {
 }
 
 #[derive(Queryable, Selectable)]
+#[derive(serde::Serialize)]
 #[diesel(table_name = schema::item_event)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct ItemEvent {
