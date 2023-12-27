@@ -1,28 +1,31 @@
 
 
-BEFORE_MIGRATION_DB_URL = ./dev/before_migration.sqlite
-AFTER_MIGRATION_DB_URL = ./dev/after_migration.sqlite
+EMPTY_DB_URL = ./dev/empty_db.sqlite
+BEFORE_MIGRATION_DB_URL = ./dev/before_migration_db.sqlite
+AFTER_MIGRATION_DB_URL = ./dev/after_migration_db.sqlite
 PROD_DB_URL = /Users/ben/Dropbox/Benjamin/Games/Pokemon/pokemon.sqlite
 
 
 
-run:
-	diesel migration run --database-url $(AFTER_MIGRATION_DB_URL)
-
-redo:
-	diesel migration redo --database-url $(AFTER_MIGRATION_DB_URL)
-	diesel migration redo --database-url $(AFTER_MIGRATION_DB_URL)
 
 db:
-	rm $(BEFORE_MIGRATION_DB_URL) || true
-	rm $(AFTER_MIGRATION_DB_URL) || true
+	rm $(EMPTY_DB_URL) $(BEFORE_MIGRATION_DB_URL) $(AFTER_MIGRATION_DB_URL) || true
+
 	mkdir -p dev
 	cp $(PROD_DB_URL) $(BEFORE_MIGRATION_DB_URL)
 	cp $(PROD_DB_URL) $(AFTER_MIGRATION_DB_URL)
-	diesel migration run --database-url $(AFTER_MIGRATION_DB_URL)
+	sqlx database setup --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+
+redo: db
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+
 
 down: db
-	diesel migration revert --database-url $(AFTER_MIGRATION_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
 
 diff: db
 	@du -sh $(BEFORE_MIGRATION_DB_URL)
