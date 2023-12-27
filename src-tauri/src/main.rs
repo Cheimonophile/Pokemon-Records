@@ -12,13 +12,13 @@ mod dbi;
 mod error;
 mod state;
 
-pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("diesel-migrations");
 
 pub fn run_db_migrations(conn: &mut impl MigrationHarness<diesel::sqlite::Sqlite>) -> PkmnResult<()> {
     match conn.run_pending_migrations(MIGRATIONS) {
         Ok(_) => Ok(()),
         Err(e) => {
-            Err(StringError::new(&format!("Error running migrations: {}", e)).into())
+            Err(StringError::new(&format!("Error running diesel migrations: {}", e)).into())
         },
     }
 }
