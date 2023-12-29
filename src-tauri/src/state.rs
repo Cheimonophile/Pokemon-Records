@@ -1,63 +1,45 @@
-use std::ops::DerefMut;
-use std::sync::Mutex;
+use sqlx::prelude::*;
+use tauri::async_runtime::block_on;
 
-use diesel::prelude::*;
+use crate::error::{PkmnError, PkmnResult, StringError};
 
-use diesel::sqlite::SqliteConnection;
+use sqlx::migrate::Migrator;
 
-use crate::{
-    dbi::structs,
-    error::{PkmnError, PkmnResult, StringError},
-    schema,
-};
+static MIGRATOR: Migrator = sqlx::migrate!();
 
 pub struct GameState {
-    connection: Mutex<Option<SqliteConnection>>,
+    db_url: Option<String>,
 }
 
 impl GameState {
     pub fn new() -> Self {
-        Self {
-            connection: Mutex::new(None),
-        }
+        Self { db_url: None }
     }
-    pub fn set_connection(&self, mut connection: SqliteConnection) -> PkmnResult<()> {
+    pub async fn set_connection(&mut self, db_url: &str) -> PkmnResult<()> {
+        let mut connection = sqlx::SqliteConnection::connect(&db_url).await?;
         // test the sqlite connection
-        // TODO run the migration here
-        if let Err(error) =
-            schema::playthrough::table.first::<structs::playthrough::Playthrough>(&mut connection)
-        {
+        if let Err(error) = MIGRATOR.run(&mut connection).await {
             return Ok(
                 StringError::new(&format!("Could not connect to database: {}", error)).err()?,
             );
         }
-
-        if let Ok(mut guard) = self.connection.lock() {
-            *guard = Some(connection);
-            Ok(())
-        } else {
-            Ok(StringError::new("Could not lock connection").err()?)
-        }
+        self.db_url = Some(db_url.to_string());
+        // if let Ok(mut guard) = self.connection.lock() {
+        //     *guard = Some(connection);
+        //     Ok(())
+        // } else {
+        //     Ok(StringError::new("Could not lock connection").err()?)
+        // }
+        Ok(())
     }
-    pub fn transact<T, F>(&self, callback: F) -> PkmnResult<T>
-    where
-        F: FnOnce(&mut SqliteConnection) -> QueryResult<T>,
-    {
-        if let Ok(mut guard) = self.connection.lock() {
-            let connection = match guard.deref_mut() {
-                Some(connection) => connection,
-                None => {
-                    return Err(PkmnError::StringError(StringError::new(
-                        "No connection set",
-                    )))
-                }
-            };
-            let result = connection.transaction(callback)?;
-            return Ok(result);
+
+    pub fn transaction(&self) -> PkmnResult<sqlx::Transaction<'_, sqlx::Sqlite>> {
+        if let Some(db_url) = &self.db_url {
+            let mut connection = block_on(sqlx::SqliteConnection::connect(&db_url))?;
+            let transaction = block_on(sqlx::Acquire::begin(&mut connection))?;
+            Ok(transaction)
         } else {
-            return Err(PkmnError::StringError(StringError::new(
-                "Could not lock connection",
-            )));
+            StringError::new("No connection set").err()
         }
     }
 }
