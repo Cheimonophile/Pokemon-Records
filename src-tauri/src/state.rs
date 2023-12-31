@@ -1,45 +1,94 @@
+use std::{
+    ops::{Deref, DerefMut},
+    sync::Mutex,
+};
+
 use sqlx::prelude::*;
 use tauri::async_runtime::block_on;
 
-use crate::error::{PkmnError, PkmnResult, StringError};
+use crate::error::{PkmnResult, StringError};
 
 use sqlx::migrate::Migrator;
 
 static MIGRATOR: Migrator = sqlx::migrate!();
 
 pub struct GameState {
-    db_url: Option<String>,
+    db_url: Mutex<Option<String>>,
 }
 
 impl GameState {
     pub fn new() -> Self {
-        Self { db_url: None }
+        Self {
+            db_url: Mutex::new(None),
+        }
     }
-    pub async fn set_connection(&mut self, db_url: &str) -> PkmnResult<()> {
-        let mut connection = sqlx::SqliteConnection::connect(&db_url).await?;
-        // test the sqlite connection
-        if let Err(error) = MIGRATOR.run(&mut connection).await {
+    pub fn set_connection(&self, db_url: &str) -> PkmnResult<()> {
+        let mut connection = block_on(sqlx::SqliteConnection::connect(&db_url))?;
+        if let Err(error) = block_on(MIGRATOR.run(&mut connection)) {
             return Ok(
                 StringError::new(&format!("Could not connect to database: {}", error)).err()?,
             );
         }
-        self.db_url = Some(db_url.to_string());
-        // if let Ok(mut guard) = self.connection.lock() {
-        //     *guard = Some(connection);
-        //     Ok(())
-        // } else {
-        //     Ok(StringError::new("Could not lock connection").err()?)
-        // }
+        match self.db_url.lock() {
+            Ok(mut db_url_guard) => *db_url_guard = Some(db_url.to_string()),
+            Err(error) => StringError::new(&format!("{}", error)).err()?,
+        };
         Ok(())
     }
 
-    pub fn transaction(&self) -> PkmnResult<sqlx::Transaction<'_, sqlx::Sqlite>> {
-        if let Some(db_url) = &self.db_url {
-            let mut connection = block_on(sqlx::SqliteConnection::connect(&db_url))?;
-            let transaction = block_on(sqlx::Acquire::begin(&mut connection))?;
-            Ok(transaction)
-        } else {
-            StringError::new("No connection set").err()
+    pub fn connection<'a>(&self) -> PkmnResult<PkmnConnection> {
+        match self.db_url.lock() {
+            Ok(db_url_guard) => {
+                if let Some(db_url) = &*db_url_guard {
+                    let connection = block_on(sqlx::SqliteConnection::connect(&db_url))?;
+                    Ok(PkmnConnection { connection })
+                } else {
+                    StringError::new("No connection set").err()
+                }
+            }
+            Err(error) => StringError::new(&format!("Unable to lock state {}", error)).err(),
         }
+    }
+}
+
+#[tauri::command]
+pub fn set_db_connection(state: tauri::State<GameState>, database_url: &str) -> PkmnResult<()> {
+    println!("{}", database_url);
+    state.set_connection(database_url)?;
+    Ok(())
+}
+
+pub struct PkmnConnection {
+    connection: sqlx::SqliteConnection,
+}
+
+impl PkmnConnection {
+    pub fn transaction(&mut self) -> PkmnResult<PkmnTransaction> {
+        let transaction = block_on(sqlx::Acquire::begin(&mut self.connection))?;
+        Ok(PkmnTransaction { transaction })
+    }
+}
+
+pub struct PkmnTransaction<'a> {
+    transaction: sqlx::Transaction<'a, sqlx::Sqlite>,
+}
+
+impl Deref for PkmnTransaction<'_> {
+    type Target = sqlx::SqliteConnection;
+    fn deref(&self) -> &Self::Target {
+        &*self.transaction
+    }
+}
+
+impl DerefMut for PkmnTransaction<'_> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut *self.transaction
+    }
+}
+
+impl PkmnTransaction<'_> {
+    pub fn commit(self) -> PkmnResult<()> {
+        block_on(self.transaction.commit())?;
+        Ok(())
     }
 }

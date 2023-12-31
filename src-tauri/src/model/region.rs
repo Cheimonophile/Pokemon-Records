@@ -1,48 +1,43 @@
 use serde;
-use sqlx::sqlite::SqliteRow;
-use sqlx::{self, ColumnIndex, Row};
+use sqlx::{self};
 use tauri;
+use tauri::async_runtime::block_on;
 
-use crate::error::StringError;
+use crate::pkmndb::Read;
 use crate::{error::PkmnResult, state};
 
-use crate::sqlx_ext;
-
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
 pub struct Region {
     pub id: i64,
     pub name: String,
 }
 
-// macro_rules! region_from_raw {
-//     ($prefix:ident) => {
-//         paste::paste! {
-//             Region {
-//                 id: self. [< $prefix _ id >],
-//                 name: self. [< $prefix _ name  >],
-//             }
-//         }
-//     };
-// }
+impl Read for Region {
+    type Raw = Region;
+    type Key = i64;
+    fn id(&self) -> Self::Key {
+        self.id
+    }
+    fn read(transaction: &mut sqlx::SqliteConnection) -> PkmnResult<Vec<Self>> {
+        let regions = block_on(
+            sqlx::query_as!(
+                Self::Raw,
+                r#"
+                    SELECT id, name
+                    FROM region
+                    ORDER BY id
+                "#,
+            )
+            .fetch_all(transaction),
+        )?;
+        Ok(regions)
+    }
+}
 
-// pub(crate) use region_from_raw;
-
-
-
-// pub struct RawRegion {
-//     pub id: Option<i64>,
-//     pub name: Option<String>,
-// }
-
-// impl sqlx_ext::RawSqlx<Region> for RawRegion {
-//     fn to_model(self) -> PkmnResult<Region> {
-//         Ok(Region {
-//             id: self
-//                 .id
-//                 .ok_or_else(|| StringError::new("Region id is None"))?,
-//             name: self
-//                 .name
-//                 .ok_or_else(|| StringError::new("Region name is None"))?,
-//         })
-//     }
-// }
+#[tauri::command]
+pub fn read_regions(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Region>> {
+    let mut connection = state.connection()?;
+    let mut transaction = connection.transaction()?;
+    let regions = Region::read(&mut *transaction)?;
+    Ok(regions)
+}

@@ -121,8 +121,8 @@ CREATE TABLE species (
   generation INTEGER NOT NULL,
   type1_id INTEGER NOT NULL,
   type2_id INTEGER,
-  FOREIGN KEY (type1_id) REFERENCES type(id),
-  FOREIGN KEY (type2_id) REFERENCES type(id),
+  FOREIGN KEY (type1_id) REFERENCES type(id) ON DELETE RESTRICT,
+  FOREIGN KEY (type2_id) REFERENCES type(id) ON DELETE RESTRICT,
   UNIQUE(name, form)
 );
 INSERT INTO species
@@ -144,7 +144,7 @@ CREATE TABLE playthrough (
   name TEXT NOT NULL,
   version_id INTEGER NOT NULL,
   adventure_started TEXT NOT NULL,
-  FOREIGN KEY (version_id) REFERENCES version(id)
+  FOREIGN KEY (version_id) REFERENCES version(id) ON DELETE RESTRICT
 );
 INSERT INTO playthrough
   SELECT 
@@ -167,10 +167,10 @@ CREATE TABLE team_member (
   caught_level INTEGER NOT NULL,
   ball_id INTEGER NOT NULL,
   gender TEXT NOT NULL,
-  FOREIGN KEY (playthrough_id_no) REFERENCES playthrough(id_no),
-  FOREIGN KEY (caught_location_id) REFERENCES location(id),
-  FOREIGN KEY (caught_species_id) REFERENCES species(id),
-  FOREIGN KEY (ball_id) REFERENCES ball(id),
+  FOREIGN KEY (playthrough_id_no) REFERENCES playthrough(id_no) ON DELETE RESTRICT,
+  FOREIGN KEY (caught_location_id) REFERENCES location(id) ON DELETE RESTRICT,
+  FOREIGN KEY (caught_species_id) REFERENCES species(id) ON DELETE RESTRICT,
+  FOREIGN KEY (ball_id) REFERENCES ball(id) ON DELETE RESTRICT,
   CHECK (caught_level >= 1 AND caught_level <= 100),
   CHECK (gender IN ('M', 'F', 'N')),
   UNIQUE (playthrough_id_no, slot)
@@ -208,7 +208,7 @@ CREATE TABLE trainer (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   class_id INTEGER NOT NULL,
-  FOREIGN KEY (class_id) REFERENCES trainer_class(id),
+  FOREIGN KEY (class_id) REFERENCES trainer_class(id) ON DELETE RESTRICT,
   UNIQUE(name, class_id)
 );
 INSERT INTO trainer
@@ -233,8 +233,8 @@ CREATE TABLE event (
   playthrough_id_no TEXT NOT NULL,
   location_id INTEGER NOT NULL,
   date TEXT NOT NULL,
-  FOREIGN KEY (playthrough_id_no) REFERENCES playthrough(id_no),
-  FOREIGN KEY (location_id) REFERENCES location(id)
+  FOREIGN KEY (playthrough_id_no) REFERENCES playthrough(id_no) ON DELETE RESTRICT,
+  FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE RESTRICT
 );
 INSERT INTO event
   SELECT
@@ -256,11 +256,11 @@ CREATE TABLE battle_event (
   partner_id INTEGER,
   lost BOOLEAN NOT NULL,
   round INTEGER,
-  FOREIGN KEY (no) REFERENCES event(no),
-  FOREIGN KEY (battle_type_id) REFERENCES battle_type(id),
-  FOREIGN KEY (opponent1_id) REFERENCES trainer(id),
-  FOREIGN KEY (opponent2_id) REFERENCES trainer(id),
-  FOREIGN KEY (partner_id) REFERENCES trainer(id)
+  FOREIGN KEY (no) REFERENCES event(no) ON DELETE CASCADE,
+  FOREIGN KEY (battle_type_id) REFERENCES battle_type(id) ON DELETE RESTRICT,
+  FOREIGN KEY (opponent1_id) REFERENCES trainer(id) ON DELETE RESTRICT,
+  FOREIGN KEY (opponent2_id) REFERENCES trainer(id) ON DELETE RESTRICT,
+  FOREIGN KEY (partner_id) REFERENCES trainer(id) ON DELETE RESTRICT
 );
 INSERT INTO battle_event
   SELECT
@@ -287,8 +287,8 @@ INSERT INTO battle_event
 CREATE TABLE item_event (
   no INTEGER NOT NULL PRIMARY KEY,
   item_id INTEGER NOT NULL,
-  FOREIGN KEY (no) REFERENCES event(no),
-  FOREIGN KEY (item_id) REFERENCES item(id)
+  FOREIGN KEY (no) REFERENCES event(no) ON DELETE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE RESTRICT
 );
 INSERT INTO item_event
   SELECT
@@ -302,9 +302,9 @@ CREATE TABLE catch_event (
   no INTEGER NOT NULL PRIMARY KEY,
   catch_type_id INTEGER NOT NULL,
   team_member_id INTEGER NOT NULL,
-  FOREIGN KEY (no) REFERENCES event(no),
-  FOREIGN KEY (catch_type_id) REFERENCES catch_type(id),
-  FOREIGN KEY (team_member_id) REFERENCES team_member(id)
+  FOREIGN KEY (no) REFERENCES event(no) ON DELETE CASCADE,
+  FOREIGN KEY (catch_type_id) REFERENCES catch_type(id) ON DELETE RESTRICT,
+  FOREIGN KEY (team_member_id) REFERENCES team_member(id) ON DELETE RESTRICT
 );
 INSERT INTO catch_event
   SELECT
@@ -321,9 +321,9 @@ CREATE TABLE team_member_change (
   team_member_id INTEGER NOT NULL,
   level INTEGER,
   species_id INTEGER,
-  FOREIGN KEY (event_no) REFERENCES event(no),
-  FOREIGN KEY (team_member_id) REFERENCES team_member(id),
-  FOREIGN KEY (species_id) REFERENCES species(id),
+  FOREIGN KEY (event_no) REFERENCES event(no) ON DELETE RESTRICT,
+  FOREIGN KEY (team_member_id) REFERENCES team_member(id) ON DELETE RESTRICT,
+  FOREIGN KEY (species_id) REFERENCES species(id) ON DELETE RESTRICT,
   CHECK (level >= 1 AND level <= 100)
 );
 INSERT INTO team_member_change

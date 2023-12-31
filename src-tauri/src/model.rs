@@ -1,10 +1,7 @@
 pub mod ball;
-pub mod battle_event;
 pub mod battle_type;
-pub mod catch_event;
 pub mod catch_type;
 pub mod event;
-pub mod item_event;
 pub mod item;
 pub mod location;
 pub mod playthrough;
