@@ -11,7 +11,7 @@ import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
 import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 import { TrainerInput } from 'components/inputs/TrainerInput';
-import { readEvents } from 'backend/data/event';
+import { deleteEvent, readEvents } from 'backend/data/event';
 import { Event } from 'backend/models';
 
 
@@ -140,7 +140,7 @@ const BattleTableRow: FC<{
                 setDisabled(prev => prev - 1)
                 return
             }
-            await deleteBattle({ no: event.no })
+            await deleteEvent({ eventNo: event.no })
         }
         catch (error) {
             console.error(error)

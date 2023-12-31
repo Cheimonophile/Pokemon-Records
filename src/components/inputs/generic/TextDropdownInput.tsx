@@ -88,7 +88,7 @@ export const TextDropdownInput = ({
   }, [text, selectOption])
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       <div>
         <input
           type="text"
