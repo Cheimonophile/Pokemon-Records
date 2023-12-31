@@ -88,6 +88,7 @@ impl Read for Event {
                     FROM event
                     LEFT JOIN battle_event ON event.no = battle_event.no
                     LEFT JOIN catch_event ON event.no = catch_event.no
+                    ORDER BY event.no DESC
                 "#,
             )
             .fetch_all(&mut *transaction),

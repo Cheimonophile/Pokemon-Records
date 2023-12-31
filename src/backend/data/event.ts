@@ -9,4 +9,6 @@ import { Parse } from "backend/models";
 export const readEvents = command(
     'read_events', 
     Parse.Event.array(),
-) satisfies Command<{}>
+) satisfies Command<{
+  playthroughIdNo: number,
+}>

@@ -1,6 +1,5 @@
 import { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { message } from '@tauri-apps/api/dialog';
-import { Catch } from '../types';
 import { useAppContext } from '../App';
 import { createCatch, readCatches } from '../backend/data/catches';
 import { readSpecies } from '../backend/data/species';

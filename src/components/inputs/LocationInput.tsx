@@ -1,5 +1,4 @@
 import { message } from "@tauri-apps/api/dialog";
-import { readBattles } from "backend/data/battles";
 import { readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
