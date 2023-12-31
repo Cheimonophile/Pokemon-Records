@@ -10,6 +10,7 @@ mod error;
 mod state;
 mod util;
 mod pkmndb;
+mod reports;
 
 fn main() {
         tauri::Builder::default()
@@ -38,6 +39,7 @@ fn main() {
                 crate::model::trainer::read_trainers,
                 crate::model::type_::read_types,
                 crate::model::version::read_versions,
+                crate::reports::team_over_time::team_over_time,
                 crate::state::set_db_connection,
             ])
             .run(tauri::generate_context!())
