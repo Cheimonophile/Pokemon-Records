@@ -101,14 +101,14 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextState}>
-      <div className="h-full w-full flex flex-col">
+      <div className="h-full w-full flex flex-col overflow-hidden">
 
         {/* Nav Bar */}
         <Nav />
         <hr />
 
         {/* Body */}
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
 
           <CurrentPage key={currentPage} />
 

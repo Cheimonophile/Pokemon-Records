@@ -45,7 +45,7 @@ export const Battles: FC<{}> = () => {
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-1 p-1">
+        <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
 
             {/* Above Table */}
             <div className="flex-none flex flex-row gap-2">
@@ -78,7 +78,7 @@ export const Battles: FC<{}> = () => {
             </div>
 
             {/* Battles Table */}
-            <div className="flex-1">
+            <div className="flex-1 overflow-hidden">
                 <div className="w-full h-full overflow-y-auto p-1 border">
 
                     {/* table */}
