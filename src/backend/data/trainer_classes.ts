@@ -1,17 +1,15 @@
 
 import { Command, command } from "backend/common"
+import { Parse } from "backend/models"
 import { z } from "zod"
-
-type ReadParams = {
-    name?: string
-}
-
-const ReadResult = z.string().array()
 
 /**
  * Reads regions from the backend
  */
-export const readTrainerClasses = command('read_trainer_classes', ReadResult) satisfies Command<ReadParams>
+export const readTrainerClasses = command(
+    'read_trainer_classes',
+    Parse.TrainerClass.array()
+) satisfies Command<{}>
 
 
 /**
@@ -19,7 +17,7 @@ export const readTrainerClasses = command('read_trainer_classes', ReadResult) sa
  */
 export const createTrainerClass = command(
     'create_trainer_class',
-    z.null()
+    z.number()
 ) satisfies Command<{
     name: string,
 }>

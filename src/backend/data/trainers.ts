@@ -1,37 +1,26 @@
 
 import { Command, command } from "backend/common"
+import { Parse } from "backend/models"
 import { z } from "zod"
-
-type ReadParams = {
-    name?: string
-    class?: string
-}
-
-const ReadResult = z.object({
-    name: z.string(),
-    class: z.string(),
-}).array()
 
 
 /**
  * Reads trainers from the backend
  */
-export const readTrainers = command('read_trainers', ReadResult) satisfies Command<ReadParams>
+export const readTrainers = command(
+    'read_trainers', 
+    Parse.Trainer.array()
+) satisfies Command<{}>
 
 
-
-type CreateParams = {
-    name: string
-    class: string
-}
-
-
-const CreateResult = z.object({
-    name: z.string(),
-    class: z.string(),
-})
 
 /**
  * Creates a trainer in the backend
  */
-export const createTrainer = command('create_trainer', CreateResult) satisfies Command<CreateParams>
+export const createTrainer = command(
+    'create_trainer', 
+    z.number()
+) satisfies Command<{
+    name: string,
+    class: string
+}>
