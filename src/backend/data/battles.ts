@@ -33,11 +33,15 @@ const TResult = z.object({
 export const readBattles = command('read_battles', TResult) satisfies Command<ReadParams>
 
 
-
-type CreateParams = {
+/**
+ * Creates a battle in the backend
+ */
+export const createBattle = command(
+    'create_battle',
+    z.number()
+) satisfies Command<{
     playthroughIdNo: string,
-    locationName: string,
-    locationRegion: string,
+    locationId: number,
     battleType: string,
     opponent1Name: string,
     opponent1Class: string,
@@ -47,16 +51,7 @@ type CreateParams = {
     partnerClass?: string,
     round: number,
     lost: boolean,
-}
-
-
-const CreateResult = z.number()
-
-
-/**
- * Creates a battle in the backend
- */
-export const createBattle = command('create_battle', CreateResult) satisfies Command<CreateParams>
+}>
 
 
 
@@ -64,7 +59,7 @@ export const createBattle = command('create_battle', CreateResult) satisfies Com
  * Updates a battle in the backend
  */
 export const updateBattle = command(
-    'update_battle', 
+    'update_battle',
     z.null()
 ) satisfies Command<{
     no: number,

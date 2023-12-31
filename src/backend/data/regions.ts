@@ -1,14 +1,15 @@
 
 import { Command, command } from "backend/common"
-import { z } from "zod"
+import { Parse } from "backend/models"
 
 type ReadParams = {
     name?: string
 }
 
-const ReadResult = z.string().array()
-
 /**
  * Reads regions from the backend
  */
-export const readRegions = command('read_regions', ReadResult) satisfies Command<ReadParams>
+export const readRegions = command(
+    'read_regions',
+    Parse.Region.array(),
+) satisfies Command<{}>

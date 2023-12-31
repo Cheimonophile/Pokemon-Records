@@ -5,13 +5,16 @@ import { readRegions } from "backend/data/regions";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
 import { TextInput } from "./generic/TextInput";
+import { Location } from "backend/models";
+import { set } from "date-fns";
+import { TextDropdownInput, TextDropdownOption } from "./generic/TextDropdownInput";
 
 
 
 
 interface Props {
-  location: { region: string, name: string }
-  setLocation: Dispatch<SetStateAction<{ region: string, name: string }>>
+  locationId?: number | null,
+  setLocationId: (location_id: number | null) => void,
 }
 
 
@@ -19,30 +22,30 @@ interface Props {
  * Input for a location in pokemon
  */
 export function LocationInput({
-  location,
-  setLocation,
+  locationId,
+  setLocationId,
 }: Props): ReactNode {
 
-  // options
+  // set retion
+  const [regionId, setRegionId] = useState<number | null>(null)
+
+  // region options
   const [regionOptions, setRegionOptions] = useState<SwitchOption[]>()
   useEffect(() => {
     (async () => {
       try {
-        const [regions, mostRecentBattle] = await Promise.all([
+        const [regions] = await Promise.all([
           readRegions({}),
-          readBattles({ howMany: 1 }),
         ])
         const regionSwitchOptions = regions.map(region => {
           return {
-            value: region,
-            label: region,
-          }
+            value: region.id.toString(),
+            label: region.name,
+          } satisfies SwitchOption
         })
         setRegionOptions(regionSwitchOptions);
-        setLocation({
-            region: mostRecentBattle[0].event.location_region,
-            name: mostRecentBattle[0].event.location_name
-        })
+        setRegionId(regions[0].id)
+        setLocationId(0)
       }
       catch (error) {
         console.error(error)
@@ -52,13 +55,24 @@ export function LocationInput({
         })
       }
     })()
-  }, [setLocation])
-  const [locationValid, setLocationValid] = useState<boolean>(false)
+  }, [setLocationId])
+
+
+  // location options
+  const [locationOptions, setLocationOptions] = useState<TextDropdownOption[]>()
   useEffect(() => {
     (async () => {
       try {
-        const locations = await readLocations({ name: location.name, region: location.region })
-        setLocationValid(locations.length > 0)
+        const [locations] = await Promise.all([
+          readLocations({ regionId: regionId ?? undefined }),
+        ])
+        const locationDropdownOptions = locations.map(location => {
+          return {
+            value: location.id.toString(),
+            label: location.name,
+          } satisfies TextDropdownOption
+        })
+        setLocationOptions(locationDropdownOptions);
       }
       catch (error) {
         console.error(error)
@@ -68,22 +82,22 @@ export function LocationInput({
         })
       }
     })()
-  }, [location])
+  }, [regionId])
 
 
 
   return (
     <div className="flex flex-row">
       <SwitchInput
-        value={location.region}
+        value={regionId?.toString()}
         options={regionOptions}
-        onChange={region => setLocation(prev => ({ ...prev, region }))}
+        onChange={regionId => setRegionId(parseInt(regionId))}
       />
-      <TextInput
-        value={location.name}
+      <TextDropdownInput
+        value={locationId?.toString()}
         placeholder="Location"
-        valid={locationValid}
-        onChange={name => setLocation(prev => ({ ...prev, name }))}
+        options={locationOptions}
+        onChange={locationId => setLocationId(locationId ? parseInt(locationId) : null)}
       />
     </div>
   )

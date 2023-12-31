@@ -4,7 +4,7 @@ import z from 'zod';
 
 
 
-export namespace Zod {
+export namespace Parse {
 
   /**
    * Zod parser for a version in the database
@@ -22,18 +22,34 @@ export namespace Zod {
   export const Playthrough = z.object({
     id_no: z.string(),
     name: z.string(),
-    version_id: z.number(),
     adventure_started: z.string(),
-    version: Version.optional(),
+    version: Version,
+  })
+
+  /**
+   * Zod parser for a region in the database
+   */
+  export const Region = z.object({
+    id: z.number(),
+    name: z.string(),
   })
 
 
-
+  /**
+   * Zod parser for a location in the database
+   */
+  export const Location = z.object({
+    id: z.number(),
+    name: z.string(),
+    region: Region,
+  })
 }
 
 // create types from the models
-export type Version = z.infer<typeof Zod.Version>
-export type Playthrough = z.infer<typeof Zod.Playthrough>
+export type Version = z.infer<typeof Parse.Version>
+export type Playthrough = z.infer<typeof Parse.Playthrough>
+export type Region = z.infer<typeof Parse.Region>
+export type Location = z.infer<typeof Parse.Location>
 
 
 

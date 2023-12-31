@@ -97,9 +97,29 @@ pub fn create_location(
 }
 
 #[tauri::command]
-pub fn read_locations(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Location>> {
+pub fn read_locations(
+    state: tauri::State<state::GameState>,
+    id: Option<i64>,
+    region_id: Option<i64>,
+) -> PkmnResult<Vec<Location>> {
     let mut connection = state.connection()?;
     let mut transaction = connection.transaction()?;
-    let locations = Location::read(&mut *transaction)?;
+    let locations = Location::read(&mut *transaction)?
+        .into_iter()
+        .filter(|location| {
+            let mut keep = true;
+            keep &= if let Some(id) = id {
+                location.id == id
+            } else {
+                true
+            };
+            keep &= if let Some(region_id) = region_id {
+                location.region.id == region_id
+            } else {
+                true
+            };
+            keep
+        })
+        .collect::<Vec<Location>>();
     Ok(locations)
 }

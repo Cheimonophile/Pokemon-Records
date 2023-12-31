@@ -20,8 +20,6 @@ export function command<TParams extends InvokeArgs, TSchema extends z.ZodTypeAny
   const func = async (params: TParams): Promise<TResult> => {
     try {
       const result = await invoke(command, params);
-      console.log(command)
-      console.log(result)
       const parsed: TResult = schema.parse(result);
       return parsed
     }

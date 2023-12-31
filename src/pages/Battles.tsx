@@ -1,7 +1,6 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createBattle, deleteBattle, readBattles, updateBattle } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Battle, TeamMember, Trainer } from '../types';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from 'backend/data/teamOverTime';
@@ -238,7 +237,7 @@ const CreateBattle: FC<{}> = () => {
 
     // Form State
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-    const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
+    const [locationId, setLocationId] = useState<number | null>(null)
     const [battleType, setBattleType] = useState<string>("")
     const [opponent1, setOpponent1] = useState<Trainer>({ name: "", class: "", })
     const [opponent2, setOpponent2] = useState<Trainer>({ name: "", class: "", })
@@ -256,11 +255,12 @@ const CreateBattle: FC<{}> = () => {
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
+            if (locationId === null)
+                throw new Error("No Location Selected")
             // create the battle
             await createBattle({
                 playthroughIdNo: playthroughIdNo,
-                locationName: location.name,
-                locationRegion: location.region,
+                locationId: locationId,
                 battleType: battleType,
                 opponent1Class: opponent1.class,
                 opponent1Name: opponent1.name,
@@ -300,8 +300,8 @@ const CreateBattle: FC<{}> = () => {
 
             {/* Location */}
             <LocationInput
-                location={location}
-                setLocation={setLocation}
+                locationId={locationId}
+                setLocationId={setLocationId}
             />
 
             {/* Battle Type */}

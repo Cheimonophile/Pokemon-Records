@@ -18,7 +18,7 @@ code {
     monospace;
 }
 div {
-  @apply overflow-hidden flex-none shrink-0;
+  @apply flex-none shrink-0;
 }
 
 * {
