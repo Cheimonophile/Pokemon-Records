@@ -12,6 +12,8 @@ import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
 import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 import { TrainerInput } from 'components/inputs/TrainerInput';
+import { readEvents } from 'backend/data/event';
+import { Event } from 'backend/models';
 
 
 
@@ -25,43 +27,18 @@ export const Battles: FC<{}> = () => {
     const { addEffect } = useAppContext()
 
     // battle table state
-    const [battles, setBattles] = useState<Battle[] | null | undefined>()
+    const [events, setEvents] = useState<Event[] | null | undefined>()
 
     // fetch battles
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const battleResponse = await readBattles({})
-                const battles = battleResponse.map(battle => {
-                    return {
-                        type: battle.battle_type,
-                        lost: battle.lost,
-                        no: battle.no,
-                        round: battle.round,
-                        location: {
-                            name: battle.event.location_name,
-                            region: battle.event.location_region,
-                        },
-                        opponent1: {
-                            class: battle.opponent1_class,
-                            name: battle.opponent1_name,
-                        },
-                        opponent2: (battle.opponent2_class === null || battle.opponent2_name === null) ? undefined : {
-                            class: battle.opponent2_class,
-                            name: battle.opponent2_name,
-                        },
-                        partner: (battle.partner_class === null || battle.partner_name === null) ? undefined : {
-                            class: battle.partner_class,
-                            name: battle.partner_name,
-                        },
-                        playthroughIdNo: battle.event.playthrough_id_no,
-                    } satisfies Battle
-                })
-                setBattles(battles)
+                const events = await readEvents({})
+                setEvents(events)
             }
             catch (error) {
                 console.error(error)
-                setBattles(null)
+                setEvents(null)
             }
         })
     }, [addEffect])
@@ -81,22 +58,22 @@ export const Battles: FC<{}> = () => {
                 {/* Level Up */}
                 <div className="min-w-fit">
                     {((): ReactNode => {
-                        if (battles instanceof Error) {
-                            return <div className="text-red-500">{battles.message}</div>
+                        if (events === null) {
+                            return <div className="text-red-500">Error</div>
                         }
-                        const battle = battles?.at(0)
-                        if (battle === undefined) {
+                        const event = events?.at(0)
+                        if (event === undefined) {
                             return <></>
                         }
                         return (<>
-                            <LevelUp battle={battle} />
+                            <LevelUp battle={event} />
                         </>)
                     })()}
                 </div>
 
                 {/* Level up over time */}
                 <div className="h-40 w-64">
-                    <TeamMemberLevelChart mostRecentBattle={battles?.at(0)} />
+                    <TeamMemberLevelChart mostRecentBattle={events?.at(0)} />
                 </div>
             </div>
 
@@ -105,18 +82,23 @@ export const Battles: FC<{}> = () => {
                 <div className="w-full h-full overflow-y-auto p-1 border">
 
                     {/* table */}
-                    {battles instanceof Error ? (<>
+                    {!events ? (<>
                         <div className="text-red-500">
-                            {battles.message}
+                            Error
                         </div>
                     </>) : (<>
                         <table>
                             <tbody>
-                                {battles?.map(battle => (
-                                    <Fragment key={battle.no}>
-                                        <BattleTableRow battle={battle} />
-                                    </Fragment>
-                                ))}
+                                {events?.map(event => {
+                                    if (!event.battle) {
+                                        return null
+                                    }
+                                    return (
+                                        <Fragment key={event.no}>
+                                            <BattleTableRow event={event} />
+                                        </Fragment>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </>)}
@@ -129,8 +111,8 @@ export const Battles: FC<{}> = () => {
 
 
 const BattleTableRow: FC<{
-    battle: Battle
-}> = (props) => {
+    event: Event
+}> = ({ event }) => {
 
     // context
     const { refresh } = useAppContext()
@@ -139,19 +121,19 @@ const BattleTableRow: FC<{
     const [disabled, setDisabled] = useState<number>(0)
 
     // make battle title
-    let title = `${props.battle.opponent1.class} ${props.battle.opponent1.name}`
-    if (props.battle.opponent2) {
-        title += ` and ${props.battle.opponent2.class}` + (props.battle.opponent2.name ? ` ${props.battle.opponent2.name}` : '')
+    let title = `${event.battle?.opponent1.class} ${event.battle?.opponent1.name}`
+    if (event.battle?.opponent2) {
+        title += ` and ${event.battle.opponent2.class}` + (event.battle.opponent2.name ? ` ${event.battle.opponent2.name}` : '')
     }
-    if (props.battle.partner) {
-        title += ` with ${props.battle.partner.class}` + (props.battle.partner.name ? ` ${props.battle.partner.name}` : '')
+    if (event.battle?.partner) {
+        title += ` with ${event.battle.partner.class}` + (event.battle.partner.name ? ` ${event.battle.partner.name}` : '')
     }
 
     // delete battle
     const onClickDeleteBattle = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            const sure = await ask(`Are you sure you want to delete battle ${props.battle.no} against ${title}`, {
+            const sure = await ask(`Are you sure you want to delete battle ${event.no} against ${title}`, {
                 title: 'Delete Battle?',
                 type: 'info',
             })
@@ -159,7 +141,7 @@ const BattleTableRow: FC<{
                 setDisabled(prev => prev - 1)
                 return
             }
-            await deleteBattle({ no: props.battle.no })
+            await deleteBattle({ no: event.no })
         }
         catch (error) {
             console.error(error)
@@ -170,14 +152,16 @@ const BattleTableRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }, [props.battle.no, title, refresh])
+    }, [event.no, title, refresh])
 
     // const on toggle lost
     const onClickToggleLost = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            await updateBattle({ no: props.battle.no, lost: !props.battle.lost })
-            props.battle.lost = !props.battle.lost
+            await updateBattle({ no: event.no, lost: !event.battle?.lost })
+            if (event.battle) {
+                event.battle.lost = !event.battle?.lost
+            }
         }
         catch (error) {
             console.error(error)
@@ -189,32 +173,32 @@ const BattleTableRow: FC<{
         await refresh()
         setDisabled(prev => prev - 1)
 
-    }, [refresh, props.battle])
+    }, [refresh, event])
 
     return (<tr>
         <td>
             <button onClick={onClickDeleteBattle} disabled={disabled > 0}>X</button>
         </td>
         <td>
-            {props.battle.no}.
+            {event.no}.
         </td>
         <td>
-            {title}{props.battle.round > 0 && ` (Round ${props.battle.round})`}
+            {title}{event.battle && event.battle.round > 0 && ` (Round ${event.battle.round})`}
         </td>
         <td>
             <label>Lost</label>
             <input
                 type="checkbox"
-                checked={props.battle.lost}
+                checked={event.battle?.lost}
                 onChange={onClickToggleLost}
                 disabled={disabled > 0}
             />
         </td>
         <td>
-            {props.battle.location.name}
+            {event.location.name}
         </td>
         <td>
-            {props.battle.location.region}
+            {event.location.region.name}
         </td>
     </tr>)
 }

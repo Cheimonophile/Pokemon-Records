@@ -355,7 +355,7 @@ pub fn create_event(state: tauri::State<state::GameState>, event: CreateEvent) -
  * Read all events
  */
 #[tauri::command]
-pub async fn read_events(
+pub fn read_events(
     state: tauri::State<'_, state::GameState>,
     playthrough_id_no: Option<String>,
 ) -> PkmnResult<Vec<Event>> {
