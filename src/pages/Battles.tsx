@@ -125,12 +125,12 @@ const BattleTableRow: FC<{
     const [disabled, setDisabled] = useState<number>(0)
 
     // make battle title
-    let title = `${event.battle?.opponent1.class} ${event.battle?.opponent1.name}`
+    let title = `${event.battle?.opponent1.class.name} ${event.battle?.opponent1.name}`
     if (event.battle?.opponent2) {
-        title += ` and ${event.battle.opponent2.class}` + (event.battle.opponent2.name ? ` ${event.battle.opponent2.name}` : '')
+        title += ` and ${event.battle.opponent2.class.name}` + (event.battle.opponent2.name ? ` ${event.battle.opponent2.name}` : '')
     }
     if (event.battle?.partner) {
-        title += ` with ${event.battle.partner.class}` + (event.battle.partner.name ? ` ${event.battle.partner.name}` : '')
+        title += ` with ${event.battle.partner.class.name}` + (event.battle.partner.name ? ` ${event.battle.partner.name}` : '')
     }
 
     // delete battle
