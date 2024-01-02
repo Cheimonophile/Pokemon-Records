@@ -1,18 +1,19 @@
 import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
-import { createBattle, deleteBattle, readBattles, updateBattle } from '../backend/data/battles'
 import { ask, message } from '@tauri-apps/api/dialog';
-import { Battle, TeamMember, Trainer } from '../types';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
-import { teamOverTime } from 'backend/data/teamOverTime';
+import { teamOverTime } from 'backend/report/team_over_time';
 import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
-import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
 import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 import { TrainerInput } from 'components/inputs/TrainerInput';
+import { createEvent, deleteEvent, readEvents, updateEvent } from 'backend/data/event';
+import { Event, TeamMember } from 'backend/models';
+import { readPlaythroughs } from 'backend/data/playthroughs';
+import { todayStr } from 'utils';
 
 
 
@@ -26,50 +27,28 @@ export const Battles: FC<{}> = () => {
     const { addEffect } = useAppContext()
 
     // battle table state
-    const [battles, setBattles] = useState<Battle[] | null | undefined>()
+    const [events, setEvents] = useState<Event[] | null | undefined>()
 
     // fetch battles
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const battleResponse = await readBattles({})
-                const battles = battleResponse.map(battle => {
-                    return {
-                        type: battle.battle_type,
-                        lost: battle.lost,
-                        no: battle.no,
-                        round: battle.round,
-                        location: {
-                            name: battle.event.location_name,
-                            region: battle.event.location_region,
-                        },
-                        opponent1: {
-                            class: battle.opponent1_class,
-                            name: battle.opponent1_name,
-                        },
-                        opponent2: (battle.opponent2_class === null || battle.opponent2_name === null) ? undefined : {
-                            class: battle.opponent2_class,
-                            name: battle.opponent2_name,
-                        },
-                        partner: (battle.partner_class === null || battle.partner_name === null) ? undefined : {
-                            class: battle.partner_class,
-                            name: battle.partner_name,
-                        },
-                        playthroughIdNo: battle.event.playthrough_id_no,
-                    } satisfies Battle
+                const playthroughs = await readPlaythroughs({})
+                const events = await readEvents({
+                    playthroughIdNo: playthroughs[0].id_no,
                 })
-                setBattles(battles)
+                setEvents(events)
             }
             catch (error) {
                 console.error(error)
-                setBattles(null)
+                setEvents(null)
             }
         })
     }, [addEffect])
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-1 p-1">
+        <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
 
             {/* Above Table */}
             <div className="flex-none flex flex-row gap-2">
@@ -82,42 +61,47 @@ export const Battles: FC<{}> = () => {
                 {/* Level Up */}
                 <div className="min-w-fit">
                     {((): ReactNode => {
-                        if (battles instanceof Error) {
-                            return <div className="text-red-500">{battles.message}</div>
+                        if (events === null) {
+                            return <div className="text-red-500">Error</div>
                         }
-                        const battle = battles?.at(0)
-                        if (battle === undefined) {
+                        const event = events?.at(0)
+                        if (event === undefined) {
                             return <></>
                         }
                         return (<>
-                            <LevelUp battle={battle} />
+                            <LevelUp event={event} />
                         </>)
                     })()}
                 </div>
 
                 {/* Level up over time */}
                 <div className="h-40 w-64">
-                    <TeamMemberLevelChart mostRecentBattle={battles?.at(0)} />
+                    <TeamMemberLevelChart mostRecentBattle={events?.at(0)} />
                 </div>
             </div>
 
             {/* Battles Table */}
-            <div className="flex-1">
+            <div className="flex-1 overflow-hidden">
                 <div className="w-full h-full overflow-y-auto p-1 border">
 
                     {/* table */}
-                    {battles instanceof Error ? (<>
+                    {!events ? (<>
                         <div className="text-red-500">
-                            {battles.message}
+                            Error
                         </div>
                     </>) : (<>
                         <table>
                             <tbody>
-                                {battles?.map(battle => (
-                                    <Fragment key={battle.no}>
-                                        <BattleTableRow battle={battle} />
-                                    </Fragment>
-                                ))}
+                                {events?.map(event => {
+                                    if (!event.battle) {
+                                        return null
+                                    }
+                                    return (
+                                        <Fragment key={event.no}>
+                                            <BattleTableRow event={event} />
+                                        </Fragment>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </>)}
@@ -130,8 +114,8 @@ export const Battles: FC<{}> = () => {
 
 
 const BattleTableRow: FC<{
-    battle: Battle
-}> = (props) => {
+    event: Event
+}> = ({ event }) => {
 
     // context
     const { refresh } = useAppContext()
@@ -140,19 +124,19 @@ const BattleTableRow: FC<{
     const [disabled, setDisabled] = useState<number>(0)
 
     // make battle title
-    let title = `${props.battle.opponent1.class} ${props.battle.opponent1.name}`
-    if (props.battle.opponent2) {
-        title += ` and ${props.battle.opponent2.class}` + (props.battle.opponent2.name ? ` ${props.battle.opponent2.name}` : '')
+    let title = `${event.battle?.opponent1.class.name} ${event.battle?.opponent1.name}`
+    if (event.battle?.opponent2) {
+        title += ` and ${event.battle.opponent2.class.name}` + (event.battle.opponent2.name ? ` ${event.battle.opponent2.name}` : '')
     }
-    if (props.battle.partner) {
-        title += ` with ${props.battle.partner.class}` + (props.battle.partner.name ? ` ${props.battle.partner.name}` : '')
+    if (event.battle?.partner) {
+        title += ` with ${event.battle.partner.class.name}` + (event.battle.partner.name ? ` ${event.battle.partner.name}` : '')
     }
 
     // delete battle
     const onClickDeleteBattle = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            const sure = await ask(`Are you sure you want to delete battle ${props.battle.no} against ${title}`, {
+            const sure = await ask(`Are you sure you want to delete battle ${event.no} against ${title}`, {
                 title: 'Delete Battle?',
                 type: 'info',
             })
@@ -160,7 +144,7 @@ const BattleTableRow: FC<{
                 setDisabled(prev => prev - 1)
                 return
             }
-            await deleteBattle({ no: props.battle.no })
+            await deleteEvent({ eventNo: event.no })
         }
         catch (error) {
             console.error(error)
@@ -171,14 +155,35 @@ const BattleTableRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }, [props.battle.no, title, refresh])
+    }, [event.no, title, refresh])
 
     // const on toggle lost
     const onClickToggleLost = useCallback(async () => {
         setDisabled(prev => prev + 1)
         try {
-            await updateBattle({ no: props.battle.no, lost: !props.battle.lost })
-            props.battle.lost = !props.battle.lost
+            if (event.battle) {
+                await updateEvent({
+                    no: event.no,
+                    event: {
+                        playthroughIdNo: event.playthrough.id_no,
+                        locationId: event.location.id,
+                        date: event.date,
+                        battle: {
+                            battleTypeId: event.battle.battle_type.id,
+                            opponent1Id: event.battle.opponent1.id,
+                            opponent2Id: event.battle.opponent2?.id ?? null,
+                            partnerId: event.battle.partner?.id ?? null,
+                            lost: !event.battle.lost,
+                            round: event.battle.round,
+                        },
+                        catch: null,
+                    }
+                })
+                event.battle.lost = !event.battle?.lost
+            }
+            else {
+                throw new Error("The event is not a battle")
+            }
         }
         catch (error) {
             console.error(error)
@@ -190,32 +195,32 @@ const BattleTableRow: FC<{
         await refresh()
         setDisabled(prev => prev - 1)
 
-    }, [refresh, props.battle])
+    }, [refresh, event])
 
     return (<tr>
         <td>
             <button onClick={onClickDeleteBattle} disabled={disabled > 0}>X</button>
         </td>
         <td>
-            {props.battle.no}.
+            {event.no}.
         </td>
         <td>
-            {title}{props.battle.round > 0 && ` (Round ${props.battle.round})`}
+            {title}{event.battle && event.battle.round > 0 && ` (Round ${event.battle.round})`}
         </td>
         <td>
             <label>Lost</label>
             <input
                 type="checkbox"
-                checked={props.battle.lost}
+                checked={event.battle?.lost}
                 onChange={onClickToggleLost}
                 disabled={disabled > 0}
             />
         </td>
         <td>
-            {props.battle.location.name}
+            {event.location.name}
         </td>
         <td>
-            {props.battle.location.region}
+            {event.location.region.name}
         </td>
     </tr>)
 }
@@ -238,12 +243,12 @@ const CreateBattle: FC<{}> = () => {
 
     // Form State
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-    const [location, setLocation] = useState<{ name: string, region: string }>({ name: "", region: "", })
-    const [battleType, setBattleType] = useState<string>("")
-    const [opponent1, setOpponent1] = useState<Trainer>({ name: "", class: "", })
-    const [opponent2, setOpponent2] = useState<Trainer>({ name: "", class: "", })
+    const [locationId, setLocationId] = useState<number | null>(null)
+    const [battleTypeId, setBattleTypeId] = useState<number | null>(null)
+    const [opponent1Id, setOpponent1Id] = useState<number | null>(null)
+    const [opponent2Id, setOpponent2Id] = useState<number | null>(null)
     const [useOpponent2, setUseOpponent2] = useState<boolean>(false)
-    const [partner, setPartner] = useState<Trainer>({ name: "", class: "", })
+    const [partnerId, setPartnerId] = useState<number | null>(null)
     const [usePartner, setUsePartner] = useState<boolean>(false)
 
     // lost
@@ -256,27 +261,39 @@ const CreateBattle: FC<{}> = () => {
             // errors
             if (playthroughIdNo === undefined)
                 throw new Error("No Playthrough Selected")
+            if (locationId === null)
+                throw new Error("No Location Selected")
+            if (battleTypeId === null)
+                throw new Error("No Battle Type Selected")
+            if (opponent1Id === null)
+                throw new Error("No Opponent 1 Selected")
+            if (useOpponent2 && opponent2Id === null)
+                throw new Error("No Opponent 2 Selected")
+            if (usePartner && partnerId === null)
+                throw new Error("No Partner Selected")
             // create the battle
-            await createBattle({
-                playthroughIdNo: playthroughIdNo,
-                locationName: location.name,
-                locationRegion: location.region,
-                battleType: battleType,
-                opponent1Class: opponent1.class,
-                opponent1Name: opponent1.name,
-                opponent2Class: useOpponent2 ? opponent2.class : undefined,
-                opponent2Name: useOpponent2 ? opponent2.name : undefined,
-                partnerClass: usePartner ? partner.class : undefined,
-                partnerName: usePartner ? partner.name : undefined,
-                round: 0,
-                lost: lost,
+            await createEvent({
+                event: {
+                    playthroughIdNo,
+                    locationId,
+                    date: todayStr(),
+                    battle: {
+                        battleTypeId,
+                        opponent1Id,
+                        opponent2Id,
+                        partnerId,
+                        round: 0,
+                        lost,
+                    },
+                    catch: null,
+                }
             })
-            setBattleType("Single")
-            setOpponent1(prev => ({ ...prev, name: "", }))
+            setBattleTypeId(null)
+            setOpponent1Id(null)
             setUseOpponent2(false)
-            setOpponent2(prev => ({ ...prev, name: "", }))
+            setOpponent2Id(null)
             setUsePartner(false)
-            setPartner(prev => ({ ...prev, name: "", }))
+            setPartnerId(null)
             setLost(false)
         }
         catch (error) {
@@ -300,14 +317,14 @@ const CreateBattle: FC<{}> = () => {
 
             {/* Location */}
             <LocationInput
-                location={location}
-                setLocation={setLocation}
+                locationId={locationId}
+                setLocationId={setLocationId}
             />
 
             {/* Battle Type */}
             <BattleTypeInput
-                battleType={battleType}
-                setBattleType={setBattleType}
+                battleTypeId={battleTypeId}
+                setBattleTypeId={setBattleTypeId}
             />
 
             {/* Opponent 1 */}
@@ -316,8 +333,8 @@ const CreateBattle: FC<{}> = () => {
                     Opponent 1:
                 </div>
                 <TrainerInput
-                    trainer={opponent1}
-                    setTrainer={setOpponent1}
+                    trainerId={opponent1Id}
+                    setTrainerId={setOpponent1Id}
                 />
             </div>
 
@@ -332,8 +349,8 @@ const CreateBattle: FC<{}> = () => {
                 />
                 {useOpponent2 && (
                     <TrainerInput
-                        trainer={opponent2}
-                        setTrainer={setOpponent2}
+                        trainerId={opponent2Id}
+                        setTrainerId={setOpponent2Id}
                     />
                 )}
             </div>
@@ -348,8 +365,8 @@ const CreateBattle: FC<{}> = () => {
                 />
                 {usePartner && (<>
                     <TrainerInput
-                        trainer={partner}
-                        setTrainer={setPartner}
+                        trainerId={partnerId}
+                        setTrainerId={setPartnerId}
                     />
                 </>)}
             </div>
@@ -414,8 +431,8 @@ const CreateBattle: FC<{}> = () => {
 
 
 const LevelUp: FC<{
-    battle: Battle
-}> = (props) => {
+    event: Event
+}> = ({ event }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -427,35 +444,7 @@ const LevelUp: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const readTeamMembersResponse = await readTeamMembers({ playthroughIdNo: props.battle.playthroughIdNo })
-                const teamMembers = readTeamMembersResponse.map(teamMember => {
-                    return {
-                        id: teamMember.id,
-                        level: teamMember.level,
-                        nickname: teamMember.nickname,
-                        species: {
-                            name: teamMember.species.name,
-                            generation: teamMember.species.generation,
-                            dexNo: teamMember.species.dex_no,
-                            type1: teamMember.species.type1,
-                            type2: teamMember.species.type2,
-                        },
-                        playthrough: {
-                            idNo: teamMember.playthrough.id_no,
-                            version: teamMember.playthrough.version,
-                            adventureStarted: teamMember.playthrough.adventure_started,
-                            name: teamMember.playthrough.name,
-                        },
-                        slot: teamMember.slot,
-                        caughtDate: teamMember.caught_date,
-                        caughtLocationName: teamMember.caught_location_name,
-                        caughtLocationRegion: teamMember.caught_location_region,
-                        caughtSpeciesName: teamMember.caught_species_name,
-                        caughtLevel: teamMember.caught_level,
-                        ball: teamMember.ball,
-                        gender: teamMember.gender
-                    } satisfies TeamMember
-                })
+                const teamMembers = await readTeamMembers({ playthroughIdNo: event.playthrough.id_no })
                 setTeamMembers(teamMembers)
             }
             catch (error) {
@@ -465,7 +454,7 @@ const LevelUp: FC<{
         })
     }, [
         addEffect,
-        props.battle.playthroughIdNo
+        event
     ])
 
     return <>
@@ -477,7 +466,7 @@ const LevelUp: FC<{
                     <tbody>
                         {teamMembers?.map(teamMember => (
                             <Fragment key={teamMember.id}>
-                                <TeamMemberRow teamMember={teamMember} battle={props.battle} />
+                                <TeamMemberRow teamMember={teamMember} event={event} />
                             </Fragment>
                         ))}
                     </tbody>
@@ -490,8 +479,8 @@ const LevelUp: FC<{
 
 const TeamMemberRow: FC<{
     teamMember: TeamMember,
-    battle: Battle,
-}> = (props) => {
+    event: Event,
+}> = ({ teamMember, event }) => {
 
     // context
     const { refresh } = useAppContext()
@@ -504,9 +493,12 @@ const TeamMemberRow: FC<{
         setDisabled(prev => prev + 1)
         try {
             await createTeamMemberChange({
-                eventNo: props.battle.no,
-                teamMemberId: props.teamMember.id,
-                level: props.teamMember.level + change
+                teamMemberChange: {
+                    teamMemberId: teamMember.id,
+                    eventNo: event.no,
+                    level: teamMember.level + change,
+                    speciesId: null,
+                }
             })
         }
         catch (error) {
@@ -523,10 +515,10 @@ const TeamMemberRow: FC<{
     return <>
         <tr>
             <td className="truncate">
-                {props.teamMember.nickname ?? props.teamMember.species.name}
+                {teamMember.nickname ?? teamMember.species.name}
             </td>
             <td>
-                {props.teamMember.level}
+                {teamMember.level}
             </td>
             <td>
                 <button disabled={disabled > 0} onClick={() => onClickLevelChange(1)}>+</button>
@@ -540,8 +532,8 @@ const TeamMemberRow: FC<{
 
 
 const TeamMemberLevelChart: FC<{
-    mostRecentBattle?: Battle,
-}> = (props) => {
+    mostRecentBattle?: Event,
+}> = ({ mostRecentBattle }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -552,12 +544,11 @@ const TeamMemberLevelChart: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                if (props.mostRecentBattle === undefined)
+                if (mostRecentBattle === undefined)
                     throw new Error("Most Recent Battle not defined")
                 const results = await teamOverTime({
-                    playthroughIdNo: props.mostRecentBattle.playthroughIdNo,
+                    playthroughIdNo: mostRecentBattle.playthrough.id_no,
                 })
-                const types = await readTypes({})
                 let maxLevel = 0
                 results.forEach(row => {
                     row.forEach(cell => {
@@ -574,7 +565,7 @@ const TeamMemberLevelChart: FC<{
                     for (const cell of row) {
                         if (data.get(cell.team_member.id) === undefined) {
                             data.set(cell.team_member.id, {
-                                color: types.find(type => type.name === cell.species.type1)?.color ?? undefined,
+                                color: cell.team_member.species.type1.color,
                                 data: []
                             })
                         }
@@ -625,7 +616,7 @@ const TeamMemberLevelChart: FC<{
                 setData(new Error(`${error}`))
             }
         })
-    }, [addEffect, props.mostRecentBattle])
+    }, [addEffect, mostRecentBattle])
 
 
 

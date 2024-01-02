@@ -4,7 +4,7 @@ import { Open } from './pages/Open';
 import { setDBConnection } from './backend/data/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
-import { Catches } from './pages/Catches';
+// import { Catches } from './pages/Catches';
 import { Nav } from './components/Nav';
 // import './App.css';
 
@@ -15,7 +15,7 @@ import { Nav } from './components/Nav';
 export const PAGES = Object.freeze({
   Open: Open,
   Battles: Battles,
-  Catches: Catches
+  // Catches: Catches
 } satisfies {
   [key: string]: FC<{}>
 })
@@ -101,14 +101,14 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextState}>
-      <div className="h-full w-full flex flex-col">
+      <div className="h-full w-full flex flex-col overflow-hidden">
 
         {/* Nav Bar */}
         <Nav />
         <hr />
 
         {/* Body */}
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
 
           <CurrentPage key={currentPage} />
 

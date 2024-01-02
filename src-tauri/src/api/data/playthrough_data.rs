@@ -25,16 +25,16 @@ pub fn team_over_time(
     playthrough_id_no: &str,
 ) -> PkmnResult<TeamOverTimeResult> {
     let db_results = state.transact(|connection| {
-        let results = schema::Event::table
+        let results = schema::event::table
             .left_join(
-                schema::Team_Member_Change::table
-                    .left_join(schema::Team_Member::table)
-                    .left_join(schema::Species::table),
+                schema::team_member_change::table
+                    .left_join(schema::team_member::table)
+                    .left_join(schema::species::table),
             )
-            .filter(schema::Event::playthrough_id_no.eq(playthrough_id_no))
+            .filter(schema::event::playthrough_id_no.eq(playthrough_id_no))
             .order((
-                schema::Event::no.asc(),
-                schema::Team_Member_Change::id.asc()
+                schema::event::no.asc(),
+                schema::team_member_change::no.asc()
             ))
             .select((
                 Event::as_select(),

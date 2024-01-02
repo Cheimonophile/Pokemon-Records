@@ -17,19 +17,31 @@ export type Command<T extends InvokeArgs> = (command: T) => any
  */
 export function command<TParams extends InvokeArgs, TSchema extends z.ZodTypeAny>(command: string, schema: TSchema) {
   type TResult = z.infer<typeof schema>
-  try {
-    const func = async (params: TParams): Promise<TResult> => {
+  const func = async (params: TParams): Promise<TResult> => {
+    try {
       const result = await invoke(command, params);
       const parsed: TResult = schema.parse(result);
       return parsed
     }
-    return func;
-  }
-  catch (error) {
-    if (error instanceof z.ZodError) {
-      const issue = error.issues[0]
-      console.error(`${issue.code} (${issue.path.join('.')}): ${error.message}`);
+    catch (error) {
+      if (error instanceof z.ZodError) {
+        const issue = error.issues[0]
+        const message = `${command} ${issue.code} (${issue.path.join('.')}) ${issue.message}`
+        throw new Error(message)
+      }
+      throw error
     }
-    throw error
   }
+  return func;
 }
+
+
+
+/**
+ * Zod parser for a version in the database
+ */
+export const ZodVersion = z.object({
+  id: z.number(),
+  name: z.string(),
+  generation: z.number(),
+})

@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Playthrough } from "../../types";
 import { readPlaythroughs } from "../../backend/data/playthroughs";
 import { message } from "@tauri-apps/api/dialog";
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
+import { Playthrough } from "backend/models";
 
 
 
@@ -22,17 +22,9 @@ export const PlaythroughInput: FC<{
         (async () => {
             try {
                 const readPlaythroughResponse = await readPlaythroughs({})
-                const playthroughs = readPlaythroughResponse.map(playthrough => {
-                    return {
-                        idNo: playthrough.id_no,
-                        version: playthrough.version,
-                        adventureStarted: playthrough.adventure_started,
-                        name: playthrough.name,
-                    } satisfies Playthrough
-                });
-                setPlaythroughOptions(playthroughs)
+                setPlaythroughOptions(readPlaythroughResponse)
                 if (!playthroughIdNo) {
-                    setPlaythroughIdNo?.(playthroughs[0].idNo)
+                    setPlaythroughIdNo?.(readPlaythroughResponse[0].id_no)
                 }
             }
             catch (error) {
@@ -51,9 +43,10 @@ export const PlaythroughInput: FC<{
      */
     const switchOptions = useMemo(() => {
         return playthroughOptions?.map(playthrough => {
+            const playthroughName = playthrough.version.name
             return {
-                value: playthrough.idNo,
-                label: <>{playthrough.version} ({playthrough.adventureStarted})</>,
+                value: playthrough.id_no,
+                label: <>{playthroughName} ({playthrough.adventure_started})</>,
             } satisfies SwitchOption
         })
     }, [playthroughOptions])

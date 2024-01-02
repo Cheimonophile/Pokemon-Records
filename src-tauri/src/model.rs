@@ -1,0 +1,15 @@
+pub mod ball;
+pub mod battle_type;
+pub mod catch_type;
+pub mod event;
+pub mod item;
+pub mod location;
+pub mod playthrough;
+pub mod region;
+pub mod species;
+pub mod team_member_change;
+pub mod team_member;
+pub mod trainer_class;
+pub mod trainer;
+pub mod type_;
+pub mod version;

@@ -14,3 +14,4 @@ pub mod catches;
 pub mod catch_types;
 pub mod species;
 pub mod balls;
+pub mod events;
