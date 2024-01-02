@@ -33,6 +33,7 @@ export const TextDropdownInput = ({
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
+  
 
   const filteredOptions = useMemo(() => {
     return options?.filter(option => {

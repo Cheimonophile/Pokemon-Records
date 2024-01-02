@@ -4,7 +4,13 @@ use std::hash::Hash;
 
 use crate::error::PkmnResult;
 
-
+/**
+ * A trait for types in the database that can be creates
+ */
+pub trait Create: Read {
+    type Create: Sized;
+    fn create(transaction: &mut sqlx::SqliteConnection, item: &Self::Create) -> PkmnResult<Self::Key>;
+}
 
 /**
  * A trait for types in the database that can be read
@@ -24,13 +30,11 @@ pub trait Read: Sized {
 }
 
 
-/**
- * A trait for types in the database that can be creates
- */
-pub trait Create: Read {
-    type Create: Sized;
-    fn create(transaction: &mut sqlx::SqliteConnection, item: &Self::Create) -> PkmnResult<Self::Key>;
+pub trait Update: Create {
+    fn update(transaction: &mut sqlx::SqliteConnection, key: &Self::Key, item: &Self::Create) -> PkmnResult<()>;
 }
+
+
 
 
 /**

@@ -20,6 +20,10 @@ pub struct TeamMember {
     pub caught_level: i64,
     pub ball: Ball,
     pub gender: String,
+
+    // flow fields
+    pub species: Species,
+    pub level: i64,
 }
 
 pub struct RawTeamMember {
@@ -33,6 +37,10 @@ pub struct RawTeamMember {
     pub caught_level: i64,
     pub ball_id: i64,
     pub gender: String,
+
+    // flow fields
+    pub species_id: Option<i64>,
+    pub level: Option<i64>,
 }
 
 impl Read for TeamMember {
@@ -47,7 +55,22 @@ impl Read for TeamMember {
             sqlx::query_as!(
                 Self::Raw,
                 r#"
-                    SELECT team_member.*
+                    SELECT
+                        team_member.*,
+                        (
+                            SELECT species_id
+                            FROM team_member_change
+                            WHERE team_member_change.team_member_id = team_member.id AND team_member_change.species_id IS NOT NULL
+                            ORDER BY team_member_change.no DESC
+                            LIMIT 1
+                        ) AS species_id,
+                        (
+                            SELECT level
+                            FROM team_member_change
+                            WHERE team_member_change.team_member_id = team_member.id AND team_member_change.level IS NOT NULL
+                            ORDER BY team_member_change.no DESC
+                            LIMIT 1
+                        ) AS level
                     FROM team_member
                 "#,
             )
@@ -62,6 +85,15 @@ impl Read for TeamMember {
         let team_members = raw_team_member
             .into_iter()
             .map(|raw_team_member| {
+                let caught_species =
+                    species
+                        .get(&raw_team_member.caught_species_id)
+                        .ok_or_else(|| {
+                            StringError::new(&format!(
+                                "No species found with id {}",
+                                raw_team_member.caught_species_id
+                            ))
+                        })?;
                 Ok(TeamMember {
                     id: raw_team_member.id,
                     playthrough: playthroughs
@@ -85,15 +117,7 @@ impl Read for TeamMember {
                             ))
                         })?
                         .clone(),
-                    caught_species: species
-                        .get(&raw_team_member.caught_species_id)
-                        .ok_or_else(|| {
-                            StringError::new(&format!(
-                                "No species found with id {}",
-                                raw_team_member.caught_species_id
-                            ))
-                        })?
-                        .clone(),
+                    caught_species: caught_species.clone(),
                     caught_level: raw_team_member.caught_level,
                     ball: balls
                         .get(&raw_team_member.ball_id)
@@ -105,6 +129,13 @@ impl Read for TeamMember {
                         })?
                         .clone(),
                     gender: raw_team_member.gender,
+                    species: raw_team_member
+                        .species_id
+                        .and_then(|species_id| species.get(&species_id).cloned())
+                        .unwrap_or_else(|| caught_species.clone()),
+                    level: raw_team_member
+                        .level
+                        .unwrap_or(raw_team_member.caught_level),
                 })
             })
             .collect::<PkmnResult<Vec<TeamMember>>>()?;

@@ -10,7 +10,9 @@ import { z } from "zod"
 export const readTrainers = command(
     'read_trainers', 
     Parse.Trainer.array()
-) satisfies Command<{}>
+) satisfies Command<{
+    classId: number | null
+}>
 
 
 

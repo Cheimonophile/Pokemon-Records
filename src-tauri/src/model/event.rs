@@ -4,7 +4,7 @@ use tauri::{self, async_runtime::block_on};
 
 use crate::{
     error::{PkmnResult, StringError},
-    pkmndb::{Create, Delete, Read},
+    pkmndb::{Create, Delete, Read, Update},
     state, util,
 };
 
@@ -226,6 +226,7 @@ impl Read for Event {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateBattleEvent {
     battle_type_id: i64,
     opponent1_id: i64,
@@ -236,12 +237,14 @@ pub struct CreateBattleEvent {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateCatchEvent {
     catch_type_id: i64,
     team_member_id: i64,
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateEvent {
     playthrough_id_no: String,
     location_id: i64,
@@ -302,6 +305,89 @@ impl Create for Event {
             )?;
         }
         Ok(no)
+    }
+}
+
+impl Update for Event {
+    fn update(
+        transaction: &mut sqlx::SqliteConnection,
+        no: &Self::Key,
+        raw: &Self::Create,
+    ) -> PkmnResult<()> {
+        if let Some(battle) = &raw.battle {
+            block_on(
+                sqlx::query!(
+                    r#"
+                        UPDATE battle_event
+                        SET battle_type_id = ?, opponent1_id = ?, opponent2_id = ?, partner_id = ?, lost = ?, round = ?
+                        WHERE no = ?;
+                    "#,
+                    battle.battle_type_id,
+                    battle.opponent1_id,
+                    battle.opponent2_id,
+                    battle.partner_id,
+                    battle.lost,
+                    battle.round,
+                    no,
+                )
+                .fetch_one(&mut *transaction),
+            )?;
+        } else {
+            block_on(
+                sqlx::query!(
+                    r#"
+                        DELETE FROM battle_event
+                        WHERE no = ?;
+                    "#,
+                    no
+                )
+                .fetch_one(&mut *transaction),
+            )?;
+        }
+
+        if let Some(catch) = &raw.catch {
+            block_on(
+                sqlx::query!(
+                    r#"
+                        UPDATE catch_event
+                        SET catch_type_id = ?, team_member_id = ?
+                        WHERE no = ?;
+                    "#,
+                    catch.catch_type_id,
+                    catch.team_member_id,
+                    no
+                )
+                .fetch_one(&mut *transaction),
+            )?;
+        } else {
+            block_on(
+                sqlx::query!(
+                    r#"
+                        DELETE FROM catch_event
+                        WHERE no = ?;
+                    "#,
+                    no
+                )
+                .fetch_one(&mut *transaction),
+            )?;
+        }
+
+        block_on(
+            sqlx::query!(
+                r#"
+                    UPDATE event
+                    SET playthrough_id_no = ?, location_id = ?, date = ?
+                    WHERE no = ?;
+                "#,
+                raw.playthrough_id_no,
+                raw.location_id,
+                raw.date,
+                no
+            )
+            .fetch_one(&mut *transaction),
+        )?;
+
+        Ok(())
     }
 }
 
@@ -373,6 +459,22 @@ pub fn read_events(
         })
         .collect::<Vec<_>>();
     Ok(events)
+}
+
+/**
+ * Update an event
+ */
+#[tauri::command]
+pub fn update_event(
+    state: tauri::State<state::GameState>,
+    no: i64,
+    event: CreateEvent,
+) -> PkmnResult<()> {
+    let mut connection = state.connection()?;
+    let mut transaction = connection.transaction()?;
+    Event::update(&mut *transaction, &no, &event)?;
+    transaction.commit()?;
+    Ok(())
 }
 
 /**

@@ -126,6 +126,10 @@ export namespace Parse {
     caught_level: z.number(),
     ball: Ball,
     gender: z.string(),
+
+    // flow fields
+    species: Species,
+    level: z.number(),
   })
 
   /**
@@ -135,6 +139,7 @@ export namespace Parse {
     no: z.number(),
     playthrough: Playthrough,
     location: Location,
+    date: z.string(),
     battle: z.object({
       battle_type: BattleType,
       opponent1: Trainer,

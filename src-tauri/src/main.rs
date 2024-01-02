@@ -21,6 +21,7 @@ fn main() {
                 crate::model::battle_type::read_battle_types,
                 crate::model::catch_type::read_catch_types,
                 crate::model::event::create_event,
+                crate::model::event::update_event,
                 crate::model::event::read_events,
                 crate::model::event::delete_event,
                 crate::model::item::read_items,

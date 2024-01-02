@@ -3,6 +3,8 @@ import { readTrainerClasses } from "backend/data/trainer_classes";
 import { readTrainers } from "backend/data/trainers";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { TextInput } from "./generic/TextInput";
+import { TextDropdownInput, TextDropdownOption } from "./generic/TextDropdownInput";
+import { set } from "date-fns";
 
 
 type Trainer = {
@@ -13,22 +15,30 @@ type Trainer = {
 
 
 export function TrainerInput({
-  trainer,
-  setTrainer
+  trainerId,
+  setTrainerId,
 }: {
-  trainer: Trainer
-  setTrainer: Dispatch<SetStateAction<Trainer>>
+  trainerId: number | null
+  setTrainerId: (value: number | null) => void
 }): ReactNode {
+
+  // trainer class state
+  const [trainerClassId, setTrainerClassId] = useState<number | null>(null)
 
 
   // is the opponent valid
-  const [trainerValidity, setTrainerValidity] = useState<{ name: boolean, class: boolean }>({ name: false, class: false })
+  const [trainerClassOptions, setTrainerClassOptions] = useState<TextDropdownOption[]>()
   useEffect(() => {
-    // trainer classes
     (async () => {
       try {
-        const trainerClasses = await readTrainerClasses({ name: trainer.class })
-        setTrainerValidity(prev => ({ ...prev, class: trainerClasses.length > 0 }))
+        const trainerClasses = await readTrainerClasses({})
+        const trainerClassOptions = trainerClasses.map(trainerClass => {
+          return {
+            value: trainerClass.id.toString(),
+            label: trainerClass.name,
+          } satisfies TextDropdownOption
+        })
+        setTrainerClassOptions(trainerClassOptions)
       }
       catch (error) {
         console.error(error)
@@ -37,12 +47,25 @@ export function TrainerInput({
           type: 'error',
         })
       }
-    })();
-    // trainers
+    })()
+  })
+
+
+  // trainer options
+  const [trainerOptions, setTrainerOptions] = useState<TextDropdownOption[]>()
+  useEffect(() => {
     (async () => {
       try {
-        const trainers = await readTrainers({ name: trainer.name, class: trainer.class })
-        setTrainerValidity(prev => ({ ...prev, name: trainers.length > 0 }))
+        const trainers = await readTrainers({
+          classId: trainerClassId,
+        })
+        const trainerOptions = trainers.map(trainer => {
+          return {
+            value: trainer.id.toString(),
+            label: trainer.name,
+          } satisfies TextDropdownOption
+        })
+        setTrainerOptions(trainerOptions)
       }
       catch (error) {
         console.error(error)
@@ -51,24 +74,20 @@ export function TrainerInput({
           type: 'error',
         })
       }
-    })();
-  }, [trainer])
-
-
+    })()
+  }, [trainerClassId])
 
   return (
     <div className="flex flex-row gap-1">
-      <TextInput
-        value={trainer.class}
+      <TextDropdownInput
+        value={trainerClassId?.toString() ?? undefined}
         placeholder="Trainer Class"
-        onChange={value => setTrainer(prev => ({ ...prev, class: value }))}
-        valid={trainerValidity.class}
+        onChange={value => value ? setTrainerClassId(parseInt(value)) : null}
       />
-      <TextInput
-        value={trainer.name}
+      <TextDropdownInput
+        value={trainerId?.toString() ?? undefined}
         placeholder="Trainer Name"
-        onChange={value => setTrainer(prev => ({ ...prev, name: value }))}
-        valid={trainerValidity.name}
+        onChange={value => value ? setTrainerId(parseInt(value)) : null}
       />
     </div>
   )

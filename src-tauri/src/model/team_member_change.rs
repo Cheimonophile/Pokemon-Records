@@ -2,7 +2,7 @@ use tauri::async_runtime::block_on;
 
 use crate::{
     error::{PkmnResult, StringError},
-    pkmndb::{Create, Read},
+    pkmndb::{Create, Read, Update},
     util,
 };
 
@@ -87,6 +87,7 @@ impl Read for TeamMemberChange {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateTeamMemberChange {
     pub event_no: i64,
     pub team_member_id: i64,
@@ -116,6 +117,31 @@ impl Create for TeamMemberChange {
             .fetch_one(transaction),
         )?;
         Ok(no)
+    }
+}
+
+impl Update for TeamMemberChange {
+    fn update(
+        transaction: &mut sqlx::SqliteConnection,
+        no: &Self::Key,
+        update: &Self::Create,
+    ) -> PkmnResult<()> {
+        block_on(
+            sqlx::query!(
+                r#"
+                    UPDATE team_member_change
+                    SET event_no = ?, team_member_id = ?, level = ?, species_id = ?
+                    WHERE no = ?
+                "#,
+                update.event_no,
+                update.team_member_id,
+                update.level,
+                update.species_id,
+                no,
+            )
+            .fetch_one(transaction),
+        )?;
+        Ok(())
     }
 }
 
