@@ -7,14 +7,15 @@
   },
   "package": {
     "productName": "Pokemon Playthrough DB",
-    "version": "0.1.1"
+    "version": "0.1.2"
   },
   "tauri": {
     "allowlist": {
       "dialog": {
         "message": true,
         "ask": true,
-        "open": true
+        "open": true,
+        "confirm": true
       }
     },
     "bundle": {
