@@ -40,6 +40,14 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
 
+      - name: Install SQLX
+        run: cargo install sqlx-cli --features sqlite
+
+      - name: Setup Database
+        run: |
+          cd src-tauri
+          make db-build
+
       - name: Sync node version and setup cache
         uses: actions/setup-node@v4
         with:

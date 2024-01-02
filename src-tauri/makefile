@@ -7,6 +7,17 @@ PROD_DB_URL = /Users/ben/Dropbox/Benjamin/Games/Pokemon/pokemon.sqlite
 
 
 
+db-build:
+	mkdir -p dev
+	sqlx database setup --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+
+
 
 db:
 	rm $(EMPTY_DB_URL) $(BEFORE_MIGRATION_DB_URL) $(AFTER_MIGRATION_DB_URL) || true
@@ -22,6 +33,7 @@ redo: db
 	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
 	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
 	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
 
 
 down: db
