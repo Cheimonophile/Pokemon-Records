@@ -1,23 +1,19 @@
 
 import { Command, command } from "backend/common"
+import { Parse } from "backend/models"
 import { z } from "zod"
-
-
-type ReadParams = {
-    name?: string
-    region?: string
-}
-
-const ReadResponse = z.object({
-    name: z.string(),
-    region: z.string(),
-}).array()
 
 
 /**
  * Reads locations from the backend
  */
-export const readLocations = command('read_locations', ReadResponse) satisfies Command<ReadParams>
+export const readLocations = command(
+    'read_locations', 
+    Parse.Location.array(),
+) satisfies Command<{
+    id?: number,
+    regionId?: number,
+}>
 
 
 type CreateParams = {

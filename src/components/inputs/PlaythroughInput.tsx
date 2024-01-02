@@ -43,7 +43,7 @@ export const PlaythroughInput: FC<{
      */
     const switchOptions = useMemo(() => {
         return playthroughOptions?.map(playthrough => {
-            const playthroughName = playthrough.version?.name ?? playthrough.version_id
+            const playthroughName = playthrough.version.name
             return {
                 value: playthrough.id_no,
                 label: <>{playthroughName} ({playthrough.adventure_started})</>,

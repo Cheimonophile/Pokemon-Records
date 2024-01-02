@@ -8,11 +8,11 @@ import { message } from "@tauri-apps/api/dialog"
 
 
 export function BattleTypeInput({
-  battleType,
-  setBattleType,
+  battleTypeId,
+  setBattleTypeId,
 }: {
-  battleType: string | null
-  setBattleType: (value: string) => void
+  battleTypeId: number | null
+  setBattleTypeId: (value: number | null) => void
 }) {
   const [battleTypeOptions, setBattleTypeOptions] = useState<SwitchOption[]>()
   useEffect(() => {
@@ -21,12 +21,12 @@ export function BattleTypeInput({
         const battleTypes = await readBattleTypes({})
         const battleTypeOptions = battleTypes.map(battleType => {
           return {
-            value: battleType.name,
+            value: battleType.id.toString(),
             label: battleType.name,
           } satisfies SwitchOption
         })
         setBattleTypeOptions(battleTypeOptions)
-        setBattleType(battleTypes[0].name)
+        setBattleTypeId(battleTypes[0].id)
       }
       catch (error) {
         console.error(error)
@@ -36,14 +36,14 @@ export function BattleTypeInput({
         })
       }
     })()
-  }, [setBattleType])
+  }, [setBattleTypeId])
 
   return (
     <div>
       <SwitchInput
-        value={battleType ?? undefined}
+        value={battleTypeId?.toString() ?? undefined}
         options={battleTypeOptions}
-        onChange={battleType => setBattleType(battleType)}
+        onChange={battleTypeId => setBattleTypeId(parseInt(battleTypeId))}
       />
     </div>
   );

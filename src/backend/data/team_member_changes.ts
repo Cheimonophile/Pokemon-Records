@@ -3,15 +3,21 @@ import { z } from "zod";
 
 
 
+type CUTeamMemberChange = {
+  eventNo: number,
+  teamMemberId: number,
+  level: number | null,
+  speciesId: number | null
+}
+
+
 
 /**
  * Creates a team member change in the backend
  */
 export const createTeamMemberChange = command(
   'create_team_member_change',
-  z.null()
+  z.number()
 ) satisfies Command<{
-  eventNo: number,
-  teamMemberId: number,
-  level: number,
+  teamMemberChange: CUTeamMemberChange
 }>

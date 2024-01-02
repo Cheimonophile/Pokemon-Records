@@ -4,13 +4,11 @@ pub enum PkmnError {
     #[error(transparent)]
     Io(#[from] std::io::Error),
     #[error(transparent)]
-    Diesel(#[from] diesel::result::Error),
-    #[error(transparent)]
     Var(#[from] std::env::VarError),
     #[error(transparent)]
-    ConnectionError(#[from] diesel::ConnectionError),
+    Str(#[from] StringError),
     #[error(transparent)]
-    StringError(#[from] StringError),
+    Sqlx(#[from] sqlx::Error),
 }
 
 // we must manually implement serde::Serialize
@@ -41,8 +39,8 @@ impl StringError {
         }
     }
 
-    pub fn err(self) -> Result<(), Self> {
-        Err(self)
+    pub fn err<T>(self) -> PkmnResult<T> {
+        Err(PkmnError::Str(self))
     }
 }
 
