@@ -36,8 +36,10 @@ impl Read for Playthrough {
             sqlx::query_as!(
                 Self::Raw,
                 r#"
-                    SELECT playthrough.*
+                    SELECT DISTINCT playthrough.*
                     FROM playthrough
+                    LEFT JOIN event ON event.playthrough_id_no = playthrough.id_no
+                    ORDER BY event.no DESC
                 "#,
             )
             .fetch_all(&mut *transaction),
