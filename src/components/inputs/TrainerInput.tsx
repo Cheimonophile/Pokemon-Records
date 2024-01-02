@@ -1,16 +1,8 @@
 import { message } from "@tauri-apps/api/dialog";
 import { readTrainerClasses } from "backend/data/trainer_classes";
 import { readTrainers } from "backend/data/trainers";
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
-import { TextInput } from "./generic/TextInput";
+import { ReactNode, useEffect, useState } from "react";
 import { TextDropdownInput, TextDropdownOption } from "./generic/TextDropdownInput";
-import { set } from "date-fns";
-
-
-type Trainer = {
-  name: string
-  class: string
-}
 
 
 
@@ -24,6 +16,19 @@ export function TrainerInput({
 
   // trainer class state
   const [trainerClassId, setTrainerClassId] = useState<number | null>(null)
+
+  // make sure trainer class is from trainer
+  useEffect(() => {
+    (async () => {
+      if (trainerId) {
+        const [trainer] = await readTrainers({
+          id: trainerId,
+          classId: null,
+        })
+        setTrainerClassId(trainer.class.id)
+      }
+    })()
+  }, [trainerId])
 
 
   // is the opponent valid
@@ -48,8 +53,7 @@ export function TrainerInput({
         })
       }
     })()
-  })
-
+  }, [])
 
   // trainer options
   const [trainerOptions, setTrainerOptions] = useState<TextDropdownOption[]>()
@@ -57,6 +61,7 @@ export function TrainerInput({
     (async () => {
       try {
         const trainers = await readTrainers({
+          id: null,
           classId: trainerClassId,
         })
         const trainerOptions = trainers.map(trainer => {
@@ -82,12 +87,14 @@ export function TrainerInput({
       <TextDropdownInput
         value={trainerClassId?.toString() ?? undefined}
         placeholder="Trainer Class"
-        onChange={value => value ? setTrainerClassId(parseInt(value)) : null}
+        options={trainerClassOptions}
+        onChange={value => setTrainerClassId(value ? parseInt(value) : null)}
       />
       <TextDropdownInput
         value={trainerId?.toString() ?? undefined}
         placeholder="Trainer Name"
-        onChange={value => value ? setTrainerId(parseInt(value)) : null}
+        options={trainerOptions}
+        onChange={value => setTrainerId(value ? parseInt(value) : null)}
       />
     </div>
   )

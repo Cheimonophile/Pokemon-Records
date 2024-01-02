@@ -1,11 +1,8 @@
 import { message } from "@tauri-apps/api/dialog";
 import { readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
-import { TextInput } from "./generic/TextInput";
-import { Location } from "backend/models";
-import { set } from "date-fns";
 import { TextDropdownInput, TextDropdownOption } from "./generic/TextDropdownInput";
 
 

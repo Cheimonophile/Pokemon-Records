@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput"
 import { readBattleTypes } from "backend/data/battle_types"
 import { message } from "@tauri-apps/api/dialog"

@@ -115,9 +115,29 @@ pub fn create_trainer(
 }
 
 #[tauri::command]
-pub fn read_trainers(state: tauri::State<state::GameState>) -> PkmnResult<Vec<Trainer>> {
+pub fn read_trainers(
+    state: tauri::State<state::GameState>, 
+    id: Option<i64>,
+    class_id: Option<i64>
+) -> PkmnResult<Vec<Trainer>> {
     let mut connection = state.connection()?;
     let mut transaction = connection.transaction()?;
-    let trainers = Trainer::read(&mut *transaction)?;
+    let trainers = Trainer::read(&mut *transaction)?
+        .into_iter()
+        .filter(|trainer| {
+            let mut keep = true;
+            keep &= if let Some(id) = id {
+                trainer.id == id
+            } else {
+                true
+            };
+            keep &= if let Some(class_id) = class_id {
+                trainer.class.id == class_id
+            } else {
+                true
+            };
+            keep
+        })
+        .collect::<Vec<_>>();
     Ok(trainers)
 }

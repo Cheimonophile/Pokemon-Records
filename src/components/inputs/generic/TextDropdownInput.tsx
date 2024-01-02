@@ -1,5 +1,4 @@
-import { set } from "date-fns"
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 
 
@@ -33,7 +32,7 @@ export const TextDropdownInput = ({
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
-  
+
 
   const filteredOptions = useMemo(() => {
     return options?.filter(option => {
@@ -53,40 +52,42 @@ export const TextDropdownInput = ({
   }, [selected])
 
 
-  const selectOption = useCallback((value: string) => {
-    const option = options?.find(option => {
+  const selectOption = useCallback((value: string | null) => {
+    const option = value ? options?.find(option => {
       return option.value === value
-    })
-    if (option) {
-      console.log(option)
-      setText(option?.label ?? "")
-      onChange?.(option?.value ?? null)
-    }
+    }) : null
+    console.log(option)
+    setText(option?.label ?? "")
+    onChange?.(option?.value ?? null)
     setOpen(false)
-  }, [onChange, options, value])
+  }, [onChange, options])
 
   const onFocus = useCallback(() => {
-    inputRef.current?.select()
     setOpen(true)
   }, [])
 
   const onBlur = useCallback(() => {
-    setText(selected?.label ?? "")
     setOpen(false)
-  }, [selectOption])
+  }, [])
 
 
-  const onKeyUp = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      if (filteredOptions) {
-        selectOption(filteredOptions[0]?.value ?? null)
-      }
-      inputRef.current?.blur()
+  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case "Tab":
+      case "Enter":
+        if (filteredOptions) {
+          const newSelected = text === "" ? null : filteredOptions[0]?.value ?? null
+          console.log(text)
+          console.log(newSelected)
+          selectOption(newSelected)
+        }
+        inputRef.current?.blur()
+        break
+      case "Escape":
+        inputRef.current?.blur()
+        break
     }
-    else if (e.key === "Escape") {
-      inputRef.current?.blur()
-    }
-  }, [text, selectOption])
+  }, [text, selectOption, filteredOptions])
 
   return (
     <div className="relative overflow-visible">
@@ -97,7 +98,7 @@ export const TextDropdownInput = ({
           onBlur={onBlur}
           className={`border-b px-1`}
           placeholder={placeholder}
-          onKeyUp={onKeyUp}
+          onKeyDown={onKeyDown}
           ref={inputRef}
           value={text}
           onClick={() => inputRef.current?.select()}
@@ -111,7 +112,8 @@ export const TextDropdownInput = ({
               <Fragment key={option.value}>
                 <div
                   className="cursor-pointer hover:bg-gray-200"
-                  onClick={() => selectOption(option.value)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => selectOption(option.value)}
                 >
                   {option.label}
                 </div>
