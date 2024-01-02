@@ -401,7 +401,7 @@ impl Delete for Event {
                 "#,
                 no
             )
-            .fetch_one(&mut *transaction),
+            .execute(&mut *transaction),
         )
         .ok();
         block_on(
@@ -412,7 +412,7 @@ impl Delete for Event {
                 "#,
                 no
             )
-            .fetch_one(&mut *transaction),
+            .execute(&mut *transaction),
         )
         .ok();
         block_on(
@@ -423,7 +423,7 @@ impl Delete for Event {
                 "#,
                 no
             )
-            .fetch_one(&mut *transaction),
+            .execute(&mut *transaction),
         )?;
         Ok(())
     }

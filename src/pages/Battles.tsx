@@ -2,7 +2,7 @@ import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react
 import { ask, message } from '@tauri-apps/api/dialog';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
-import { teamOverTime } from 'backend/data/teamOverTime';
+import { teamOverTime } from 'backend/report/team_over_time';
 import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
 import { readTypes } from '../backend/data/types';
@@ -567,7 +567,7 @@ const TeamMemberLevelChart: FC<{
                     for (const cell of row) {
                         if (data.get(cell.team_member.id) === undefined) {
                             data.set(cell.team_member.id, {
-                                color: types.find(type => type.name === cell.species.type1)?.color ?? undefined,
+                                color: cell.team_member.species.type1.color,
                                 data: []
                             })
                         }
