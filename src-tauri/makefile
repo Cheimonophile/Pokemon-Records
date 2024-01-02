@@ -12,10 +12,10 @@ db-build:
 	sqlx database setup --database-url sqlite://$(EMPTY_DB_URL)
 	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
 	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
-	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
-	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
-	sqlx migrate revert --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
-	sqlx migrate run --database-url sqlite://$(AFTER_MIGRATION_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate revert --database-url sqlite://$(EMPTY_DB_URL)
+	sqlx migrate run --database-url sqlite://$(EMPTY_DB_URL)
 
 
 
