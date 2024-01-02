@@ -38,8 +38,11 @@ impl Read for Playthrough {
                 r#"
                     SELECT DISTINCT playthrough.*
                     FROM playthrough
-                    LEFT JOIN event ON event.playthrough_id_no = playthrough.id_no
-                    ORDER BY event.no DESC
+                    ORDER BY (
+                        SELECT MAX(event.no)
+                        FROM event
+                        WHERE event.playthrough_id_no = playthrough.id_no
+                    ) DESC
                 "#,
             )
             .fetch_all(&mut *transaction),

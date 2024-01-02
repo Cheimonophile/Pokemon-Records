@@ -286,7 +286,7 @@ impl Create for Event {
                     battle.lost,
                     battle.round
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         }
 
@@ -301,7 +301,7 @@ impl Create for Event {
                     catch.catch_type_id,
                     catch.team_member_id
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         }
         Ok(no)
@@ -330,7 +330,7 @@ impl Update for Event {
                     battle.round,
                     no,
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         } else {
             block_on(
@@ -341,7 +341,7 @@ impl Update for Event {
                     "#,
                     no
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         }
 
@@ -357,7 +357,7 @@ impl Update for Event {
                     catch.team_member_id,
                     no
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         } else {
             block_on(
@@ -368,7 +368,7 @@ impl Update for Event {
                     "#,
                     no
                 )
-                .fetch_one(&mut *transaction),
+                .execute(&mut *transaction),
             )?;
         }
 
@@ -384,7 +384,7 @@ impl Update for Event {
                 raw.date,
                 no
             )
-            .fetch_one(&mut *transaction),
+            .execute(&mut *transaction),
         )?;
 
         Ok(())
