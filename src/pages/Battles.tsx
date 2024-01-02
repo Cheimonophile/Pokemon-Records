@@ -5,7 +5,6 @@ import ReactECharts from 'echarts-for-react';
 import { teamOverTime } from 'backend/report/team_over_time';
 import { EChartsOption } from 'echarts';
 import { useAppContext } from '../App';
-import { readTypes } from '../backend/data/types';
 import { PlaythroughInput } from '../components/inputs/PlaythroughInput';
 import { createTeamMemberChange } from 'backend/data/team_member_changes';
 import { LocationInput } from 'components/inputs/LocationInput';
@@ -550,7 +549,6 @@ const TeamMemberLevelChart: FC<{
                 const results = await teamOverTime({
                     playthroughIdNo: mostRecentBattle.playthrough.id_no,
                 })
-                const types = await readTypes({})
                 let maxLevel = 0
                 results.forEach(row => {
                     row.forEach(cell => {
