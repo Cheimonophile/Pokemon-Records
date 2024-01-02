@@ -14,7 +14,8 @@
       "dialog": {
         "message": true,
         "ask": true,
-        "open": true
+        "open": true,
+        "confirm": true
       }
     },
     "bundle": {

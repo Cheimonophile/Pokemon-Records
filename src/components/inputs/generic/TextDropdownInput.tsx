@@ -1,3 +1,5 @@
+import { message } from "@tauri-apps/api/dialog"
+import { useAppContext } from "App"
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 
@@ -19,14 +21,17 @@ export const TextDropdownInput = ({
   options,
   placeholder,
   onChange,
+  createNew
 }: {
   value?: string,
   options?: TextDropdownOption[],
   placeholder?: string,
   onChange?: (value: string | null) => void,
+  createNew?: (value: string) => Promise<string | undefined>,
 }) => {
 
-
+  // context
+  const { refresh } = useAppContext()
 
   // state
   const [open, setOpen] = useState(false)
@@ -56,7 +61,6 @@ export const TextDropdownInput = ({
     const option = value ? options?.find(option => {
       return option.value === value
     }) : null
-    console.log(option)
     setText(option?.label ?? "")
     onChange?.(option?.value ?? null)
     setOpen(false)
@@ -77,8 +81,6 @@ export const TextDropdownInput = ({
       case "Enter":
         if (filteredOptions) {
           const newSelected = text === "" ? null : filteredOptions[0]?.value ?? null
-          console.log(text)
-          console.log(newSelected)
           selectOption(newSelected)
         }
         inputRef.current?.blur()
@@ -88,6 +90,31 @@ export const TextDropdownInput = ({
         break
     }
   }, [text, selectOption, filteredOptions])
+
+
+  const onCreateNew = useCallback(async () => {
+    try {
+      if (text !== "" && createNew) {
+        const value = await createNew?.(text)
+        await refresh()
+        if (value !== null) {
+          options?.push({
+            value: value ?? "",
+            label: text,
+          })
+          selectOption(value ?? null)
+        }
+        inputRef.current?.blur()
+      }
+    }
+    catch (error) {
+      console.error(error)
+      await message(`${error}`, {
+        title: 'Error Creating New',
+        type: 'error',
+      })
+    }
+  }, [text, createNew, refresh, selectOption, options])
 
   return (
     <div className="relative overflow-visible">
@@ -120,9 +147,17 @@ export const TextDropdownInput = ({
               </Fragment>
             )
           })}
+          {createNew && text !== "" && (
+            <div
+              className="cursor-pointer hover:bg-gray-200"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={onCreateNew}
+            >
+              + Create "{text}"
+            </div>
+          )}
         </div>
       )}
     </div>
-
   )
 }

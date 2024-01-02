@@ -25,5 +25,5 @@ export const createTrainer = command(
     z.number()
 ) satisfies Command<{
     name: string,
-    class: string
+    classId: number
 }>

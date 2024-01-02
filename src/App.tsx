@@ -59,9 +59,9 @@ function App() {
 
   // call all refresh callbacks
   const refresh = useCallback(async () => {
-    for (const callback of Array.from(refreshCallbackRef.current)) {
-      await callback();
-    }
+    await Promise.all(
+      Array.from(refreshCallbackRef.current).map(callback => callback())
+    );
   }, [])
 
   // load db connection
