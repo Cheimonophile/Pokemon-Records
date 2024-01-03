@@ -16,19 +16,14 @@ export const readLocations = command(
 }>
 
 
-type CreateParams = {
-    name: string
-    region: string
-}
-
-const CreateResponse = z.object({
-    name: z.string(),
-    region: z.string(),
-})
-
-
 
 /**
  * Creates a location in the backend
  */
-export const createLocation = command('create_location', CreateResponse) satisfies Command<CreateParams>
+export const createLocation = command(
+    'create_location',
+    z.number(),
+) satisfies Command<{
+    name: string,
+    regionId: number,
+}>

@@ -1,7 +1,7 @@
-import { message } from "@tauri-apps/api/dialog";
-import { readLocations } from "backend/data/locations";
+import { ask, message } from "@tauri-apps/api/dialog";
+import { createLocation, readLocations } from "backend/data/locations";
 import { readRegions } from "backend/data/regions";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { SwitchInput, SwitchOption } from "./generic/SwitchInput";
 import { TextDropdownInput, TextDropdownOption } from "./generic/TextDropdownInput";
 
@@ -81,6 +81,31 @@ export function LocationInput({
   }, [regionId])
 
 
+  /**
+   * Create a new location
+   */
+  const createNewLocation = useCallback(async (name: string): Promise<string | undefined> => {
+    try {
+      if (regionId === null)
+        throw new Error("Region must be selected to create a new location")
+      const ok = await ask(`Create New Location '${name}'?`)
+      if (ok) {
+        const newLocationId = await createLocation({
+          name,
+          regionId: regionId ?? null,
+        })
+        return newLocationId.toString()
+      }
+    }
+    catch (error) {
+      console.error(error)
+      await message(`${error}`, {
+        title: 'Error Creating New Location',
+        type: 'error',
+      })
+    }
+  }, [regionId])
+
 
   return (
     <div className="flex flex-row">
@@ -94,6 +119,7 @@ export function LocationInput({
         placeholder="Location"
         options={locationOptions}
         onChange={locationId => setLocationId(locationId ? parseInt(locationId) : null)}
+        createNew={createNewLocation}
       />
     </div>
   )
