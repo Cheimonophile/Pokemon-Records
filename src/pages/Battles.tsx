@@ -288,7 +288,7 @@ const CreateBattle: FC<{}> = () => {
                     catch: null,
                 }
             })
-            setBattleTypeId(null)
+            setBattleTypeId(1)
             setOpponent1Id(null)
             setUseOpponent2(false)
             setOpponent2Id(null)
