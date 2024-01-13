@@ -599,7 +599,11 @@ const TeamMemberLevelChart: FC<{
                         }
                         const xPowBase = 1.05
                         const yPowBase = 1.1
-                        data.get(cell.team_member.id)?.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
+                        const teamMemberData = data.get(cell.team_member.id)
+                        if (teamMemberData) {
+                            teamMemberData.color = cell.team_member.species.type1.color
+                            teamMemberData.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
+                        }
                     }
                 })
                 const option: EChartsOption = {
@@ -637,7 +641,6 @@ const TeamMemberLevelChart: FC<{
                     //     responsive: false
                     // }
                 };
-                console.log(option)
                 setData(option)
             }
             catch (error) {
