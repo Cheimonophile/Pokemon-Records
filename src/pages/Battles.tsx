@@ -631,6 +631,7 @@ const TeamMemberLevelChart: FC<{
                     //     responsive: false
                     // }
                 };
+                console.log(option)
                 setData(option)
             }
             catch (error) {
@@ -647,9 +648,13 @@ const TeamMemberLevelChart: FC<{
             ? <></>
             : data instanceof Error
                 ? <div className="text-red-500">{data.message}</div>
-                : <ReactECharts option={data} style={{
-                    width: '100%',
-                    height: '100%',
-                }} />}
+                : <ReactECharts
+                    option={data}
+                    notMerge={true}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                    }}
+                />}
     </>
 }

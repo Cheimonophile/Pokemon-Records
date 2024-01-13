@@ -14,8 +14,8 @@ pub type TeamOverTimeResult = Vec<Vec<TeamMemberInstant>>;
 #[derive(serde::Serialize, Clone)]
 pub struct TeamMemberInstant {
     team_member: TeamMember,
-    species: Option<Species>,
-    level: Option<i64>,
+    species: Species,
+    level: i64,
 }
 
 pub struct QueryResult {
@@ -86,18 +86,18 @@ pub fn team_over_time(
             if let Some(team_member) = team_member {
                 if let Some(team_member_instant) = instant.get_mut(&team_member.id) {
                     if let Some(species) = species {
-                        team_member_instant.species = Some(species);
+                        team_member_instant.species = species;
                     }
                     if let Some(level) = level {
-                        team_member_instant.level = Some(level);
+                        team_member_instant.level = level;
                     }
                 } else {
                     instant.insert(
                         team_member.id,
                         TeamMemberInstant {
                             team_member: team_member.clone(),
-                            species: species.clone(),
-                            level,
+                            species: species.unwrap_or_else(|| team_member.caught_species.clone()),
+                            level: level.unwrap_or_else(|| team_member.caught_level),
                         },
                     );
                 };
