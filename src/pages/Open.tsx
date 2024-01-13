@@ -15,7 +15,11 @@ export const Open: FC<{}> = () => {
         setDisabled(prev => prev + 1)
         try {
             const db_file = await open();
-            const db_url = `sqlite://${db_file}`;
+            if (db_file === null)
+                throw new Error('No file selected');
+            if (Array.isArray(db_file))
+                throw new Error("Multiple files selected");
+            const db_url = db_file;
             await setDBConnection({ databaseUrl: db_url });
             localStorage.setItem(DATABASE_URL, db_url);
         }

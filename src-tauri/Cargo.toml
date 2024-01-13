@@ -24,6 +24,7 @@ thiserror = "1.0.49"
 diesel_migrations = { version = "2.1.0", features = ["sqlite"] }
 sqlx = { version = "0.7.3", features = ["sqlite", "migrate"] }
 paste = "1.0.14"
+chrono = "0.4.31"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
