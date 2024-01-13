@@ -37,17 +37,17 @@ pub fn team_over_time(
         sqlx::query_as!(
             QueryResult,
             r#"
-        SELECT
-          event.no AS event_no,
-          team_member_change.team_member_id AS team_member_id,
-          team_member_change.level AS level,
-          team_member_change.species_id AS species_id
-        FROM event
-        LEFT JOIN team_member_change ON team_member_change.event_no = event.no
-        WHERE event.playthrough_id_no = ?
-        GROUP BY team_member_change.no, event.no, team_member_change.team_member_id
-        ORDER BY event.no, team_member_change.no
-      "#,
+                SELECT
+                event.no AS event_no,
+                team_member_change.team_member_id AS team_member_id,
+                team_member_change.level AS level,
+                team_member_change.species_id AS species_id
+                FROM event
+                LEFT JOIN team_member_change ON team_member_change.event_no = event.no
+                WHERE event.playthrough_id_no = ?
+                GROUP BY team_member_change.no, event.no, team_member_change.team_member_id
+                ORDER BY event.no, team_member_change.no
+            "#,
             playthrough_id_no
         )
         .fetch_all(&mut *transaction),

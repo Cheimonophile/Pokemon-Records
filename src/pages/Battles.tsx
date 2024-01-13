@@ -1,4 +1,4 @@
-import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
@@ -26,6 +26,9 @@ export const Battles: FC<{}> = () => {
     // context
     const { addEffect } = useAppContext()
 
+    // state
+    const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
+
     // battle table state
     const [events, setEvents] = useState<Event[] | null | undefined>()
 
@@ -50,34 +53,36 @@ export const Battles: FC<{}> = () => {
     return (
         <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
 
+            {/* Global Filters */}
+            <div>
+                <PlaythroughInput
+                    playthroughIdNo={playthroughIdNo}
+                    setPlaythroughIdNo={setPlaythroughIdNo}
+                />
+            </div>
+
             {/* Above Table */}
             <div className="flex-none flex flex-row gap-2">
+                {!playthroughIdNo
+                    ? <div>Loading...</div>
+                    : (
+                        <Fragment>
+                            {/* Make Battle */}
+                            <div>
+                                <CreateBattle playthroughIdNo={playthroughIdNo} />
+                            </div>
 
-                {/* Make Battle */}
-                <div>
-                    <CreateBattle />
-                </div>
+                            {/* Level Up */}
+                            <div className="min-w-fit">
+                                <LevelUp playthroughIdNo={playthroughIdNo} />
+                            </div>
 
-                {/* Level Up */}
-                <div className="min-w-fit">
-                    {((): ReactNode => {
-                        if (events === null) {
-                            return <div className="text-red-500">Error</div>
-                        }
-                        const event = events?.at(0)
-                        if (event === undefined) {
-                            return <></>
-                        }
-                        return (<>
-                            <LevelUp event={event} />
-                        </>)
-                    })()}
-                </div>
-
-                {/* Level up over time */}
-                <div className="h-40 w-64">
-                    <TeamMemberLevelChart mostRecentBattle={events?.at(0)} />
-                </div>
+                            {/* Level up over time */}
+                            <div className="h-40 w-64">
+                                <TeamMemberLevelChart playthroughIdNo={playthroughIdNo} />
+                            </div>
+                        </Fragment>
+                    )}
             </div>
 
             {/* Battles Table */}
@@ -226,13 +231,18 @@ const BattleTableRow: FC<{
 }
 
 
+interface CreateBattleProps {
+    playthroughIdNo: string,
+}
 
 /**
  * Is the form to create a battle
  * 
  * @returns 
  */
-const CreateBattle: FC<{}> = () => {
+const CreateBattle: FC<CreateBattleProps> = ({
+    playthroughIdNo,
+}) => {
 
     // context
     const { refresh } = useAppContext()
@@ -242,7 +252,6 @@ const CreateBattle: FC<{}> = () => {
 
 
     // Form State
-    const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
     const [locationId, setLocationId] = useState<number | null>(null)
     const [battleTypeId, setBattleTypeId] = useState<number | null>(null)
     const [opponent1Id, setOpponent1Id] = useState<number | null>(null)
@@ -309,11 +318,6 @@ const CreateBattle: FC<{}> = () => {
 
     return (
         <div>
-            {/* Playthrough selector */}
-            <PlaythroughInput
-                playthroughIdNo={playthroughIdNo}
-                setPlaythroughIdNo={setPlaythroughIdNo}
-            />
 
             {/* Location */}
             <LocationInput
@@ -431,8 +435,8 @@ const CreateBattle: FC<{}> = () => {
 
 
 const LevelUp: FC<{
-    event: Event
-}> = ({ event }) => {
+    playthroughIdNo: string
+}> = ({ playthroughIdNo }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -444,7 +448,7 @@ const LevelUp: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const teamMembers = await readTeamMembers({ playthroughIdNo: event.playthrough.id_no })
+                const teamMembers = await readTeamMembers({ playthroughIdNo })
                 setTeamMembers(teamMembers)
             }
             catch (error) {
@@ -454,8 +458,24 @@ const LevelUp: FC<{
         })
     }, [
         addEffect,
-        event
+        playthroughIdNo
     ])
+
+    // event
+    const [eventNo, setEventNo] = useState<number | null>(null)
+    useEffect(() => {
+        return addEffect(async () => {
+            try {
+                const [event] = await readEvents({ playthroughIdNo })
+                if (event) {
+                    setEventNo(event.no)
+                }
+            }
+            catch (error) {
+                console.error(error)
+            }
+        })
+    }, [addEffect, playthroughIdNo]);
 
     return <>
         <div>
@@ -466,7 +486,11 @@ const LevelUp: FC<{
                     <tbody>
                         {teamMembers?.map(teamMember => (
                             <Fragment key={teamMember.id}>
-                                <TeamMemberRow teamMember={teamMember} event={event} />
+                                {eventNo === null
+                                    ? <div>Loading...</div>
+                                    : <>
+                                        <TeamMemberRow teamMember={teamMember} eventNo={eventNo} />
+                                    </>}
                             </Fragment>
                         ))}
                     </tbody>
@@ -479,8 +503,8 @@ const LevelUp: FC<{
 
 const TeamMemberRow: FC<{
     teamMember: TeamMember,
-    event: Event,
-}> = ({ teamMember, event }) => {
+    eventNo: number,
+}> = ({ teamMember, eventNo }) => {
 
     // context
     const { refresh } = useAppContext()
@@ -489,13 +513,13 @@ const TeamMemberRow: FC<{
     const [disabled, setDisabled] = useState<number>(0)
 
     // on click level change
-    const onClickLevelChange = async (change: number) => {
+    const onClickLevelChange = useCallback(async (change: number) => {
         setDisabled(prev => prev + 1)
         try {
             await createTeamMemberChange({
                 teamMemberChange: {
                     teamMemberId: teamMember.id,
-                    eventNo: event.no,
+                    eventNo,
                     level: teamMember.level + change,
                     speciesId: null,
                 }
@@ -510,7 +534,7 @@ const TeamMemberRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }
+    }, [teamMember, eventNo, refresh])
 
     return <>
         <tr>
@@ -532,8 +556,8 @@ const TeamMemberRow: FC<{
 
 
 const TeamMemberLevelChart: FC<{
-    mostRecentBattle?: Event,
-}> = ({ mostRecentBattle }) => {
+    playthroughIdNo: string,
+}> = ({ playthroughIdNo }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -544,10 +568,8 @@ const TeamMemberLevelChart: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                if (mostRecentBattle === undefined)
-                    throw new Error("Most Recent Battle not defined")
                 const results = await teamOverTime({
-                    playthroughIdNo: mostRecentBattle.playthrough.id_no,
+                    playthroughIdNo,
                 })
                 let maxLevel = 0
                 results.forEach(row => {
@@ -616,7 +638,7 @@ const TeamMemberLevelChart: FC<{
                 setData(new Error(`${error}`))
             }
         })
-    }, [addEffect, mostRecentBattle])
+    }, [addEffect, playthroughIdNo])
 
 
 
