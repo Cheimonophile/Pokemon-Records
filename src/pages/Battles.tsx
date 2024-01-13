@@ -12,7 +12,6 @@ import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 import { TrainerInput } from 'components/inputs/TrainerInput';
 import { createEvent, deleteEvent, readEvents, updateEvent } from 'backend/data/event';
 import { Event, TeamMember } from 'backend/models';
-import { readPlaythroughs } from 'backend/data/playthroughs';
 import { todayStr } from 'utils';
 
 
@@ -22,33 +21,8 @@ import { todayStr } from 'utils';
  */
 export const Battles: FC<{}> = () => {
 
-
-    // context
-    const { addEffect } = useAppContext()
-
     // state
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
-
-    // battle table state
-    const [events, setEvents] = useState<Event[] | null | undefined>()
-
-    // fetch battles
-    useEffect(() => {
-        return addEffect(async () => {
-            try {
-                const playthroughs = await readPlaythroughs({})
-                const events = await readEvents({
-                    playthroughIdNo: playthroughs[0].id_no,
-                })
-                setEvents(events)
-            }
-            catch (error) {
-                console.error(error)
-                setEvents(null)
-            }
-        })
-    }, [addEffect])
-
 
     return (
         <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
@@ -90,32 +64,64 @@ export const Battles: FC<{}> = () => {
                 <div className="w-full h-full overflow-y-auto p-1 border">
 
                     {/* table */}
-                    {!events ? (<>
-                        <div className="text-red-500">
-                            Error
-                        </div>
-                    </>) : (<>
-                        <table>
-                            <tbody>
-                                {events?.map(event => {
-                                    if (!event.battle) {
-                                        return null
-                                    }
-                                    return (
-                                        <Fragment key={event.no}>
-                                            <BattleTableRow event={event} />
-                                        </Fragment>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </>)}
+                    {!playthroughIdNo
+                        ? (<>
+                            <div>
+                                No Playthrough Selected...
+                            </div>
+                        </>)
+                        : (<>
+                            <BattleTable playthroughIdNo={playthroughIdNo ?? ''} />
+                        </>)}
                 </div>
             </div>
         </div>
     )
 }
 
+const BattleTable: FC<{
+    playthroughIdNo: string,
+}> = ({ playthroughIdNo }) => {
+
+    // context
+    const { addEffect } = useAppContext()
+
+    // events
+    const [events, setEvents] = useState<Event[] | null | undefined>()
+
+    // fetch battles
+    useEffect(() => {
+        return addEffect(async () => {
+            try {
+                const events = await readEvents({
+                    playthroughIdNo,
+                })
+                setEvents(events)
+            }
+            catch (error) {
+                console.error(error)
+                setEvents(null)
+            }
+        })
+    }, [addEffect, playthroughIdNo])
+
+    return (
+        <table>
+            <tbody>
+                {events?.map(event => {
+                    if (!event.battle) {
+                        return null
+                    }
+                    return (
+                        <Fragment key={event.no}>
+                            <BattleTableRow event={event} />
+                        </Fragment>
+                    )
+                })}
+            </tbody>
+        </table>
+    )
+}
 
 
 const BattleTableRow: FC<{
