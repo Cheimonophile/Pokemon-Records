@@ -1,4 +1,4 @@
-import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { ask, message } from '@tauri-apps/api/dialog';
 import { readTeamMembers } from '../backend/data/team_members';
 import ReactECharts from 'echarts-for-react';
@@ -12,7 +12,6 @@ import { BattleTypeInput } from 'components/inputs/BattleTypeInput';
 import { TrainerInput } from 'components/inputs/TrainerInput';
 import { createEvent, deleteEvent, readEvents, updateEvent } from 'backend/data/event';
 import { Event, TeamMember } from 'backend/models';
-import { readPlaythroughs } from 'backend/data/playthroughs';
 import { todayStr } from 'utils';
 
 
@@ -22,20 +21,80 @@ import { todayStr } from 'utils';
  */
 export const Battles: FC<{}> = () => {
 
+    // state
+    const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
+
+    return (
+        <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
+
+            {/* Global Filters */}
+            <div>
+                <PlaythroughInput
+                    playthroughIdNo={playthroughIdNo}
+                    setPlaythroughIdNo={setPlaythroughIdNo}
+                />
+            </div>
+
+            {/* Above Table */}
+            <div className="flex-none flex flex-row gap-2">
+                {!playthroughIdNo
+                    ? <div>Loading...</div>
+                    : (
+                        <Fragment>
+                            {/* Make Battle */}
+                            <div>
+                                <CreateBattle playthroughIdNo={playthroughIdNo} />
+                            </div>
+
+                            {/* Level Up */}
+                            <div className="min-w-fit">
+                                <LevelUp playthroughIdNo={playthroughIdNo} />
+                            </div>
+
+                            {/* Level up over time */}
+                            <div className="h-40 w-64">
+                                <TeamMemberLevelChart playthroughIdNo={playthroughIdNo} />
+                            </div>
+                        </Fragment>
+                    )}
+            </div>
+
+            {/* Battles Table */}
+            <div className="flex-1 overflow-hidden">
+                <div className="w-full h-full overflow-y-auto p-1 border">
+
+                    {/* table */}
+                    {!playthroughIdNo
+                        ? (<>
+                            <div>
+                                No Playthrough Selected...
+                            </div>
+                        </>)
+                        : (<>
+                            <BattleTable playthroughIdNo={playthroughIdNo ?? ''} />
+                        </>)}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const BattleTable: FC<{
+    playthroughIdNo: string,
+}> = ({ playthroughIdNo }) => {
 
     // context
     const { addEffect } = useAppContext()
 
-    // battle table state
+    // events
     const [events, setEvents] = useState<Event[] | null | undefined>()
 
     // fetch battles
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const playthroughs = await readPlaythroughs({})
                 const events = await readEvents({
-                    playthroughIdNo: playthroughs[0].id_no,
+                    playthroughIdNo,
                 })
                 setEvents(events)
             }
@@ -44,73 +103,25 @@ export const Battles: FC<{}> = () => {
                 setEvents(null)
             }
         })
-    }, [addEffect])
-
+    }, [addEffect, playthroughIdNo])
 
     return (
-        <div className="h-full w-full flex flex-col gap-1 p-1 overflow-hidden">
-
-            {/* Above Table */}
-            <div className="flex-none flex flex-row gap-2">
-
-                {/* Make Battle */}
-                <div>
-                    <CreateBattle />
-                </div>
-
-                {/* Level Up */}
-                <div className="min-w-fit">
-                    {((): ReactNode => {
-                        if (events === null) {
-                            return <div className="text-red-500">Error</div>
-                        }
-                        const event = events?.at(0)
-                        if (event === undefined) {
-                            return <></>
-                        }
-                        return (<>
-                            <LevelUp event={event} />
-                        </>)
-                    })()}
-                </div>
-
-                {/* Level up over time */}
-                <div className="h-40 w-64">
-                    <TeamMemberLevelChart mostRecentBattle={events?.at(0)} />
-                </div>
-            </div>
-
-            {/* Battles Table */}
-            <div className="flex-1 overflow-hidden">
-                <div className="w-full h-full overflow-y-auto p-1 border">
-
-                    {/* table */}
-                    {!events ? (<>
-                        <div className="text-red-500">
-                            Error
-                        </div>
-                    </>) : (<>
-                        <table>
-                            <tbody>
-                                {events?.map(event => {
-                                    if (!event.battle) {
-                                        return null
-                                    }
-                                    return (
-                                        <Fragment key={event.no}>
-                                            <BattleTableRow event={event} />
-                                        </Fragment>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </>)}
-                </div>
-            </div>
-        </div>
+        <table>
+            <tbody>
+                {events?.map(event => {
+                    if (!event.battle) {
+                        return null
+                    }
+                    return (
+                        <Fragment key={event.no}>
+                            <BattleTableRow event={event} />
+                        </Fragment>
+                    )
+                })}
+            </tbody>
+        </table>
     )
 }
-
 
 
 const BattleTableRow: FC<{
@@ -226,13 +237,18 @@ const BattleTableRow: FC<{
 }
 
 
+interface CreateBattleProps {
+    playthroughIdNo: string,
+}
 
 /**
  * Is the form to create a battle
  * 
  * @returns 
  */
-const CreateBattle: FC<{}> = () => {
+const CreateBattle: FC<CreateBattleProps> = ({
+    playthroughIdNo,
+}) => {
 
     // context
     const { refresh } = useAppContext()
@@ -242,7 +258,6 @@ const CreateBattle: FC<{}> = () => {
 
 
     // Form State
-    const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
     const [locationId, setLocationId] = useState<number | null>(null)
     const [battleTypeId, setBattleTypeId] = useState<number | null>(null)
     const [opponent1Id, setOpponent1Id] = useState<number | null>(null)
@@ -309,11 +324,6 @@ const CreateBattle: FC<{}> = () => {
 
     return (
         <div>
-            {/* Playthrough selector */}
-            <PlaythroughInput
-                playthroughIdNo={playthroughIdNo}
-                setPlaythroughIdNo={setPlaythroughIdNo}
-            />
 
             {/* Location */}
             <LocationInput
@@ -431,8 +441,8 @@ const CreateBattle: FC<{}> = () => {
 
 
 const LevelUp: FC<{
-    event: Event
-}> = ({ event }) => {
+    playthroughIdNo: string
+}> = ({ playthroughIdNo }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -444,7 +454,7 @@ const LevelUp: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                const teamMembers = await readTeamMembers({ playthroughIdNo: event.playthrough.id_no })
+                const teamMembers = await readTeamMembers({ playthroughIdNo })
                 setTeamMembers(teamMembers)
             }
             catch (error) {
@@ -454,8 +464,24 @@ const LevelUp: FC<{
         })
     }, [
         addEffect,
-        event
+        playthroughIdNo
     ])
+
+    // event
+    const [eventNo, setEventNo] = useState<number | null>(null)
+    useEffect(() => {
+        return addEffect(async () => {
+            try {
+                const [event] = await readEvents({ playthroughIdNo })
+                if (event) {
+                    setEventNo(event.no)
+                }
+            }
+            catch (error) {
+                console.error(error)
+            }
+        })
+    }, [addEffect, playthroughIdNo]);
 
     return <>
         <div>
@@ -466,7 +492,11 @@ const LevelUp: FC<{
                     <tbody>
                         {teamMembers?.map(teamMember => (
                             <Fragment key={teamMember.id}>
-                                <TeamMemberRow teamMember={teamMember} event={event} />
+                                {eventNo === null
+                                    ? <div>Loading...</div>
+                                    : <>
+                                        <TeamMemberRow teamMember={teamMember} eventNo={eventNo} />
+                                    </>}
                             </Fragment>
                         ))}
                     </tbody>
@@ -479,8 +509,8 @@ const LevelUp: FC<{
 
 const TeamMemberRow: FC<{
     teamMember: TeamMember,
-    event: Event,
-}> = ({ teamMember, event }) => {
+    eventNo: number,
+}> = ({ teamMember, eventNo }) => {
 
     // context
     const { refresh } = useAppContext()
@@ -489,13 +519,13 @@ const TeamMemberRow: FC<{
     const [disabled, setDisabled] = useState<number>(0)
 
     // on click level change
-    const onClickLevelChange = async (change: number) => {
+    const onClickLevelChange = useCallback(async (change: number) => {
         setDisabled(prev => prev + 1)
         try {
             await createTeamMemberChange({
                 teamMemberChange: {
                     teamMemberId: teamMember.id,
-                    eventNo: event.no,
+                    eventNo,
                     level: teamMember.level + change,
                     speciesId: null,
                 }
@@ -510,7 +540,7 @@ const TeamMemberRow: FC<{
         }
         await refresh()
         setDisabled(prev => prev - 1)
-    }
+    }, [teamMember, eventNo, refresh])
 
     return <>
         <tr>
@@ -532,8 +562,8 @@ const TeamMemberRow: FC<{
 
 
 const TeamMemberLevelChart: FC<{
-    mostRecentBattle?: Event,
-}> = ({ mostRecentBattle }) => {
+    playthroughIdNo: string,
+}> = ({ playthroughIdNo }) => {
 
     // context
     const { addEffect } = useAppContext()
@@ -544,10 +574,8 @@ const TeamMemberLevelChart: FC<{
     useEffect(() => {
         return addEffect(async () => {
             try {
-                if (mostRecentBattle === undefined)
-                    throw new Error("Most Recent Battle not defined")
                 const results = await teamOverTime({
-                    playthroughIdNo: mostRecentBattle.playthrough.id_no,
+                    playthroughIdNo,
                 })
                 let maxLevel = 0
                 results.forEach(row => {
@@ -609,6 +637,7 @@ const TeamMemberLevelChart: FC<{
                     //     responsive: false
                     // }
                 };
+                console.log(option)
                 setData(option)
             }
             catch (error) {
@@ -616,7 +645,7 @@ const TeamMemberLevelChart: FC<{
                 setData(new Error(`${error}`))
             }
         })
-    }, [addEffect, mostRecentBattle])
+    }, [addEffect, playthroughIdNo])
 
 
 
@@ -625,9 +654,13 @@ const TeamMemberLevelChart: FC<{
             ? <></>
             : data instanceof Error
                 ? <div className="text-red-500">{data.message}</div>
-                : <ReactECharts option={data} style={{
-                    width: '100%',
-                    height: '100%',
-                }} />}
+                : <ReactECharts
+                    option={data}
+                    notMerge={true}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                    }}
+                />}
     </>
 }

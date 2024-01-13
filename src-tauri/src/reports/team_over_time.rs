@@ -14,8 +14,8 @@ pub type TeamOverTimeResult = Vec<Vec<TeamMemberInstant>>;
 #[derive(serde::Serialize, Clone)]
 pub struct TeamMemberInstant {
     team_member: TeamMember,
-    species: Option<Species>,
-    level: Option<i64>,
+    species: Species,
+    level: i64,
 }
 
 pub struct QueryResult {
@@ -37,17 +37,17 @@ pub fn team_over_time(
         sqlx::query_as!(
             QueryResult,
             r#"
-        SELECT
-          event.no AS event_no,
-          team_member_change.team_member_id AS team_member_id,
-          team_member_change.level AS level,
-          team_member_change.species_id AS species_id
-        FROM event
-        LEFT JOIN team_member_change ON team_member_change.event_no = event.no
-        WHERE event.playthrough_id_no = ?
-        GROUP BY team_member_change.no, event.no, team_member_change.team_member_id
-        ORDER BY event.no, team_member_change.no
-      "#,
+                SELECT
+                event.no AS event_no,
+                team_member_change.team_member_id AS team_member_id,
+                team_member_change.level AS level,
+                team_member_change.species_id AS species_id
+                FROM event
+                LEFT JOIN team_member_change ON team_member_change.event_no = event.no
+                WHERE event.playthrough_id_no = ?
+                GROUP BY team_member_change.no, event.no, team_member_change.team_member_id
+                ORDER BY event.no, team_member_change.no
+            "#,
             playthrough_id_no
         )
         .fetch_all(&mut *transaction),
@@ -86,18 +86,18 @@ pub fn team_over_time(
             if let Some(team_member) = team_member {
                 if let Some(team_member_instant) = instant.get_mut(&team_member.id) {
                     if let Some(species) = species {
-                        team_member_instant.species = Some(species);
+                        team_member_instant.species = species;
                     }
                     if let Some(level) = level {
-                        team_member_instant.level = Some(level);
+                        team_member_instant.level = level;
                     }
                 } else {
                     instant.insert(
                         team_member.id,
                         TeamMemberInstant {
                             team_member: team_member.clone(),
-                            species: species.clone(),
-                            level,
+                            species: species.unwrap_or_else(|| team_member.caught_species.clone()),
+                            level: level.unwrap_or_else(|| team_member.caught_level),
                         },
                     );
                 };
