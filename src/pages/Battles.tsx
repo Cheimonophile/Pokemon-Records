@@ -586,26 +586,44 @@ const TeamMemberLevelChart: FC<{
                     })
                 })
                 const data: Map<number, {
-                    color: string | undefined,
+                    color: string,
+                    name: string,
                     data: [number, number][]
                 }> = new Map()
+                const xPowBase = 1.05
+                const yPowBase = 1.1
                 results.forEach((row, r) => {
                     for (const cell of row) {
                         if (data.get(cell.team_member.id) === undefined) {
                             data.set(cell.team_member.id, {
                                 color: cell.team_member.species.type1.color,
+                                name: cell.team_member.nickname ?? cell.team_member.species.name,
                                 data: []
                             })
                         }
-                        const xPowBase = 1.05
-                        const yPowBase = 1.1
-                        data.get(cell.team_member.id)?.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
+                        const teamMemberData = data.get(cell.team_member.id)
+                        if (teamMemberData) {
+                            teamMemberData.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
+                        }
                     }
                 })
                 const option: EChartsOption = {
-                    // tooltip: {
-                    //     trigger: 'axis'
-                    // },
+                    tooltip: {
+                        trigger: 'axis',
+                        // renderMode: 'richText',
+                        confine: true,
+                        valueFormatter: (value) => {
+                            const values = Array.isArray(value) ? value : [value]
+                            const formatted = values.map(value => {
+                                if (typeof value !== 'number') {
+                                    return `${value}`
+                                }
+                                const formatted =  Math.round(Math.log(value) / Math.log(yPowBase))
+                                return `${formatted}`
+                            }).join(', ')
+                            return formatted
+                        }
+                    },
                     grid: {
                         left: 1,
                         top: 1,
@@ -627,17 +645,19 @@ const TeamMemberLevelChart: FC<{
                     series: Array.from(data).map(([team_member_id, team_member_data]) => ({
                         symbol: 'none',
                         type: 'line',
-                        name: team_member_id,
+                        name: team_member_data.name,
                         data: team_member_data.data,
                         lineStyle: {
                             color: team_member_data.color
-                        }
+                        },
+                        itemStyle: {
+                            color: team_member_data.color
+                        },
                     })),
                     // options: {
                     //     responsive: false
                     // }
                 };
-                console.log(option)
                 setData(option)
             }
             catch (error) {
