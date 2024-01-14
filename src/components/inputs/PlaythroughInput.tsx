@@ -24,7 +24,7 @@ export const PlaythroughInput: FC<{
                 const readPlaythroughResponse = await readPlaythroughs({})
                 setPlaythroughOptions(readPlaythroughResponse)
                 if (!playthroughIdNo) {
-                    setPlaythroughIdNo?.(readPlaythroughResponse[0].id_no)
+                    setPlaythroughIdNo?.(readPlaythroughResponse[0].idNo)
                 }
             }
             catch (error) {
@@ -45,8 +45,8 @@ export const PlaythroughInput: FC<{
         return playthroughOptions?.map(playthrough => {
             const playthroughName = playthrough.version.name
             return {
-                value: playthrough.id_no,
-                label: <>{playthroughName} ({playthrough.adventure_started})</>,
+                value: playthrough.idNo,
+                label: <>{playthroughName} ({playthrough.adventureStarted})</>,
             } satisfies SwitchOption
         })
     }, [playthroughOptions])

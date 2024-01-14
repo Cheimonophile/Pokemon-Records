@@ -14,6 +14,7 @@ use super::{
 };
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BattleEvent {
     pub battle_type: BattleType,
     pub opponent1: Trainer,
@@ -24,12 +25,14 @@ pub struct BattleEvent {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CatchEvent {
     pub catch_type: CatchType,
     pub team_member: TeamMember,
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Event {
     no: i64,
     playthrough: Playthrough,

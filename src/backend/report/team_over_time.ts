@@ -16,7 +16,7 @@ export const teamOverTime = command(
     z.object({
         level: z.number(),
         species: Parse.Species,
-        team_member: Parse.TeamMember,
+        teamMember: Parse.TeamMember,
     }).array().array()
 ) satisfies Command<{
     playthroughIdNo: string

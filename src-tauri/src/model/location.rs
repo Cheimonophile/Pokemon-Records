@@ -11,6 +11,7 @@ use crate::{
 use super::region::Region;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Location {
     pub id: i64,
     pub name: String,

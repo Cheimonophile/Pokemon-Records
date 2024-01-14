@@ -9,6 +9,7 @@ use crate::{
 use super::type_::Type;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Species {
     pub id: i64,
     pub name: String,

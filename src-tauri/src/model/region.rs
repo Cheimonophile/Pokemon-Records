@@ -7,6 +7,7 @@ use crate::pkmndb::Read;
 use crate::{error::PkmnResult, state};
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Region {
     pub id: i64,
     pub name: String,

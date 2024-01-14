@@ -13,6 +13,7 @@ use crate::{
 pub type TeamOverTimeResult = Vec<Vec<TeamMemberInstant>>;
 
 #[derive(serde::Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct TeamMemberInstant {
     team_member: TeamMember,
     species: Option<Species>,

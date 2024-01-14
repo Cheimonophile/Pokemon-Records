@@ -5,6 +5,7 @@ use tauri::{self, async_runtime::block_on};
 use crate::{error::PkmnResult, pkmndb::Read, state};
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Version {
     pub id: i64,
     pub name: String,

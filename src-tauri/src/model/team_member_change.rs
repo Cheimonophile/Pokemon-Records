@@ -9,6 +9,7 @@ use crate::{
 use super::{species::Species, team_member::TeamMember};
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TeamMemberChange {
     pub id: i64,
     pub event_no: i64,
