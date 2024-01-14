@@ -10,6 +10,7 @@ use crate::{error::PkmnResult, pkmndb::Read};
 
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 
 pub struct CatchType {
     pub id: i64,

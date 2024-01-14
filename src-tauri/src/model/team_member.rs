@@ -9,6 +9,7 @@ use crate::{
 use super::{ball::Ball, location::Location, playthrough::Playthrough, species::Species};
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct TeamMember {
     pub id: i64,
     pub playthrough: Playthrough,

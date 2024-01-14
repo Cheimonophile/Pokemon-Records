@@ -176,11 +176,11 @@ const BattleTableRow: FC<{
                 await updateEvent({
                     no: event.no,
                     event: {
-                        playthroughIdNo: event.playthrough.id_no,
+                        playthroughIdNo: event.playthrough.idNo,
                         locationId: event.location.id,
                         date: event.date,
                         battle: {
-                            battleTypeId: event.battle.battle_type.id,
+                            battleTypeId: event.battle.battleType.id,
                             opponent1Id: event.battle.opponent1.id,
                             opponent2Id: event.battle.opponent2?.id ?? null,
                             partnerId: event.battle.partner?.id ?? null,
@@ -594,14 +594,14 @@ const TeamMemberLevelChart: FC<{
                 const yPowBase = 1.1
                 results.forEach((row, r) => {
                     for (const cell of row) {
-                        if (data.get(cell.team_member.id) === undefined) {
-                            data.set(cell.team_member.id, {
-                                color: cell.team_member.species.type1.color,
-                                name: cell.team_member.nickname ?? cell.team_member.species.name,
+                        if (data.get(cell.teamMember.id) === undefined) {
+                            data.set(cell.teamMember.id, {
+                                color: cell.teamMember.species.type1.color,
+                                name: cell.teamMember.nickname ?? cell.teamMember.species.name,
                                 data: []
                             })
                         }
-                        const teamMemberData = data.get(cell.team_member.id)
+                        const teamMemberData = data.get(cell.teamMember.id)
                         if (teamMemberData) {
                             teamMemberData.data.push([Math.pow(xPowBase, r), Math.pow(yPowBase, cell.level)])
                         }

@@ -20,9 +20,9 @@ export namespace Parse {
    * Zod parser for a playthrough in the database
    */
   export const Playthrough = z.object({
-    id_no: z.string(),
+    idNo: z.string(),
     name: z.string(),
-    adventure_started: z.string(),
+    adventureStarted: z.string(),
     version: Version,
   })
 
@@ -105,7 +105,7 @@ export namespace Parse {
     id: z.number(),
     name: z.string(),
     form: z.string().nullable(),
-    dex_no: z.number(),
+    dexNo: z.number(),
     generation: z.number(),
     type1: Type,
     type2: Type.nullable(),
@@ -120,10 +120,10 @@ export namespace Parse {
     playthrough: Playthrough,
     slot: z.number(),
     nickname: z.string().nullable(),
-    caught_date: z.string(),
-    caught_location: Location,
-    caught_species: Species,
-    caught_level: z.number(),
+    caughtDate: z.string(),
+    caughtLocation: Location,
+    caughtSpecies: Species,
+    caughtLevel: z.number(),
     ball: Ball,
     gender: z.string(),
 
@@ -140,17 +140,21 @@ export namespace Parse {
     playthrough: Playthrough,
     location: Location,
     date: z.string(),
+
+    // battle subtype
     battle: z.object({
-      battle_type: BattleType,
+      battleType: BattleType,
       opponent1: Trainer,
       opponent2: Trainer.nullable(),
       partner: Trainer.nullable(),
       lost: z.boolean(),
       round: z.number(),
     }).nullable(),
+
+    // catch subtype
     catch: z.object({
-      catch_type: CatchType,
-      team_member: TeamMember,
+      catchType: CatchType,
+      teamMember: TeamMember,
     }).nullable(),
   })
 }

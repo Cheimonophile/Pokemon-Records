@@ -11,6 +11,7 @@ use crate::{
 use super::trainer_class::TrainerClass;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Trainer {
     pub id: i64,
     pub name: String,

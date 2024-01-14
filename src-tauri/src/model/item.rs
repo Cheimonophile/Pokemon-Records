@@ -4,6 +4,7 @@ use crate::{error::PkmnResult, pkmndb::Read, state};
 
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Item {
     id: i64,
     name: String,

@@ -11,6 +11,7 @@ use crate::{
 use super::version::Version;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Playthrough {
     pub id_no: String,
     pub name: String,
