@@ -63,6 +63,18 @@ impl GameState {
             ))
         })?;
 
+        // open database and run migrations
+        let mut connection = block_on(sqlx::SqliteConnection::connect(&url))?;
+        if let Err(error) = block_on(MIGRATOR.run(&mut connection)) {
+            return Ok(
+                StringError::new(&format!("Could not connect to database: {}", error)).err()?,
+            );
+        }
+        match self.db_url.lock() {
+            Ok(mut db_url_guard) => *db_url_guard = Some(db_url.to_string()),
+            Err(error) => StringError::new(&format!("{}", error)).err()?,
+        };
+
         // remove old backups
         if let Some(parent_path) = path::Path::new(db_url).parent() {
             if let Some(mut backup_paths) = fs::read_dir(parent_path).ok().and_then(|read_dir| {
@@ -90,17 +102,6 @@ impl GameState {
             };
         }
 
-        // open database and run migrations
-        let mut connection = block_on(sqlx::SqliteConnection::connect(&url))?;
-        if let Err(error) = block_on(MIGRATOR.run(&mut connection)) {
-            return Ok(
-                StringError::new(&format!("Could not connect to database: {}", error)).err()?,
-            );
-        }
-        match self.db_url.lock() {
-            Ok(mut db_url_guard) => *db_url_guard = Some(db_url.to_string()),
-            Err(error) => StringError::new(&format!("{}", error)).err()?,
-        };
         Ok(())
     }
 
