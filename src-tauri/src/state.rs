@@ -2,7 +2,7 @@ use std::{
     fs::{self},
     ops::{Deref, DerefMut},
     path,
-    sync::Mutex,
+    sync::RwLock,
 };
 
 use chrono;
@@ -19,21 +19,20 @@ static NUM_BACKUPS: usize = 3;
 static MIGRATOR: Migrator = sqlx::migrate!();
 
 pub struct GameState {
-    db_url: Mutex<Option<String>>,
+    db_url: RwLock<Option<String>>,
 }
 
 impl GameState {
     pub fn new() -> Self {
         Self {
-            db_url: Mutex::new(None),
+            db_url: RwLock::new(None),
         }
     }
     pub fn set_connection(&self, db_url: &str) -> PkmnResult<()> {
-
         let url = format!("sqlite://{}", &db_url);
 
         // do nothing if the url matches the old url
-        if let Ok(db_url_guard) = self.db_url.lock() {
+        if let Ok(db_url_guard) = self.db_url.read() {
             if let Some(db_url_guard) = &*db_url_guard {
                 if db_url_guard == db_url {
                     return Ok(());
@@ -70,7 +69,7 @@ impl GameState {
                 StringError::new(&format!("Could not connect to database: {}", error)).err()?,
             );
         }
-        match self.db_url.lock() {
+        match self.db_url.write() {
             Ok(mut db_url_guard) => *db_url_guard = Some(db_url.to_string()),
             Err(error) => StringError::new(&format!("{}", error)).err()?,
         };
@@ -106,7 +105,7 @@ impl GameState {
     }
 
     pub fn connection<'a>(&self) -> PkmnResult<PkmnConnection> {
-        match self.db_url.lock() {
+        match self.db_url.read() {
             Ok(db_url_guard) => {
                 if let Some(db_url) = &*db_url_guard {
                     let connection = block_on(sqlx::SqliteConnection::connect(&db_url))?;
