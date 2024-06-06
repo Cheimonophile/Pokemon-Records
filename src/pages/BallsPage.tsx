@@ -3,15 +3,21 @@ import { useBalls } from "hooks/data/useBalls";
 import { IBall } from "interfaces/data/ball";
 import { FC, useMemo } from "react";
 import { ColDef } from "ag-grid-community";
+import { Page } from "interfaces/components/page";
 
 
+/**
+ * Default column definitions
+ */
 const DEFAULT_COL_DEF: ColDef<IBall> = {
   sortable: false,
   filter: false,
 }
 
-
-export const Balls: FC<{}> = () => {
+/**
+ * Page that displays all of the balls
+ */
+export const BallsPage: Page = () => {
 
   // state
   const { ballsArray } = useBalls();
@@ -47,13 +53,6 @@ export const Balls: FC<{}> = () => {
           rowData={ballsArray}
         />
       </div>
-      {/* <ul className="flex-1 overflow-y-scroll">
-        {ballsArray?.map(ball => (
-          <li key={ball.id}>
-            ({ball.id}) {ball.name}
-          </li>
-        ))}
-      </ul> */}
     </div>
   )
 }

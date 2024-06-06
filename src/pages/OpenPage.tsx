@@ -2,9 +2,10 @@ import { message, open } from "@tauri-apps/api/dialog";
 import { FC, useCallback, useState } from "react"
 import { setDBConnection } from "../backend/data/state";
 import { DATABASE_URL } from "../constants";
+import { Page } from "interfaces/components/page";
 
 
-export const Open: FC<{}> = () => {
+export const OpenPage: Page = () => {
 
 
     // state

@@ -1,23 +1,23 @@
 import React, { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Battles } from './pages/Battles';
-import { Open } from './pages/Open';
 import { setDBConnection } from './backend/data/state';
 import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
 // import { Catches } from './pages/Catches';
 import { Nav } from './components/Nav';
-import { Balls } from 'pages/Balls';
+import { BallsPage } from 'pages/BallsPage';
 // import './App.css';
 import "ag-grid-community/styles/ag-grid.css";
 import 'ag-grid-community/styles/ag-theme-balham.min.css'; // Optional theme CSS
+import { OpenPage } from 'pages/OpenPage';
+import { BattlesPage } from 'pages/BattlesPage';
 
 /**
  * The pages in the application
  */
 export const PAGES = Object.freeze({
-  Open: Open,
-  Battles: Battles,
-  Balls: Balls
+  Open: OpenPage,
+  Battles: BattlesPage,
+  Balls: BallsPage
   // Catches: Catches
 } satisfies {
   [key: string]: FC<{}>

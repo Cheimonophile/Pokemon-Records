@@ -13,13 +13,14 @@ import { TrainerInput } from 'components/inputs/TrainerInput';
 import { createEvent, deleteEvent, readEvents, updateEvent } from 'backend/data/event';
 import { Event, TeamMember } from 'backend/models';
 import { todayStr } from 'utils';
+import { Page } from 'interfaces/components/page';
 
 
 
 /**
  * Battles Page
  */
-export const Battles: FC<{}> = () => {
+export const BattlesPage: Page = () => {
 
     // state
     const [playthroughIdNo, setPlaythroughIdNo] = useState<string | undefined>()
