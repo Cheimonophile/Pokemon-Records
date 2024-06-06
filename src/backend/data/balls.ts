@@ -1,11 +1,15 @@
 import z from "zod";
 import { Command, command } from "backend/common";
-
-const TResult = z.object({
-    name: z.string(),
-}).array()
+import { id } from "date-fns/locale";
 
 /**
  * Reads pokeballs from the frontend
  */
-export const readBalls = command('read_balls', TResult) satisfies Command<{}>
+export const readBalls = command(
+  'read_balls',
+  z.object({
+    id: z.number(),
+    name: z.string(),
+  }).array()
+) satisfies Command<{}>
+

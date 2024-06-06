@@ -6,6 +6,7 @@ import { DATABASE_URL } from './constants';
 import { message } from '@tauri-apps/api/dialog';
 // import { Catches } from './pages/Catches';
 import { Nav } from './components/Nav';
+import { Balls } from 'pages/Balls';
 // import './App.css';
 
 
@@ -15,6 +16,7 @@ import { Nav } from './components/Nav';
 export const PAGES = Object.freeze({
   Open: Open,
   Battles: Battles,
+  Balls: Balls
   // Catches: Catches
 } satisfies {
   [key: string]: FC<{}>
