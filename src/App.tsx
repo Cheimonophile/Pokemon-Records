@@ -8,7 +8,8 @@ import { message } from '@tauri-apps/api/dialog';
 import { Nav } from './components/Nav';
 import { Balls } from 'pages/Balls';
 // import './App.css';
-
+import "ag-grid-community/styles/ag-grid.css";
+import 'ag-grid-community/styles/ag-theme-balham.min.css'; // Optional theme CSS
 
 /**
  * The pages in the application
